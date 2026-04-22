@@ -3,6 +3,7 @@ import 'order.dart';
 import 'order_item.dart';
 import 'order_address.dart';
 import 'payment.dart';
+import 'order_branch.dart';
 
 part 'order_detail.freezed.dart';
 
@@ -14,6 +15,7 @@ sealed class OrderDetail with _$OrderDetail {
     OrderAddress?
     address, // Nullable because pickup orders don't have addresses
     required Payment payment,
+    OrderBranch? branch,
   }) = _OrderDetail;
 }
 /*

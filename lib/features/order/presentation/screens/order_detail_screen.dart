@@ -14,6 +14,7 @@ import '../providers/order_providers.dart';
 import '../widgets/detail/order_info_section.dart';
 import '../widgets/detail/order_items_section.dart';
 import '../widgets/detail/order_address_section.dart';
+import '../widgets/detail/order_branch_section.dart';
 import '../widgets/detail/order_payment_section.dart';
 import '../widgets/detail/order_qr_section.dart';
 import '../widgets/detail/order_status_timeline.dart';
@@ -90,6 +91,9 @@ class OrderDetailScreen extends ConsumerWidget {
                     // Order Status Timeline (all types: pickup, dining, delivery)
                     OrderStatusTimeline(order: orderDetail.order),
                     SizedBox(height: AppSizes.sm),
+                    // Order Items Section
+                    OrderBranchSection(orderDetail: orderDetail),
+                    if (orderDetail.branch != null) SizedBox(height: AppSizes.sm),
                     // Order Items Section
                     OrderItemsSection(items: orderDetail.items),
                     SizedBox(height: AppSizes.sm),
