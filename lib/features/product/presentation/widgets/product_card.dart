@@ -85,7 +85,7 @@ class ProductCard extends ConsumerWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.error,
+                              color: AppColors.success,
                               borderRadius: BorderRadius.circular(
                                 AppSizes.radiusSm,
                               ),
@@ -105,12 +105,10 @@ class ProductCard extends ConsumerWidget {
                 ),
                 // Product details
                 Padding(
-                  padding: EdgeInsets.all(AppSizes.sm),
+                  padding: const EdgeInsets.only(left: 4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      // Name
                       Text(
                         product.name,
                         style: AppTextStyles.h5.copyWith(
@@ -119,7 +117,7 @@ class ProductCard extends ConsumerWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 4),
+
                       // Rating
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -135,34 +133,37 @@ class ProductCard extends ConsumerWidget {
                           ),
                           SizedBox(width: 4),
                           Text(
-                            '(${product.reviewCount})',
+                            product.reviewCount > 1
+                                ? '(${product.reviewCount} reviews)'
+                                : '(${product.reviewCount} review)',
                             style: AppTextStyles.caption.copyWith(
                               color: AppColors.txtSecondary,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 4),
+
                       // Price row
-                      _buildPrice(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildPrice(),
+                          // Cart action button/control at bottom right
+                          isInCart && cartItem != null
+                              ? ProductQuantityControl(
+                                  cart: cartItem,
+                                  branchId: product.branchId,
+                                  iconColor: AppColors.accentOrange,
+                                  textColor: AppColors.accentOrange,
+                                  buttonBackgroundColor: AppColors.primary,
+                                )
+                              : _buildAddButton(context, ref),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ],
-            ),
-            // Cart action button/control at bottom right
-            Positioned(
-              bottom: AppSizes.sm,
-              right: AppSizes.sm,
-              child: isInCart && cartItem != null
-                  ? ProductQuantityControl(
-                      cart: cartItem,
-                      branchId: product.branchId,
-                      iconColor: AppColors.accentOrange,
-                      textColor: AppColors.accentOrange,
-                      buttonBackgroundColor: AppColors.primary,
-                    )
-                  : _buildAddButton(context, ref),
             ),
           ],
         ),
@@ -195,31 +196,77 @@ class ProductCard extends ConsumerWidget {
 
   Widget _buildPrice() {
     if (product.hasDiscount) {
-      return Row(
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Br${product.discountedPriceValue.toStringAsFixed(2)}',
-            style: AppTextStyles.h6.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w700,
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: product.discountedPriceValue.toStringAsFixed(2),
+                  style: AppTextStyles.h6.copyWith(
+                    fontSize: 14,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                TextSpan(
+                  text: ' ETB',
+                  style: AppTextStyles.caption.copyWith(
+                    fontSize: 10,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(width: 4),
-          Text(
-            'Br${product.originalPriceValue.toStringAsFixed(2)}',
-            style: AppTextStyles.caption.copyWith(
-              color: AppColors.txtSecondary,
-              decoration: TextDecoration.lineThrough,
+          SizedBox(height: 4),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: product.originalPriceValue.toStringAsFixed(2),
+                  style: AppTextStyles.caption.copyWith(
+                    fontSize: 12,
+                    color: AppColors.lightRed,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+                TextSpan(
+                  text: ' ETB',
+                  style: AppTextStyles.caption.copyWith(
+                    fontSize: 10,
+                    color: AppColors.lightRed,
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.lineThrough,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       );
     }
-    return Text(
-      'Br${product.price}',
-      style: AppTextStyles.h6.copyWith(
-        color: AppColors.primary,
-        fontWeight: FontWeight.w700,
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: product.price,
+            style: AppTextStyles.h6.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          TextSpan(
+            text: ' ETB',
+            style: AppTextStyles.caption.copyWith(
+              fontSize: 10,
+              color: AppColors.primary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }

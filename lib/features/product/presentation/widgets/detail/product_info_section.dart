@@ -146,7 +146,7 @@ class ProductInfoSection extends StatelessWidget {
             children: [
               // Discounted Price
               Text(
-                'Br${product.discountedPriceValue.toStringAsFixed(2)}',
+                '${product.discountedPriceValue.toStringAsFixed(2)} ETB',
                 style: AppTextStyles.h4,
               ),
 
@@ -154,7 +154,7 @@ class ProductInfoSection extends StatelessWidget {
 
               // Original Price
               Text(
-                'Br${product.originalPriceValue.toStringAsFixed(2)}',
+                '${product.originalPriceValue.toStringAsFixed(2)} ETB',
                 style: AppTextStyles.bodyLarge.copyWith(
                   color: AppColors.grey,
                   decoration: TextDecoration.lineThrough,
@@ -212,7 +212,7 @@ class ProductInfoSection extends StatelessWidget {
 
           // Savings text
           Text(
-            'You save Br${saved.toStringAsFixed(2)}',
+            'You save ${saved.toStringAsFixed(2)} ETB ',
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.success,
               fontWeight: FontWeight.w500,
@@ -224,7 +224,7 @@ class ProductInfoSection extends StatelessWidget {
 
     // Regular Price (no discount)
     return Text(
-      'Br${product.price}',
+      '${product.price} ETB',
       style: AppTextStyles.h1.copyWith(
         color: AppColors.primary,
         fontWeight: FontWeight.w800,

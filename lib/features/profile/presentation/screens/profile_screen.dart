@@ -24,7 +24,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileState = ref.watch(userProfileProvider);
 
-     // Navigate to login when auth state becomes Unauthenticated
+    // Navigate to login when auth state becomes Unauthenticated
     ref.listen<AuthEvent?>(authEventsProvider, (prev, next) {
       if (next is Unauthenticated) {
         //invalidate isAuthenticatedProvider
@@ -49,9 +49,9 @@ class ProfileScreen extends ConsumerWidget {
 
     return RefreshIndicator(
       onRefresh: () => ref.refresh(userProfileProvider.future),
-      
+
       child: Scaffold(
-       backgroundColor: AppColors.background,
+        backgroundColor: AppColors.background,
         body: profileState.when(
           data: (user) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,6 +60,8 @@ class ProfileScreen extends ConsumerWidget {
               ProfileHeader(user: user),
               // Scrollable content
               Expanded(child: ProfileContent(user: user)),
+              //the height of bottom sheet. we added this because we used extendedbody in the bottom nav screen to allow the active tab background to be transparent
+              SizedBox(height: 60),
             ],
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -73,7 +75,7 @@ class ProfileScreen extends ConsumerWidget {
                     : Failure.unexpected(message: error.toString()),
                 onRetry: () => ref.refresh(userProfileProvider.future),
               ),
-               SizedBox(height: AppSizes.lg),
+              SizedBox(height: AppSizes.lg),
               LogoutButton(),
             ],
           ),

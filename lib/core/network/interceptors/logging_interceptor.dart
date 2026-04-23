@@ -41,7 +41,7 @@ class LoggingInterceptor extends Interceptor {
 
     if (options.data != null) {
       final data = options.data.toString();
-      final truncatedData = data.length > 500
+      final truncatedData = data.length > 50000
           ? '${data.substring(0, 500)}...'
           : data;
       _logger.d('│ Body: $truncatedData');
@@ -66,7 +66,7 @@ class LoggingInterceptor extends Interceptor {
 
     if (response.data != null) {
       final data = response.data.toString();
-      final truncatedData = data.length > 10000
+      final truncatedData = data.length > 100000
           ? '${data.substring(0, 10000)}...'
           : data;
       _logger.d('│ Data: $truncatedData');

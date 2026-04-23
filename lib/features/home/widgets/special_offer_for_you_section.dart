@@ -28,7 +28,7 @@ class SpecialOfferForYouSection extends ConsumerWidget {
         }
 
         return SizedBox(
-          height: kHorizontalProductSectionTotalHeight,
+          height: 253,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,8 +66,8 @@ class SpecialOfferForYouSection extends ConsumerWidget {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     return SizedBox(
-                      width: kHorizontalProductCardWidth,
-                      height: kHorizontalProductSectionRowHeight,
+                      width: 190,
+                      // height: kHorizontalProductSectionRowHeight,
                       child: Padding(
                         padding: EdgeInsets.only(right: AppSizes.sm),
                         child: ProductCard(product: products[index]),

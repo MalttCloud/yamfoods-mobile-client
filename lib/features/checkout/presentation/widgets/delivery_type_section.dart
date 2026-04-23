@@ -110,7 +110,7 @@ class _DeliveryTypeSectionState extends ConsumerState<DeliveryTypeSection> {
               ),
               Expanded(
                 child: _DeliveryOption(
-                  label: 'Dining',
+                  label: 'Dine in',
                   icon: Icons.restaurant_outlined,
                   isSelected: isDining,
                   onTap: () {

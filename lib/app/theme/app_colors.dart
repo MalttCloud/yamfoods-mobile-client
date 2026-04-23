@@ -5,7 +5,9 @@ class AppColors {
 
   //app
   static const Color primary = Color(0xFF0A2447); // Color(0xFF64390C);
-  static const Color primaryLight = Color(0xFF8B5A2B); // Lighter shade for gradient
+  static const Color primaryLight = Color(
+    0xFF8B5A2B,
+  ); // Lighter shade for gradient
   static const Color secondary = Color(0xCC553412);
   static const Color background = Color(0xFFFFF9ED);
   static const Color white = Colors.white;
@@ -25,7 +27,12 @@ class AppColors {
   static const warning = Color(0xFFF59E0B);
   static const error = Color.fromARGB(255, 245, 120, 120);
   static const info = Color(0xFF2563EB);
-  static const lightRed = Color(0xFFDC2626); // Red color for logout actions
+  static const lightRed = Color.fromARGB(
+    255,
+    240,
+    105,
+    105,
+  ); // Red color for logout actions
 
   // Branch card colors
   static const cardGradientStart = primary;
@@ -35,7 +42,6 @@ class AppColors {
   static const cardTextWhite = white;
   static const cardTextWhiteDimmed = Color(0xFFFFFFFF); // white with alpha
   static const cardBackgroundCircle = Color(0xFFFFFFFF); // white with alpha
-
 
   static const Color accentOrange = Color(0xFFffaa00);
 }

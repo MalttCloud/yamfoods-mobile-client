@@ -16,14 +16,23 @@ import '../providers/cart_notifier.dart';
 import '../providers/cart_loading_providers.dart';
 import 'cart_qty_cntrl.dart';
 
-class CartCard extends ConsumerWidget {
+class CartCard extends ConsumerStatefulWidget {
   final Cart cart;
   final int branchId;
 
   const CartCard({super.key, required this.cart, required this.branchId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CartCard> createState() => _CartCardState();
+}
+
+class _CartCardState extends ConsumerState<CartCard> {
+  bool _isSwiping = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final cart = widget.cart;
+    final branchId = widget.branchId;
     final mainImage = cart.product.getMainImage();
     final imageUrl = mainImage != null
         ? ImageUrlBuilder.build(
@@ -42,7 +51,11 @@ class CartCard extends ConsumerWidget {
         padding: EdgeInsets.only(right: AppSizes.lg),
         decoration: BoxDecoration(
           color: AppColors.error,
-          borderRadius: BorderRadius.circular(AppSizes.radius),
+          // borderRadius: BorderRadius.circular(AppSizes.radius),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(AppSizes.radius),
+            bottomRight: Radius.circular(AppSizes.radius),
+          ),
         ),
         child: const Icon(
           Icons.delete_outline,
@@ -50,6 +63,7 @@ class CartCard extends ConsumerWidget {
           size: 28,
         ),
       ),
+      //
       confirmDismiss: (direction) async {
         // Show confirmation dialog and return result
         return await _showDeleteConfirmation(context, ref);
@@ -58,11 +72,24 @@ class CartCard extends ConsumerWidget {
         // This is called after confirmDismiss returns true
         // The item is already deleted by confirmDismiss, so we don't need to do anything here
       },
+      onUpdate: (details) {
+        final isSwipingNow = details.progress > 0;
+        if (_isSwiping != isSwipingNow) {
+          setState(() {
+            _isSwiping = isSwipingNow;
+          });
+        }
+      },
       child: Container(
         padding: EdgeInsets.all(AppSizes.sm),
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSizes.radius),
+          borderRadius: _isSwiping
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(AppSizes.radius),
+                  bottomLeft: Radius.circular(AppSizes.radius),
+                )
+              : BorderRadius.circular(AppSizes.radius),
         ),
         child: Stack(
           children: [
@@ -196,14 +223,16 @@ class CartCard extends ConsumerWidget {
       context: context,
       title: 'Remove Item?',
       message:
-          'Are you sure you want to remove ${cart.product.name} from your cart?',
+          'Are you sure you want to remove ${widget.cart.product.name} from your cart?',
       confirmText: 'Remove',
       cancelText: 'Cancel',
       confirmButtonColor: AppColors.error,
     );
 
     if (confirmed == true) {
-      ref.read(cartProvider(branchId).notifier).deleteCartItem(cart.id);
+      ref
+          .read(cartProvider(widget.branchId).notifier)
+          .deleteCartItem(widget.cart.id);
       return true;
     }
 
