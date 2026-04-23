@@ -38,102 +38,109 @@ class HomeScreen extends ConsumerWidget {
       ]);
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.primary,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(180),
-        child: Container(
-          decoration: const BoxDecoration(color: AppColors.primary),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: MediaQuery.of(context).padding.top),
-              const HomeHeader(),
-              Container(
-                padding: EdgeInsets.only(bottom: AppSizes.sm),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.primary,
-                      AppColors.primary.withValues(alpha: 0.9),
-                    ],
-                  ),
-                ),
-                child: const HomeSearchBar(),
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: Stack(
-        children: [
-          RefreshIndicator(
-            onRefresh: onHomePageRefresh,
-            child: CustomScrollView(
-              slivers: [
-                // Premium surface section (banner, categories) with gradient
-                SliverToBoxAdapter(
-                  child: Container(
+    return Stack(
+      children: [
+        Scaffold(
+          backgroundColor: AppColors.primary,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(180),
+            child: Container(
+              decoration: const BoxDecoration(color: AppColors.primary),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).padding.top),
+                  const HomeHeader(),
+                  Container(
+                    padding: EdgeInsets.only(bottom: AppSizes.sm),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
+                          AppColors.primary,
                           AppColors.primary.withValues(alpha: 0.9),
-                          AppColors.background,
                         ],
                       ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 2),
-                        // Promo banner slider
-                        const PromoBannerSlider(),
-
-                        SizedBox(height: AppSizes.lg),
-
-                        // Category chips list
-                        CategoryChipsList(branchId: branchId),
-                      ],
-                    ),
+                    child: const HomeSearchBar(),
                   ),
-                ),
-
-                // Special offer + Popular with gradient (primary → white) like top section
-                SliverToBoxAdapter(
-                  child: Container(
-                    color: AppColors.background,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SpecialOfferForYouSection(branchId: branchId),
-                        PopularSection(branchId: branchId),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Product grid - scrolls with content
-                ProductSliverGrid(branchId: branchId),
-
-                // Bottom padding for safe area (background so content area ends on white)
-                SliverToBoxAdapter(
-                  child: Container(
-                    color: AppColors.background,
-                    child: SizedBox(
-                      height: MediaQuery.of(context).padding.bottom + AppSizes.lg,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-          const Positioned.fill(child: DraggableTelegramFab()),
-        ],
-      ),
+          body: Stack(
+            children: [
+              RefreshIndicator(
+                onRefresh: onHomePageRefresh,
+                child: CustomScrollView(
+                  slivers: [
+                    // Premium surface section (banner, categories) with gradient
+                    SliverToBoxAdapter(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              AppColors.primary.withValues(alpha: 0.9),
+                              AppColors.background,
+                            ],
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 2),
+                            // Promo banner slider
+                            const PromoBannerSlider(),
+
+                            SizedBox(height: AppSizes.lg),
+
+                            // Category chips list
+                            CategoryChipsList(branchId: branchId),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // Special offer + Popular with gradient (primary → white) like top section
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: AppColors.background,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SpecialOfferForYouSection(branchId: branchId),
+                            PopularSection(branchId: branchId),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // Product grid - scrolls with content
+                    ProductSliverGrid(branchId: branchId),
+
+                    // Bottom padding for safe area (background so content area ends on white)
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: AppColors.background,
+                        child: SizedBox(
+                          height:
+                              MediaQuery.of(context).padding.bottom +
+                              AppSizes.lg,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const Positioned.fill(child: DraggableTelegramFab()),
+      ],
     );
   }
 }

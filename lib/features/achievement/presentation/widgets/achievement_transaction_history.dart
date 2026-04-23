@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/components/empty_state.dart';
 import '../../../../app/components/error_widget.dart';
+import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
@@ -83,15 +84,12 @@ class AchievementTransactionHistory extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Padding(
-        padding: EdgeInsets.all(AppSizes.xl),
-        child: Center(child: CircularProgressIndicator()),
-      ),
+      loading: () => const AppLoadingIndicator(),
       error: (error, stackTrace) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
         child: ErrorWidgett(
           icon: Icons.error_outline,
-          title: 'Error loading wallet transaction history',
+          title: 'Transaction history is unavailable for now.',
           failure: error is Failure
               ? error
               : Failure.unexpected(message: error.toString()),

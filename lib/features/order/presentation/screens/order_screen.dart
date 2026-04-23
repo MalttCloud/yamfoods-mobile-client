@@ -50,7 +50,7 @@ class OrderScreen extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: AppSizes.xs),
           child: ordersAsync.when(
             data: (orders) {
-              if (orders.isNotEmpty) {
+              if (orders.isEmpty) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -89,7 +89,7 @@ class OrderScreen extends ConsumerWidget {
             },
             error: (error, stackTrace) => ErrorWidgett(
               icon: Icons.error_outline,
-              title: 'Error loading orders',
+              title: 'Your orders did not load this time.',
               failure: error is Failure
                   ? error
                   : Failure.unexpected(message: error.toString()),

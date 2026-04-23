@@ -19,7 +19,7 @@ class ProductDetailHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.lg,
+        horizontal: AppSizes.xs,
         vertical: AppSizes.md,
       ),
       child: Row(
@@ -29,7 +29,11 @@ class ProductDetailHeader extends ConsumerWidget {
           GestureDetector(
             onTap: () => context.pop(),
             child: _buildButton(
-              child: Icon(Icons.chevron_left, color: AppColors.white, size: 24),
+              child: Icon(
+                Icons.chevron_left,
+                color: AppColors.primary,
+                size: 30,
+              ),
             ),
           ),
 
@@ -87,8 +91,8 @@ class _CartIconButton extends ConsumerWidget {
         padding: EdgeInsets.all(AppSizes.sm),
         child: Icon(
           Icons.shopping_basket_outlined,
-          color: AppColors.white,
-          size: 24,
+          color: AppColors.accentOrange,
+          size: 26,
         ),
       ),
     );
@@ -100,7 +104,7 @@ class _CartIconButton extends ConsumerWidget {
       maxCount: 99,
       backgroundColor: AppColors.white,
       textColor: Colors.red,
-      offset: const Offset(10, -10),
+      offset: const Offset(0, 0),
       child: icon,
     );
   }

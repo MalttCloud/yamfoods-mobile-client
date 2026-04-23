@@ -99,7 +99,7 @@ class ProductCartBottomSheet extends ConsumerWidget {
               );
             },
       color: AppColors.primary,
-      textColor: AppColors.white,
+      textColor: AppColors.accentOrange,
       isLoading: isLoading,
       height: 60,
     );

@@ -5,6 +5,9 @@ import 'failure.dart';
 /// This extension abstracts technical errors and provides context-aware
 /// messages that are safe to display to end users.
 extension FailureMapper on Failure {
+  static const String _unexpectedErrorAsset =
+      'assets/images/error/unexpected_error.png';
+
   /// Returns a user-friendly error message for this [Failure].
   ///
   /// Strategy:
@@ -47,6 +50,26 @@ extension FailureMapper on Failure {
       unexpected: (message) =>
           message ?? 'Something went wrong. Please try again.',
       mapError: (message) => message,
+    );
+  }
+
+  /// Returns an error image asset path for this [Failure].
+  ///
+  /// Falls back to the generic unexpected error icon when a specific
+  /// icon is not defined for the current failure type.
+  String toErrorAsset() {
+    return when(
+      network: (message) => 'assets/images/error/network_error.png',
+      backend: (message, statusCode) => 'assets/images/error/backend_error.png',
+      auth: (message, statusCode) => 'assets/images/error/auth_error.png',
+      validation: (message) => 'assets/images/error/validation_error.png',
+      permission: (type, permanentlyDenied) =>
+          'assets/images/error/permission_error.png',
+      payment: (message) => 'assets/images/error/payment_error.png',
+      cache: (message) => 'assets/images/error/storage_error.png',
+      parsing: (message) => _unexpectedErrorAsset,
+      unexpected: (message) => _unexpectedErrorAsset,
+      mapError: (message) => 'assets/images/error/map_error.png',
     );
   }
 }

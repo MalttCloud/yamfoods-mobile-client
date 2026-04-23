@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yamfoods_customer_app/app/components/app_loading_indicator.dart';
 
 import '../../../../app/components/empty_state.dart';
 import '../../../../app/components/error_widget.dart';
@@ -82,15 +83,13 @@ class HelpSupportScreen extends ConsumerWidget {
           },
           error: (error, stackTrace) => ErrorWidgett(
             icon: Icons.error_outline,
-            title: 'Error loading support info',
+            title: 'We cannot reach support details right now.',
             failure: error is Failure
                 ? error
                 : Failure.unexpected(message: error.toString()),
             onRetry: () => ref.refresh(helpSupportProvider.future),
           ),
-          loading: () => const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
-          ),
+          loading: () => const AppLoadingIndicator()
         ),
       ),
     );

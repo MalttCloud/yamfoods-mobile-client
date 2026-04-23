@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../app/theme/app_sizes.dart';
@@ -23,28 +22,36 @@ class _ProductDescriptionSectionState extends State<ProductDescriptionSection> {
   bool _isExpanded = false;
   static const int _collapsedMaxLines = 4;
 
+  String get _normalizedDescription {
+    return widget.description
+        .trim()
+        // Collapse repeated empty lines that create visual gaps.
+        .replaceAll(RegExp(r'\n\s*\n+'), '\n');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-          child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final showReadMore = _shouldShowReadMore(constraints.maxWidth);
+
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Title with vertical bar
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Vertical accent bar (wall) - matches title height
                   Container(
                     width: 4,
-                    height: 24, // Matches h4 font size
+                    height: 24,
                     margin: const EdgeInsets.only(right: AppSizes.sm, top: 2),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  // Section Title
                   Expanded(
                     child: Text(
                       'About This Dish',
@@ -55,105 +62,70 @@ class _ProductDescriptionSectionState extends State<ProductDescriptionSection> {
                   ),
                 ],
               ),
-              // Content
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: AppSizes.md),
-
-                  // Description with expand/collapse
-                  AnimatedCrossFade(
-                    firstChild: _buildCollapsedDescription(),
-                    secondChild: _buildExpandedDescription(),
-                    crossFadeState: _isExpanded
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    duration: const Duration(milliseconds: 300),
-                    sizeCurve: Curves.easeInOut,
-                  ),
-
-                  const SizedBox(height: AppSizes.sm),
-
-                  // Read more / Read less button
-                  if (_shouldShowReadMore())
-                    GestureDetector(
-                      onTap: () => setState(() => _isExpanded = !_isExpanded),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            _isExpanded ? 'Read less' : 'Read more',
-                            style: AppTextStyles.labelLarge.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          AnimatedRotation(
-                            turns: _isExpanded ? 0.5 : 0,
-                            duration: const Duration(milliseconds: 300),
-                            child: Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              color: AppColors.primary,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                ],
+              const SizedBox(height: AppSizes.md),
+              _buildDescriptionText(
+                maxLines: showReadMore && !_isExpanded ? _collapsedMaxLines : null,
               ),
+              if (showReadMore) ...[
+                const SizedBox(height: AppSizes.sm),
+                GestureDetector(
+                  onTap: () => setState(() => _isExpanded = !_isExpanded),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _isExpanded ? 'Read less' : 'Read more',
+                        style: AppTextStyles.labelLarge.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Icon(
+                        _isExpanded
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ],
-          ),
-        )
-        .animate()
-        .fadeIn(duration: 400.ms, delay: 400.ms)
-        .slideY(begin: 0.15, end: 0, curve: Curves.easeOutCubic);
-  }
-
-  Widget _buildCollapsedDescription() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        widget.description,
-        style: AppTextStyles.bodyLarge.copyWith(
-          color: AppColors.txtSecondary.withValues(alpha: 0.85),
-          height: 1.6,
-        ),
-        textAlign: TextAlign.left,
-        maxLines: _collapsedMaxLines,
-        overflow: TextOverflow.ellipsis,
+          );
+        },
       ),
     );
   }
 
-  Widget _buildExpandedDescription() {
+  Widget _buildDescriptionText({int? maxLines}) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-        widget.description,
+        _normalizedDescription,
         style: AppTextStyles.bodyLarge.copyWith(
           color: AppColors.txtSecondary.withValues(alpha: 0.85),
           height: 1.6,
         ),
         textAlign: TextAlign.left,
+        maxLines: maxLines,
+        overflow: maxLines == null ? TextOverflow.visible : TextOverflow.ellipsis,
       ),
     );
   }
 
   /// Determines if the description needs a "Read more" button.
-  bool _shouldShowReadMore() {
+  bool _shouldShowReadMore(double maxWidth) {
     final textPainter = TextPainter(
       text: TextSpan(
-        text: widget.description,
+        text: _normalizedDescription,
         style: AppTextStyles.bodyLarge.copyWith(height: 1.6),
       ),
       maxLines: _collapsedMaxLines,
       textDirection: TextDirection.ltr,
     );
-
-    // Use a reasonable width estimate (will be recalculated on layout)
-    textPainter.layout(maxWidth: 300);
+    textPainter.layout(maxWidth: maxWidth);
 
     return textPainter.didExceedMaxLines;
   }

@@ -65,7 +65,7 @@ class ProductSliverGrid extends ConsumerWidget {
         hasScrollBody: false,
         child: Center(
           child: app_error.ErrorWidgett(
-            title: 'Failed to load products',
+            title: 'Could not fetch matching products.',
             failure: error is Failure
                 ? error
                 : Failure.unexpected(message: error.toString()),

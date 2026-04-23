@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/components/error_widget.dart';
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -64,20 +65,38 @@ class ProfileScreen extends ConsumerWidget {
               SizedBox(height: 60),
             ],
           ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Column(
-            children: [
-              ErrorWidgett(
-                icon: Icons.error_outline,
-                title: 'Error loading profile',
-                failure: error is Failure
-                    ? error
-                    : Failure.unexpected(message: error.toString()),
-                onRetry: () => ref.refresh(userProfileProvider.future),
+          loading: () => const AppLoadingIndicator(message: 'Loading...'),
+          error: (error, _) => Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                colors: [
+                  AppColors.primary.withValues(alpha: 0.9),
+                  AppColors.primary.withValues(alpha: 0.7),
+                  AppColors.primary.withValues(alpha: 0.4),
+                  AppColors.primary.withValues(alpha: 0.1),
+                  AppColors.primary.withValues(alpha: 0.05),
+                  AppColors.background,
+                ],
               ),
-              SizedBox(height: AppSizes.lg),
-              LogoutButton(),
-            ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ErrorWidgett(
+                  icon: Icons.error_outline,
+                  title: 'We hit a snag loading your profile.',
+                  failure: error is Failure
+                      ? error
+                      : Failure.unexpected(message: error.toString()),
+                  onRetry: () => ref.refresh(userProfileProvider.future),
+                ),
+                SizedBox(height: AppSizes.lg),
+                LogoutButton(),
+              ],
+            ),
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/components/error_widget.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
@@ -74,15 +75,13 @@ class ProductDetailScreen extends ConsumerWidget {
           _buildProductDetail(context, ref, fetchedProduct),
       loading: () => Scaffold(
         backgroundColor: AppColors.background,
-        body: const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
+        body: const AppLoadingIndicator(),
       ),
       error: (error, stackTrace) => Scaffold(
         backgroundColor: AppColors.background,
         body: ErrorWidgett(
           icon: Icons.error_outline,
-          title: 'Error loading product',
+          title: 'We could not open this product right now.',
           failure: error is Failure
               ? error
               : Failure.unexpected(message: error.toString()),
@@ -100,6 +99,10 @@ class ProductDetailScreen extends ConsumerWidget {
     WidgetRef ref,
     Product product,
   ) {
+    final hasNutrition =
+        product.nutrition != null && product.nutrition!.trim().isNotEmpty;
+    final hasIngredients = product.ingredients.isNotEmpty;
+
     // Listen to review events
     ref.listen<ReviewUiEvent?>(reviewUiEventsProvider, (previous, next) {
       if (next == null) return;
@@ -162,12 +165,12 @@ class ProductDetailScreen extends ConsumerWidget {
 
           SliverToBoxAdapter(child: const SizedBox(height: AppSizes.lg)),
 
-          // Nutrition/Calories (quick stat right after price)
-          SliverToBoxAdapter(
-            child: ProductNutritionPanel(nutrition: product.nutrition),
-          ),
-
-          SliverToBoxAdapter(child: const SizedBox(height: AppSizes.xxl)),
+          if (hasNutrition)
+            SliverToBoxAdapter(
+              child: ProductNutritionPanel(nutrition: product.nutrition),
+            ),
+          if (hasNutrition)
+            SliverToBoxAdapter(child: const SizedBox(height: AppSizes.xxl)),
 
           // Description
           SliverToBoxAdapter(
@@ -176,12 +179,14 @@ class ProductDetailScreen extends ConsumerWidget {
 
           SliverToBoxAdapter(child: const SizedBox(height: AppSizes.xl)),
 
-          // Ingredients
-          SliverToBoxAdapter(
-            child: ProductIngredientsSection(ingredients: product.ingredients),
-          ),
-
-          SliverToBoxAdapter(child: const SizedBox(height: AppSizes.xxl)),
+          if (hasIngredients)
+            SliverToBoxAdapter(
+              child: ProductIngredientsSection(
+                ingredients: product.ingredients,
+              ),
+            ),
+          if (hasIngredients)
+            SliverToBoxAdapter(child: const SizedBox(height: AppSizes.xxl)),
 
           // Related Products
           SliverToBoxAdapter(

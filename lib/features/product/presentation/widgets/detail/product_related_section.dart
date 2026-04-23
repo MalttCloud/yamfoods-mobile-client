@@ -70,7 +70,7 @@ class ProductRelatedSection extends ConsumerWidget {
 
         // Horizontally scrollable products
         SizedBox(
-          height: 260, // Fixed height for product cards
+          height: 205, // Fixed height for product cards
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
