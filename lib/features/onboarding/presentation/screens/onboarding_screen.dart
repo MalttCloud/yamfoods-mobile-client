@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/errors/failure.dart';
@@ -29,8 +30,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       backgroundColor: AppColors.background,
       body: state.when(
         data: (onboardingState) => onboardingState.when(
-          initial: () => const Center(child: CircularProgressIndicator()),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          initial: () => const AppLoadingIndicator(),
+          loading: () => const AppLoadingIndicator(),
           loaded: (pages, currentPageIndex, pageController) => Stack(
             children: [
               PageView.builder(
@@ -80,7 +81,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 context.go(RouteName.branches);
               }
             });
-            return const Center(child: CircularProgressIndicator());
+            return const AppLoadingIndicator();
           },
         ),
         error: (error, stack) {
@@ -91,11 +92,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 failure: Failure.unexpected(message: error.toString()),
               );
               context.go(RouteName.branches);
-            } 
+            }
           });
-          return const Center(child: CircularProgressIndicator());
+          return const AppLoadingIndicator();
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const AppLoadingIndicator(),
       ),
     );
   }

@@ -76,7 +76,7 @@ class CartList extends ConsumerWidget {
         );
       },
       error: (error, stack) => ErrorWidgett(
-        title: 'Failed to load cart',
+        title: 'Cart data could not be loaded.',
         failure: error is Failure
             ? error
             : Failure.unexpected(message: error.toString()),

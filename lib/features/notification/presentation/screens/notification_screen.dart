@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/components/empty_state.dart';
 import '../../../../app/components/error_widget.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -48,15 +49,13 @@ class NotificationScreen extends ConsumerWidget {
         },
         error: (error, stackTrace) => ErrorWidgett(
           icon: Icons.error_outline,
-          title: 'Error loading notifications',
+          title: 'Your notification feed could not be refreshed.',
           failure: error is Failure
               ? error
               : Failure.unexpected(message: error.toString()),
           onRetry: () => ref.refresh(notificationsProvider.future),
         ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
+        loading: () => const AppLoadingIndicator(),
       ),
     );
   }

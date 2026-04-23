@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/components/empty_state.dart';
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/components/error_widget.dart';
@@ -70,13 +71,13 @@ class AddressScreen extends ConsumerWidget {
           },
           error: (error, stackTrace) => ErrorWidgett(
             icon: Icons.error_outline,
-            title: 'Error loading addresses',
+            title: 'We could not access your saved addresses.',
             failure: error is Failure
                 ? error
                 : Failure.unexpected(message: error.toString()),
             onRetry: () => ref.refresh(addressProvider.future),
           ),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const AppLoadingIndicator(),
         ),
       ),
     );

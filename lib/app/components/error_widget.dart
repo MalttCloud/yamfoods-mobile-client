@@ -56,18 +56,22 @@ class _ErrorWidgettState extends State<ErrorWidgett> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(widget.icon, size: 64, color: AppColors.error),
+            Image.asset(
+              widget.failure.toErrorAsset(),
+              height: 200,
+              fit: BoxFit.contain,
+            ),
             const SizedBox(height: AppSizes.lg),
             Text(
               widget.title,
-              style: AppTextStyles.h4.copyWith(color: AppColors.error),
+              style: AppTextStyles.h5.copyWith(color: AppColors.error),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSizes.sm),
             Text(
               message,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.txtSecondary,
+                color: AppColors.txtPrimary.withValues(alpha: .7),
               ),
               textAlign: TextAlign.center,
             ),
@@ -105,6 +109,8 @@ class _ErrorWidgettState extends State<ErrorWidgett> {
                     )
                   : Text('Retry', style: AppTextStyles.buttonMedium),
             ),
+            //the height of bottom sheet. we added this because we used extendedbody in the bottom nav screen to allow the active tab background to be transparent
+            SizedBox(height: 60),
           ],
         ),
       ),

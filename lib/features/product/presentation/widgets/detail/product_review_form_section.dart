@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../app/components/custom_button.dart';
+import '../../../../../app/components/custom_outlined_button.dart';
 import '../../../../../app/components/input_textfield.dart';
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../app/theme/app_sizes.dart';
@@ -210,11 +210,15 @@ class _ProductReviewFormSectionState
                       const SizedBox(height: AppSizes.lg),
 
                       // Submit Button
-                      CustomButton(
-                        text: 'Submit Review',
-                        onPressed: _handleSubmit,
-                        isLoading: isCreating,
-                        loadingText: 'Submitting...',
+                      Align(
+                        child: CustomOutlinedButton(
+                          height: 50,
+                          width: 200,
+                          text: 'Submit Review',
+                          onPressed: _handleSubmit,
+                          isLoading: isCreating,
+                          loadingText: 'Submitting...',
+                        ),
                       ),
                     ],
                   ),

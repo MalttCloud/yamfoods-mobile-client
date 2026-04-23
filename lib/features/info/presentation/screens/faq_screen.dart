@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yamfoods_customer_app/app/components/app_loading_indicator.dart';
 
 import '../../../../app/components/empty_state.dart';
 import '../../../../app/components/error_widget.dart';
@@ -61,15 +62,13 @@ class FaqScreen extends ConsumerWidget {
         },
         error: (error, stackTrace) => ErrorWidgett(
           icon: Icons.error_outline,
-          title: 'Error loading FAQs',
+          title: 'We could not pull the latest FAQs.',
           failure: error is Failure
               ? error
               : Failure.unexpected(message: error.toString()),
           onRetry: () => ref.refresh(faqsProvider.future),
         ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
+        loading: () => AppLoadingIndicator(),
       ),
     );
   }

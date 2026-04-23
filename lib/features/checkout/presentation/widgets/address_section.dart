@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yamfoods_customer_app/app/components/app_loading_indicator.dart';
 
 import '../../../../app/components/custom_button.dart';
 import '../../../../app/components/error_widget.dart';
@@ -128,15 +129,10 @@ class AddressSection extends ConsumerWidget {
                 onChange: () => _handleAddressChange(context, ref),
               );
             },
-            loading: () => const Center(
-              child: Padding(
-                padding: EdgeInsets.all(AppSizes.lg),
-                child: CircularProgressIndicator(),
-              ),
-            ),
+            loading: () => AppLoadingIndicator(),
             error: (error, stackTrace) => ErrorWidgett(
               icon: Icons.error_outline,
-              title: 'Error loading addresses',
+              title: 'Could not load delivery addresses yet.',
               failure: error is Failure
                   ? error
                   : Failure.unexpected(message: error.toString()),

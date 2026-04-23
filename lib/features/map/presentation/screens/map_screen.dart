@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gebeta_gl/gebeta_gl.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/components/error_widget.dart';
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -158,12 +159,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
               onStyleLoaded: _onStyleLoaded,
             );
           },
-          loading: () => const Center(
-            child: CircularProgressIndicator(color: AppColors.primary),
-          ),
+          loading: () => const AppLoadingIndicator(),
           error: (error, stackTrace) => ErrorWidgett(
             icon: Icons.error_outline,
-            title: 'Error loading route',
+            title: 'Navigation route failed to load.',
             failure: error is Failure
                 ? error
                 : Failure.unexpected(message: error.toString()),
