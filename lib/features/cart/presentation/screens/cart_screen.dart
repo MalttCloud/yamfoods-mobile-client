@@ -85,23 +85,28 @@ class CartScreen extends ConsumerWidget {
             ],
           ),
         ),
-        child: CartList(cartAsync: cartAsync, branchId: branchId)),
+        child: CartList(cartAsync: cartAsync, branchId: branchId),
+      ),
       // Bottom sheet with summary and checkout
       bottomSheet: cartAsync.value?.isNotEmpty == true
-          ? CartSummaryCard(
-              branchId: branchId,
-              onPlaceOrder: () {
-                final carts = cartAsync.value ?? [];
-                context.push(
-                  RouteName.checkout,
-                  extra: CheckoutArgs(branchId: branchId, carts: carts),
-                );
-              },
+          ? Padding(
+              padding: const EdgeInsets.only(
+                bottom: 60.0,
+              ), //the height of bottom sheet. we added this because we used extendedbody in the bottom nav screen to allow the active tab background to be transparent
+              child: CartSummaryCard(
+                branchId: branchId,
+                onPlaceOrder: () {
+                  final carts = cartAsync.value ?? [];
+                  context.push(
+                    RouteName.checkout,
+                    extra: CheckoutArgs(branchId: branchId, carts: carts),
+                  );
+                },
+              ),
             )
           : null,
     );
   }
 }
-
 
 //remove     return LocationGpsGuardPerscreen(

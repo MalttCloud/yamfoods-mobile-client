@@ -12,8 +12,6 @@ import '../theme/app_sizes.dart';
 import '../../features/branch/presentation/providers/branch_providers.dart';
 import '../../features/cart/presentation/providers/cart_providers.dart';
 
-
-
 class BottomNavScreen extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
 
@@ -93,10 +91,13 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
       child: SafeArea(
         top: false,
         child: Scaffold(
+          extendBody: true,
           body: widget.navigationShell,
           bottomNavigationBar: CurvedNavigationBar(
-           height: 60,
-            key: ValueKey('${widget.navigationShell.currentIndex}-$_navBarVersion'),
+            height: 60,
+            key: ValueKey(
+              '${widget.navigationShell.currentIndex}-$_navBarVersion',
+            ),
             index: widget.navigationShell.currentIndex,
             onTap: (index) async {
               final didNavigate = await _onItemTapped(index);
@@ -105,7 +106,7 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
                 setState(() => _navBarVersion++);
               }
             },
-            backgroundColor: AppColors.background,
+            backgroundColor: Colors.transparent,
             color: AppColors.primary,
             buttonBackgroundColor: AppColors.primary,
             animationDuration: const Duration(milliseconds: 250),
@@ -178,7 +179,6 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
     );
   }
 }
-
 
 class _CartBadgeIcon extends ConsumerWidget {
   final bool isActive;

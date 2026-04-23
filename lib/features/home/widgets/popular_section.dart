@@ -28,7 +28,7 @@ class PopularSection extends ConsumerWidget {
         }
 
         return SizedBox(
-          height: kHorizontalProductSectionTotalHeight,
+          height: 253,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,10 +42,7 @@ class PopularSection extends ConsumerWidget {
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Popular picks',
-                          style: AppTextStyles.h4,
-                        ),
+                        child: Text('Popular picks', style: AppTextStyles.h4),
                       ),
                     ),
                   ),
@@ -66,8 +63,7 @@ class PopularSection extends ConsumerWidget {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     return SizedBox(
-                      width: kHorizontalProductCardWidth,
-                      height: kHorizontalProductSectionRowHeight,
+                      width: 250,
                       child: Padding(
                         padding: EdgeInsets.only(right: AppSizes.sm),
                         child: ProductCard(product: products[index]),

@@ -51,10 +51,10 @@ class FilterSection extends ConsumerWidget {
           if (filters.minPrice != null || filters.maxPrice != null)
             _FilterChip(
               label: filters.minPrice != null && filters.maxPrice != null
-                  ? 'Price: Br${filters.minPrice!.toStringAsFixed(0)} - Br${filters.maxPrice!.toStringAsFixed(0)}'
+                  ? 'Price: ${filters.minPrice!.toStringAsFixed(0)} ETB - ${filters.maxPrice!.toStringAsFixed(0)} ETB'
                   : filters.minPrice != null
-                  ? 'Min: Br${filters.minPrice!.toStringAsFixed(0)}'
-                  : 'Max: Br${filters.maxPrice!.toStringAsFixed(0)}',
+                  ? 'Min: ${filters.minPrice!.toStringAsFixed(0)} ETB'
+                  : 'Max: ${filters.maxPrice!.toStringAsFixed(0)} ETB',
               onRemove: () {
                 ref
                     .read(searchFiltersProvider.notifier)

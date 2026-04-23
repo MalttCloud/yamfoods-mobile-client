@@ -66,7 +66,7 @@ class ProductSliverGrid extends ConsumerWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: AppSizes.sm,
                     mainAxisSpacing: AppSizes.sm,
-                    childAspectRatio: 0.75,
+                    childAspectRatio: 0.88,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) => ProductCard(product: products[index]),

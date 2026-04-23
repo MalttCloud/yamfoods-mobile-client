@@ -37,12 +37,22 @@ class CartList extends ConsumerWidget {
     return cartAsync.when(
       data: (carts) {
         if (carts.isEmpty) {
-          return EmptyState(
-            icon: Icons.shopping_cart_outlined,
-            title: 'Your cart is empty',
-            subtitle: 'Start adding delicious items to your cart',
-            actionText: 'Browse Menu',
-            onAction: () => context.go(RouteName.home),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              EmptyState(
+                icon: Icons.shopping_cart_outlined,
+                imageAsset: 'assets/images/empty_cart.png',
+                imageHeight: 270,
+                title: 'Your cart is waiting',
+                subtitle: 'Find something tasty and add it to your cart',
+                actionText: 'Browse Menu',
+                onAction: () => context.go(RouteName.home),
+              ),
+
+              //the height of bottom sheet. we added this because we used extendedbody in the bottom nav screen to allow the active tab background to be transparent
+              SizedBox(height: 60),
+            ],
           );
         }
         return ListView.builder(

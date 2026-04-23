@@ -48,7 +48,7 @@ class PaymentMethodSection extends ConsumerWidget {
           ),
           SizedBox(height: AppSizes.sm),
           _PaymentOption(
-            label: 'Telebirr (0% fee)',
+            label: 'telebirr (0% fee)',
             isSelected: paymentMethod == PaymentMethod.telebirr.value,
             onTap: () {
               ref
