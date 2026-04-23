@@ -29,6 +29,12 @@ _OrderDetailModel _$OrderDetailModelFromJson(Map<String, dynamic> json) =>
           'payment',
           (v) => PaymentModel.fromJson(v as Map<String, dynamic>),
         ),
+        branch: $checkedConvert(
+          'branch',
+          (v) => v == null
+              ? null
+              : OrderBranchModel.fromJson(v as Map<String, dynamic>),
+        ),
       );
       return val;
     });
@@ -39,4 +45,5 @@ Map<String, dynamic> _$OrderDetailModelToJson(_OrderDetailModel instance) =>
       'items': instance.items.map((e) => e.toJson()).toList(),
       'address': instance.address?.toJson(),
       'payment': instance.payment.toJson(),
+      'branch': instance.branch?.toJson(),
     };

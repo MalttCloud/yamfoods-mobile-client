@@ -5,6 +5,7 @@ import '../../../../../app/theme/app_colors.dart';
 import '../../../../../app/theme/app_sizes.dart';
 import '../../../../../app/theme/app_text_styles.dart';
 import '../../../../../core/constants/app_constants.dart';
+import '../../../../../core/enums/order_type.dart';
 import '../../../../../core/enums/payment_status.dart';
 import '../../../../../features/order/domain/entities/order_detail.dart';
 import 'payment_row.dart';
@@ -47,7 +48,8 @@ class OrderPaymentSection extends StatelessWidget {
           PaymentRow(label: 'Subtotal', amount: order.subtotal),
           if (order.vatTotal != null && order.vatTotal! > 0)
             PaymentRow(label: 'VAT', amount: order.vatTotal!),
-          PaymentRow(label: 'Delivery Fee', amount: order.deliveryFee),
+          if (order.type.toOrderType() == OrderType.delivery)
+            PaymentRow(label: 'Delivery Fee', amount: order.deliveryFee),
           if (order.pointDiscount != null && order.pointDiscount! > 0)
             PaymentRow(
               label: 'Point Discount',

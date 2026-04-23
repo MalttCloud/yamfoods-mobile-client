@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 mixin _$OrderDetail {
 
  Orderr get order; List<OrderItem> get items; OrderAddress? get address;// Nullable because pickup orders don't have addresses
- Payment get payment;
+ Payment get payment; OrderBranch? get branch;
 /// Create a copy of OrderDetail
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $OrderDetailCopyWith<OrderDetail> get copyWith => _$OrderDetailCopyWithImpl<Orde
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderDetail&&(identical(other.order, order) || other.order == order)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.address, address) || other.address == address)&&(identical(other.payment, payment) || other.payment == payment));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderDetail&&(identical(other.order, order) || other.order == order)&&const DeepCollectionEquality().equals(other.items, items)&&(identical(other.address, address) || other.address == address)&&(identical(other.payment, payment) || other.payment == payment)&&(identical(other.branch, branch) || other.branch == branch));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,order,const DeepCollectionEquality().hash(items),address,payment);
+int get hashCode => Object.hash(runtimeType,order,const DeepCollectionEquality().hash(items),address,payment,branch);
 
 @override
 String toString() {
-  return 'OrderDetail(order: $order, items: $items, address: $address, payment: $payment)';
+  return 'OrderDetail(order: $order, items: $items, address: $address, payment: $payment, branch: $branch)';
 }
 
 
@@ -46,11 +46,11 @@ abstract mixin class $OrderDetailCopyWith<$Res>  {
   factory $OrderDetailCopyWith(OrderDetail value, $Res Function(OrderDetail) _then) = _$OrderDetailCopyWithImpl;
 @useResult
 $Res call({
- Orderr order, List<OrderItem> items, OrderAddress? address, Payment payment
+ Orderr order, List<OrderItem> items, OrderAddress? address, Payment payment, OrderBranch? branch
 });
 
 
-$OrderrCopyWith<$Res> get order;$OrderAddressCopyWith<$Res>? get address;$PaymentCopyWith<$Res> get payment;
+$OrderrCopyWith<$Res> get order;$OrderAddressCopyWith<$Res>? get address;$PaymentCopyWith<$Res> get payment;$OrderBranchCopyWith<$Res>? get branch;
 
 }
 /// @nodoc
@@ -63,13 +63,14 @@ class _$OrderDetailCopyWithImpl<$Res>
 
 /// Create a copy of OrderDetail
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? order = null,Object? items = null,Object? address = freezed,Object? payment = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? order = null,Object? items = null,Object? address = freezed,Object? payment = null,Object? branch = freezed,}) {
   return _then(_self.copyWith(
 order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
 as Orderr,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
 as List<OrderItem>,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as OrderAddress?,payment: null == payment ? _self.payment : payment // ignore: cast_nullable_to_non_nullable
-as Payment,
+as Payment,branch: freezed == branch ? _self.branch : branch // ignore: cast_nullable_to_non_nullable
+as OrderBranch?,
   ));
 }
 /// Create a copy of OrderDetail
@@ -101,6 +102,18 @@ $PaymentCopyWith<$Res> get payment {
   
   return $PaymentCopyWith<$Res>(_self.payment, (value) {
     return _then(_self.copyWith(payment: value));
+  });
+}/// Create a copy of OrderDetail
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrderBranchCopyWith<$Res>? get branch {
+    if (_self.branch == null) {
+    return null;
+  }
+
+  return $OrderBranchCopyWith<$Res>(_self.branch!, (value) {
+    return _then(_self.copyWith(branch: value));
   });
 }
 }
@@ -181,10 +194,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Orderr order,  List<OrderItem> items,  OrderAddress? address,  Payment payment)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Orderr order,  List<OrderItem> items,  OrderAddress? address,  Payment payment,  OrderBranch? branch)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderDetail() when $default != null:
-return $default(_that.order,_that.items,_that.address,_that.payment);case _:
+return $default(_that.order,_that.items,_that.address,_that.payment,_that.branch);case _:
   return orElse();
 
 }
@@ -202,10 +215,10 @@ return $default(_that.order,_that.items,_that.address,_that.payment);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Orderr order,  List<OrderItem> items,  OrderAddress? address,  Payment payment)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Orderr order,  List<OrderItem> items,  OrderAddress? address,  Payment payment,  OrderBranch? branch)  $default,) {final _that = this;
 switch (_that) {
 case _OrderDetail():
-return $default(_that.order,_that.items,_that.address,_that.payment);}
+return $default(_that.order,_that.items,_that.address,_that.payment,_that.branch);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -219,10 +232,10 @@ return $default(_that.order,_that.items,_that.address,_that.payment);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Orderr order,  List<OrderItem> items,  OrderAddress? address,  Payment payment)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Orderr order,  List<OrderItem> items,  OrderAddress? address,  Payment payment,  OrderBranch? branch)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderDetail() when $default != null:
-return $default(_that.order,_that.items,_that.address,_that.payment);case _:
+return $default(_that.order,_that.items,_that.address,_that.payment,_that.branch);case _:
   return null;
 
 }
@@ -234,7 +247,7 @@ return $default(_that.order,_that.items,_that.address,_that.payment);case _:
 
 
 class _OrderDetail implements OrderDetail {
-  const _OrderDetail({required this.order, required final  List<OrderItem> items, this.address, required this.payment}): _items = items;
+  const _OrderDetail({required this.order, required final  List<OrderItem> items, this.address, required this.payment, this.branch}): _items = items;
   
 
 @override final  Orderr order;
@@ -248,6 +261,7 @@ class _OrderDetail implements OrderDetail {
 @override final  OrderAddress? address;
 // Nullable because pickup orders don't have addresses
 @override final  Payment payment;
+@override final  OrderBranch? branch;
 
 /// Create a copy of OrderDetail
 /// with the given fields replaced by the non-null parameter values.
@@ -259,16 +273,16 @@ _$OrderDetailCopyWith<_OrderDetail> get copyWith => __$OrderDetailCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderDetail&&(identical(other.order, order) || other.order == order)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.address, address) || other.address == address)&&(identical(other.payment, payment) || other.payment == payment));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderDetail&&(identical(other.order, order) || other.order == order)&&const DeepCollectionEquality().equals(other._items, _items)&&(identical(other.address, address) || other.address == address)&&(identical(other.payment, payment) || other.payment == payment)&&(identical(other.branch, branch) || other.branch == branch));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,order,const DeepCollectionEquality().hash(_items),address,payment);
+int get hashCode => Object.hash(runtimeType,order,const DeepCollectionEquality().hash(_items),address,payment,branch);
 
 @override
 String toString() {
-  return 'OrderDetail(order: $order, items: $items, address: $address, payment: $payment)';
+  return 'OrderDetail(order: $order, items: $items, address: $address, payment: $payment, branch: $branch)';
 }
 
 
@@ -279,11 +293,11 @@ abstract mixin class _$OrderDetailCopyWith<$Res> implements $OrderDetailCopyWith
   factory _$OrderDetailCopyWith(_OrderDetail value, $Res Function(_OrderDetail) _then) = __$OrderDetailCopyWithImpl;
 @override @useResult
 $Res call({
- Orderr order, List<OrderItem> items, OrderAddress? address, Payment payment
+ Orderr order, List<OrderItem> items, OrderAddress? address, Payment payment, OrderBranch? branch
 });
 
 
-@override $OrderrCopyWith<$Res> get order;@override $OrderAddressCopyWith<$Res>? get address;@override $PaymentCopyWith<$Res> get payment;
+@override $OrderrCopyWith<$Res> get order;@override $OrderAddressCopyWith<$Res>? get address;@override $PaymentCopyWith<$Res> get payment;@override $OrderBranchCopyWith<$Res>? get branch;
 
 }
 /// @nodoc
@@ -296,13 +310,14 @@ class __$OrderDetailCopyWithImpl<$Res>
 
 /// Create a copy of OrderDetail
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? order = null,Object? items = null,Object? address = freezed,Object? payment = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? order = null,Object? items = null,Object? address = freezed,Object? payment = null,Object? branch = freezed,}) {
   return _then(_OrderDetail(
 order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
 as Orderr,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
 as List<OrderItem>,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as OrderAddress?,payment: null == payment ? _self.payment : payment // ignore: cast_nullable_to_non_nullable
-as Payment,
+as Payment,branch: freezed == branch ? _self.branch : branch // ignore: cast_nullable_to_non_nullable
+as OrderBranch?,
   ));
 }
 
@@ -335,6 +350,18 @@ $PaymentCopyWith<$Res> get payment {
   
   return $PaymentCopyWith<$Res>(_self.payment, (value) {
     return _then(_self.copyWith(payment: value));
+  });
+}/// Create a copy of OrderDetail
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$OrderBranchCopyWith<$Res>? get branch {
+    if (_self.branch == null) {
+    return null;
+  }
+
+  return $OrderBranchCopyWith<$Res>(_self.branch!, (value) {
+    return _then(_self.copyWith(branch: value));
   });
 }
 }

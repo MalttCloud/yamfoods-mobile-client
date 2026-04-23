@@ -50,17 +50,27 @@ class OrderScreen extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: AppSizes.xs),
           child: ordersAsync.when(
             data: (orders) {
-              if (orders.isEmpty) {
-                return EmptyState(
-                  icon: Icons.shopping_bag_outlined,
-                  title: 'No orders yet',
-                  subtitle:
-                      'Your order history will appear here once you place an order',
-                  actionText: 'Browse Menu',
-                  onAction: () => context.pushReplacement(RouteName.home),
+              if (orders.isNotEmpty) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    EmptyState(
+                      icon: Icons.shopping_bag_outlined,
+                      imageAsset: 'assets/images/no_order.png',
+                      imageHeight: 210,
+                      title: 'No orders yet',
+                      subtitle:
+                          'Your order history will appear here once you place an order',
+                      actionText: 'Browse Menu',
+                      onAction: () => context.pushReplacement(RouteName.home),
+                    ),
+
+                    //the height of bottom sheet. we added this because we used extendedbody in the bottom nav screen to allow the active tab background to be transparent
+                    SizedBox(height: 60),
+                  ],
                 );
               }
-        
+
               return RefreshIndicator(
                 onRefresh: () => ref.refresh(allOrdersProvider.future),
                 color: AppColors.primary,
