@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:yamfoods_customer_app/app/components/custom_outlined_button.dart';
 
-import '../../../../app/components/custom_button.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_images.dart';
 import '../../../../app/theme/app_sizes.dart';
@@ -108,12 +108,29 @@ class _PaymentVerificationDialogState
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.asset(
-            AppImages.processPaymentAnime,
-            width: 300,
-            height: 300,
-            fit: BoxFit.contain,
-            repeat: true,
+          SizedBox(
+            // Fixed viewport: we clip a larger Lottie into this area (crop-only).
+            height: 190,
+            child: ClipRect(
+              child: Center(
+                child: OverflowBox(
+                  alignment: Alignment.center,
+                  minWidth: 0,
+                  minHeight: 0,
+                  maxWidth: 330,
+                  maxHeight: 330,
+                  child: SizedBox(
+                    width: 330,
+                    height: 330,
+                    child: Lottie.asset(
+                      AppImages.processPaymentAnime,
+                      fit: BoxFit.contain,
+                      repeat: true,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: AppSizes.sm),
           Text(
@@ -147,22 +164,20 @@ class _PaymentVerificationDialogState
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Icon(
-            Icons.error_outline,
-            size: AppSizes.iconSize * 2,
-            color: AppColors.error,
+          Center(
+            child: Image.asset(
+              'assets/images/error/payment_error.png',
+              height: 120,
+              fit: BoxFit.contain,
+            ),
           ),
-          const SizedBox(height: AppSizes.lg),
-          Text(
-            'Payment could not be confirmed',
-            style: AppTextStyles.h6.copyWith(color: AppColors.txtPrimary),
-            textAlign: TextAlign.center,
-          ),
+
           const SizedBox(height: AppSizes.sm),
           Text(
-            'Please try again or check your orders later.',
-            style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.txtSecondary,
+            'We couldn’t verify your payment. Please try again or use a different payment method. You can also check your order status in order page',
+            style: AppTextStyles.buttonLarge.copyWith(
+              color: AppColors.txtPrimary,
+              fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
@@ -171,19 +186,19 @@ class _PaymentVerificationDialogState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: CustomButton(
+                child: CustomOutlinedButton(
                   text: 'Retry',
                   onPressed: () =>
                       ref.invalidate(queryOrderProvider(widget.request)),
                   icon: Icons.refresh,
+                  textColor: AppColors.accentOrange,
                 ),
               ),
               const SizedBox(width: AppSizes.sm),
               Expanded(
-                child: CustomButton(
+                child: CustomOutlinedButton(
                   text: 'Skip',
                   onPressed: () => Navigator.of(context).pop(),
-                  color: AppColors.btnSecondary,
                   textColor: AppColors.txtPrimary,
                 ),
               ),
