@@ -8,6 +8,7 @@ import 'package:chapasdk/chapasdk.dart';
 import '../../features/payment/domain/entities/payment_result.dart';
 
 part 'chapa_payment_service.g.dart';
+
 /// Parameters required to start Chapa native checkout.
 ///
 /// All fields are required by the Chapa SDK for native checkout.
@@ -70,8 +71,7 @@ String _normalizeEthiopianMobileForChapa(String raw) {
       if (rest.length >= 10) return rest.substring(0, 10);
       return rest;
     }
-    if (rest.length == 9 &&
-        (rest.startsWith('9') || rest.startsWith('7'))) {
+    if (rest.length == 9 && (rest.startsWith('9') || rest.startsWith('7'))) {
       return '0$rest';
     }
   }
@@ -135,8 +135,9 @@ class ChapaPaymentService extends _$ChapaPaymentService {
         completer.complete(result);
       }
     }
+
     try {
-    Chapa.paymentParameters(
+      Chapa.paymentParameters(
         context: context,
         publicKey: publicKey,
         currency: _currency,
@@ -151,7 +152,7 @@ class ChapaPaymentService extends _$ChapaPaymentService {
         nativeCheckout: true,
         namedRouteFallBack: '',
         onPaymentFinished: (String message, String reference, String amount) {
-         //print the message, reference, and amount in one line
+          //print the message, reference, and amount in one line
           if (message == 'paymentSuccessful') {
             completeOnce(PaymentResult.success(transactionId: reference));
           } else if (message == 'paymentCancelled') {
