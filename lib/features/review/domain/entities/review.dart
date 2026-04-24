@@ -11,6 +11,7 @@ sealed class Review with _$Review {
     required String reviewerName,
     required int rating,
     required String comment,
+    String? reviewerImageUrl,
     required DateTime createdAt,
     required DateTime updatedAt,
   }) = _Review;

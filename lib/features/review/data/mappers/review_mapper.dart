@@ -12,6 +12,7 @@ extension ReviewModelMapper on ReviewModel {
       reviewerName: reviewerName ?? 'N/A',
       rating: rating ?? 0,
       comment: comment ?? 'N/A',
+      reviewerImageUrl: reviewerImageUrl,
       createdAt: createdAt,
       updatedAt: updatedAt,
     );

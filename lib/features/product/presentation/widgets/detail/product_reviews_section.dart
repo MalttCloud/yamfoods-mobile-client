@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../../app/components/confirmation_dialog.dart';
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../app/theme/app_sizes.dart';
 import '../../../../../app/theme/app_text_styles.dart';
+import '../../../../../core/constants/api_urls.dart';
 import '../../../../../core/utils/date_formatter.dart';
+import '../../../../../core/utils/image_url_builder.dart';
 import '../../../../auth/presentation/providers/auth_user_state.dart';
 import '../../../../review/domain/entities/review.dart';
 import '../../../../review/presentation/providers/review_notifier.dart';
@@ -204,6 +207,8 @@ class _ReviewItem extends ConsumerWidget {
     // Format time ago
     final timeAgo = DateFormatter.formatTimeAgo(review.createdAt);
 
+    final reviewerImageUrl = _buildReviewerImageUrl();
+
     return Container(
       padding: const EdgeInsets.all(AppSizes.lg),
       decoration: BoxDecoration(
@@ -220,27 +225,10 @@ class _ReviewItem extends ConsumerWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar (first character)
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.2),
-                width: 1,
-              ),
-            ),
-            child: Center(
-              child: Text(
-                firstChar,
-                style: AppTextStyles.h4.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
+          // Avatar (reviewer image if exists, else first character)
+          _ReviewerAvatar(
+            imageUrl: reviewerImageUrl,
+            firstChar: firstChar,
           ),
 
           const SizedBox(width: AppSizes.md),
@@ -323,6 +311,16 @@ class _ReviewItem extends ConsumerWidget {
     );
   }
 
+  String? _buildReviewerImageUrl() {
+    final imagePath = review.reviewerImageUrl;
+    if (imagePath == null || imagePath.isEmpty) return null;
+
+    return ImageUrlBuilder.build(
+      baseUrl: ApiUrls.getClientImageBaseUrl(),
+      imagePath: imagePath,
+    );
+  }
+
   /// Formats name: "Rejeb Dendir" → "Rejeb D.", "Rejeb" → "Rejeb"
   String _formatName(String fullName) {
     if (fullName.isEmpty) return 'Anonymous';
@@ -366,5 +364,65 @@ class _ReviewItem extends ConsumerWidget {
     if (confirmed == true && context.mounted) {
       await ref.read(reviewProvider(productId).notifier).delete(id: review.id);
     }
+  }
+}
+
+class _ReviewerAvatar extends StatelessWidget {
+  final String? imageUrl;
+  final String firstChar;
+
+  const _ReviewerAvatar({
+    required this.imageUrl,
+    required this.firstChar,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.primary.withValues(alpha: 0.1),
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: ClipOval(
+        child: imageUrl == null
+            ? Center(
+                child: Text(
+                  firstChar,
+                  style: AppTextStyles.h4.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              )
+            : CachedNetworkImage(
+                imageUrl: imageUrl!,
+                fit: BoxFit.cover,
+                placeholder: (_, __) => Center(
+                  child: Text(
+                    firstChar,
+                    style: AppTextStyles.h4.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                errorWidget: (_, _, _) => Center(
+                  child: Text(
+                    firstChar,
+                    style: AppTextStyles.h4.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+      ),
+    );
   }
 }

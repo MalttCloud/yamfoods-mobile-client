@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ReviewModel {
 
- int get id;@JsonKey(name: 'productId') int get productId;@JsonKey(name: 'reviewerId') int get reviewerId;@JsonKey(name: 'reviewerName') String? get reviewerName; int? get rating; String? get comment;@JsonKey(name: 'createdAt') DateTime get createdAt;@JsonKey(name: 'updatedAt') DateTime get updatedAt;
+ int get id;@JsonKey(name: 'productId') int get productId;@JsonKey(name: 'reviewerId') int get reviewerId;@JsonKey(name: 'reviewerName') String? get reviewerName; int? get rating; String? get reviewerImageUrl; String? get comment;@JsonKey(name: 'createdAt') DateTime get createdAt;@JsonKey(name: 'updatedAt') DateTime get updatedAt;
 /// Create a copy of ReviewModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ReviewModelCopyWith<ReviewModel> get copyWith => _$ReviewModelCopyWithImpl<Revi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReviewModel&&(identical(other.id, id) || other.id == id)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.reviewerId, reviewerId) || other.reviewerId == reviewerId)&&(identical(other.reviewerName, reviewerName) || other.reviewerName == reviewerName)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ReviewModel&&(identical(other.id, id) || other.id == id)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.reviewerId, reviewerId) || other.reviewerId == reviewerId)&&(identical(other.reviewerName, reviewerName) || other.reviewerName == reviewerName)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.reviewerImageUrl, reviewerImageUrl) || other.reviewerImageUrl == reviewerImageUrl)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,productId,reviewerId,reviewerName,rating,comment,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,productId,reviewerId,reviewerName,rating,reviewerImageUrl,comment,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'ReviewModel(id: $id, productId: $productId, reviewerId: $reviewerId, reviewerName: $reviewerName, rating: $rating, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ReviewModel(id: $id, productId: $productId, reviewerId: $reviewerId, reviewerName: $reviewerName, rating: $rating, reviewerImageUrl: $reviewerImageUrl, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ReviewModelCopyWith<$Res>  {
   factory $ReviewModelCopyWith(ReviewModel value, $Res Function(ReviewModel) _then) = _$ReviewModelCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'productId') int productId,@JsonKey(name: 'reviewerId') int reviewerId,@JsonKey(name: 'reviewerName') String? reviewerName, int? rating, String? comment,@JsonKey(name: 'createdAt') DateTime createdAt,@JsonKey(name: 'updatedAt') DateTime updatedAt
+ int id,@JsonKey(name: 'productId') int productId,@JsonKey(name: 'reviewerId') int reviewerId,@JsonKey(name: 'reviewerName') String? reviewerName, int? rating, String? reviewerImageUrl, String? comment,@JsonKey(name: 'createdAt') DateTime createdAt,@JsonKey(name: 'updatedAt') DateTime updatedAt
 });
 
 
@@ -65,14 +65,15 @@ class _$ReviewModelCopyWithImpl<$Res>
 
 /// Create a copy of ReviewModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? productId = null,Object? reviewerId = null,Object? reviewerName = freezed,Object? rating = freezed,Object? comment = freezed,Object? createdAt = null,Object? updatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? productId = null,Object? reviewerId = null,Object? reviewerName = freezed,Object? rating = freezed,Object? reviewerImageUrl = freezed,Object? comment = freezed,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as int,reviewerId: null == reviewerId ? _self.reviewerId : reviewerId // ignore: cast_nullable_to_non_nullable
 as int,reviewerName: freezed == reviewerName ? _self.reviewerName : reviewerName // ignore: cast_nullable_to_non_nullable
 as String?,rating: freezed == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
-as int?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
+as int?,reviewerImageUrl: freezed == reviewerImageUrl ? _self.reviewerImageUrl : reviewerImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'productId')  int productId, @JsonKey(name: 'reviewerId')  int reviewerId, @JsonKey(name: 'reviewerName')  String? reviewerName,  int? rating,  String? comment, @JsonKey(name: 'createdAt')  DateTime createdAt, @JsonKey(name: 'updatedAt')  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'productId')  int productId, @JsonKey(name: 'reviewerId')  int reviewerId, @JsonKey(name: 'reviewerName')  String? reviewerName,  int? rating,  String? reviewerImageUrl,  String? comment, @JsonKey(name: 'createdAt')  DateTime createdAt, @JsonKey(name: 'updatedAt')  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ReviewModel() when $default != null:
-return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_that.rating,_that.comment,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_that.rating,_that.reviewerImageUrl,_that.comment,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'productId')  int productId, @JsonKey(name: 'reviewerId')  int reviewerId, @JsonKey(name: 'reviewerName')  String? reviewerName,  int? rating,  String? comment, @JsonKey(name: 'createdAt')  DateTime createdAt, @JsonKey(name: 'updatedAt')  DateTime updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'productId')  int productId, @JsonKey(name: 'reviewerId')  int reviewerId, @JsonKey(name: 'reviewerName')  String? reviewerName,  int? rating,  String? reviewerImageUrl,  String? comment, @JsonKey(name: 'createdAt')  DateTime createdAt, @JsonKey(name: 'updatedAt')  DateTime updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _ReviewModel():
-return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_that.rating,_that.comment,_that.createdAt,_that.updatedAt);}
+return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_that.rating,_that.reviewerImageUrl,_that.comment,_that.createdAt,_that.updatedAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -195,10 +196,10 @@ return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'productId')  int productId, @JsonKey(name: 'reviewerId')  int reviewerId, @JsonKey(name: 'reviewerName')  String? reviewerName,  int? rating,  String? comment, @JsonKey(name: 'createdAt')  DateTime createdAt, @JsonKey(name: 'updatedAt')  DateTime updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'productId')  int productId, @JsonKey(name: 'reviewerId')  int reviewerId, @JsonKey(name: 'reviewerName')  String? reviewerName,  int? rating,  String? reviewerImageUrl,  String? comment, @JsonKey(name: 'createdAt')  DateTime createdAt, @JsonKey(name: 'updatedAt')  DateTime updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ReviewModel() when $default != null:
-return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_that.rating,_that.comment,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_that.rating,_that.reviewerImageUrl,_that.comment,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -210,7 +211,7 @@ return $default(_that.id,_that.productId,_that.reviewerId,_that.reviewerName,_th
 @JsonSerializable()
 
 class _ReviewModel implements ReviewModel {
-  const _ReviewModel({required this.id, @JsonKey(name: 'productId') required this.productId, @JsonKey(name: 'reviewerId') required this.reviewerId, @JsonKey(name: 'reviewerName') this.reviewerName, this.rating, this.comment, @JsonKey(name: 'createdAt') required this.createdAt, @JsonKey(name: 'updatedAt') required this.updatedAt});
+  const _ReviewModel({required this.id, @JsonKey(name: 'productId') required this.productId, @JsonKey(name: 'reviewerId') required this.reviewerId, @JsonKey(name: 'reviewerName') this.reviewerName, this.rating, this.reviewerImageUrl, this.comment, @JsonKey(name: 'createdAt') required this.createdAt, @JsonKey(name: 'updatedAt') required this.updatedAt});
   factory _ReviewModel.fromJson(Map<String, dynamic> json) => _$ReviewModelFromJson(json);
 
 @override final  int id;
@@ -218,6 +219,7 @@ class _ReviewModel implements ReviewModel {
 @override@JsonKey(name: 'reviewerId') final  int reviewerId;
 @override@JsonKey(name: 'reviewerName') final  String? reviewerName;
 @override final  int? rating;
+@override final  String? reviewerImageUrl;
 @override final  String? comment;
 @override@JsonKey(name: 'createdAt') final  DateTime createdAt;
 @override@JsonKey(name: 'updatedAt') final  DateTime updatedAt;
@@ -235,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReviewModel&&(identical(other.id, id) || other.id == id)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.reviewerId, reviewerId) || other.reviewerId == reviewerId)&&(identical(other.reviewerName, reviewerName) || other.reviewerName == reviewerName)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ReviewModel&&(identical(other.id, id) || other.id == id)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.reviewerId, reviewerId) || other.reviewerId == reviewerId)&&(identical(other.reviewerName, reviewerName) || other.reviewerName == reviewerName)&&(identical(other.rating, rating) || other.rating == rating)&&(identical(other.reviewerImageUrl, reviewerImageUrl) || other.reviewerImageUrl == reviewerImageUrl)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,productId,reviewerId,reviewerName,rating,comment,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,productId,reviewerId,reviewerName,rating,reviewerImageUrl,comment,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'ReviewModel(id: $id, productId: $productId, reviewerId: $reviewerId, reviewerName: $reviewerName, rating: $rating, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ReviewModel(id: $id, productId: $productId, reviewerId: $reviewerId, reviewerName: $reviewerName, rating: $rating, reviewerImageUrl: $reviewerImageUrl, comment: $comment, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$ReviewModelCopyWith<$Res> implements $ReviewModelCopyWith
   factory _$ReviewModelCopyWith(_ReviewModel value, $Res Function(_ReviewModel) _then) = __$ReviewModelCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'productId') int productId,@JsonKey(name: 'reviewerId') int reviewerId,@JsonKey(name: 'reviewerName') String? reviewerName, int? rating, String? comment,@JsonKey(name: 'createdAt') DateTime createdAt,@JsonKey(name: 'updatedAt') DateTime updatedAt
+ int id,@JsonKey(name: 'productId') int productId,@JsonKey(name: 'reviewerId') int reviewerId,@JsonKey(name: 'reviewerName') String? reviewerName, int? rating, String? reviewerImageUrl, String? comment,@JsonKey(name: 'createdAt') DateTime createdAt,@JsonKey(name: 'updatedAt') DateTime updatedAt
 });
 
 
@@ -272,14 +274,15 @@ class __$ReviewModelCopyWithImpl<$Res>
 
 /// Create a copy of ReviewModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? productId = null,Object? reviewerId = null,Object? reviewerName = freezed,Object? rating = freezed,Object? comment = freezed,Object? createdAt = null,Object? updatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? productId = null,Object? reviewerId = null,Object? reviewerName = freezed,Object? rating = freezed,Object? reviewerImageUrl = freezed,Object? comment = freezed,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_ReviewModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,productId: null == productId ? _self.productId : productId // ignore: cast_nullable_to_non_nullable
 as int,reviewerId: null == reviewerId ? _self.reviewerId : reviewerId // ignore: cast_nullable_to_non_nullable
 as int,reviewerName: freezed == reviewerName ? _self.reviewerName : reviewerName // ignore: cast_nullable_to_non_nullable
 as String?,rating: freezed == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
-as int?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
+as int?,reviewerImageUrl: freezed == reviewerImageUrl ? _self.reviewerImageUrl : reviewerImageUrl // ignore: cast_nullable_to_non_nullable
+as String?,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
 as DateTime,
