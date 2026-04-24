@@ -13,6 +13,7 @@ sealed class ReviewModel with _$ReviewModel {
     @JsonKey(name: 'reviewerId') required int reviewerId,
     @JsonKey(name: 'reviewerName') String? reviewerName,
     int? rating,
+    String? reviewerImageUrl,
     String? comment,
     @JsonKey(name: 'createdAt') required DateTime createdAt,
     @JsonKey(name: 'updatedAt') required DateTime updatedAt,

@@ -12,10 +12,7 @@ import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 
 /// Confetti colors using app theme.
-const List<Color> _confettiColors = [
-  AppColors.primary,
-  AppColors.white,
-];
+const List<Color> _confettiColors = [AppColors.primary, AppColors.white];
 
 /// Full-screen order success confirmation shown after payment is verified.
 ///
@@ -148,12 +145,12 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                 const SizedBox(height: AppSizes.lg),
                 CustomButton(
                   text: 'Continue shopping',
-                  onPressed: () => context.pushReplacement(RouteName.home),
+                  onPressed: () => context.go(RouteName.home),
                   icon: Icons.shopping_bag_outlined,
                   color: AppColors.btnSecondary,
                   textColor: AppColors.txtPrimary,
                 ),
-                 const Spacer(flex: 3),
+                const Spacer(flex: 3),
               ],
             ),
           ),
@@ -171,10 +168,7 @@ class _SuccessIcon extends StatelessWidget {
     return SizedBox(
       width: 210,
       height: 210,
-      child: Image.asset(
-        AppImages.orderSuccessIcon,
-        fit: BoxFit.contain,
-      ),
+      child: Image.asset(AppImages.orderSuccessIcon, fit: BoxFit.contain),
     );
   }
 }

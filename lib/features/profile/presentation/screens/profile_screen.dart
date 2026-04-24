@@ -65,7 +65,7 @@ class ProfileScreen extends ConsumerWidget {
               SizedBox(height: 60),
             ],
           ),
-          loading: () => const AppLoadingIndicator(message: 'Loading...'),
+          loading: () => const AppLoadingIndicator(),
           error: (error, _) => Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -87,7 +87,7 @@ class ProfileScreen extends ConsumerWidget {
               children: [
                 ErrorWidgett(
                   icon: Icons.error_outline,
-                  title: 'We hit a snag loading your profile.',
+                  title: 'We could\'t load your profile.',
                   failure: error is Failure
                       ? error
                       : Failure.unexpected(message: error.toString()),
