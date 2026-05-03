@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../core/utils/distance_calculator.dart';
+import '../../../../responsive.dart';
 import '../../domain/entities/branch.dart';
 import 'branch_ring_selector.dart';
 
@@ -26,12 +27,12 @@ class BranchRingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 140,
+      height: context.isTablet ? 240 : 140,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
         itemCount: branches.length,
-        separatorBuilder: (_, _) => const SizedBox(width: AppSizes.lg),
+        separatorBuilder: (_, _) => SizedBox(width: context.isTablet ? AppSizes.xxl : AppSizes.lg),
         itemBuilder: (context, index) {
           final branch = branches[index];
           final formattedDistance = userPosition != null

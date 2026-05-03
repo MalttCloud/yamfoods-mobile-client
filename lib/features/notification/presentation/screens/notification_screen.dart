@@ -5,6 +5,7 @@ import '../../../../app/components/app_loading_indicator.dart';
 import '../../../../app/components/empty_state.dart';
 import '../../../../app/components/error_widget.dart';
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/widgets/custom_app_bar.dart';
 import '../../../../core/errors/failure.dart';
 import '../providers/notification_providers.dart';
@@ -34,16 +35,21 @@ class NotificationScreen extends ConsumerWidget {
           return RefreshIndicator(
             onRefresh: () => ref.refresh(notificationsProvider.future),
             color: AppColors.primary,
-            child: ListView.separated(
-              itemCount: notifications.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                thickness: 1,
-                color: AppColors.grey.withValues(alpha: 0.2),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+                child: ListView.separated(
+                  itemCount: notifications.length,
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: AppColors.grey.withValues(alpha: 0.2),
+                  ),
+                  itemBuilder: (context, index) {
+                    return NotificationCard(notification: notifications[index]);
+                  },
+                ),
               ),
-              itemBuilder: (context, index) {
-                return NotificationCard(notification: notifications[index]);
-              },
             ),
           );
         },

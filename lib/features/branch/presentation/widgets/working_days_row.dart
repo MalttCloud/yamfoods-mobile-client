@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
+import '../../../../responsive.dart';
 import '../../domain/entities/working_day.dart';
 
 /// Widget displaying working days as chips in a row.
@@ -26,7 +27,7 @@ class WorkingDaysRow extends StatelessWidget {
       children: days.map((day) {
         final isActive = activeDays.contains(day);
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: context.isTablet ? const EdgeInsets.symmetric(horizontal: 24, vertical: 16) : const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
             color: isActive
                 ? AppColors.white.withValues(alpha: 0.15)
@@ -41,6 +42,7 @@ class WorkingDaysRow extends StatelessWidget {
             style: AppTextStyles.caption.copyWith(
               color: AppColors.white.withValues(alpha: isActive ? 1.0 : 0.5),
               fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+              fontSize: context.isTablet ? 16 : 12,
             ),
           ),
         );

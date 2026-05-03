@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../app/theme/app_sizes.dart';
 import '../../../../../app/theme/app_text_styles.dart';
+import '../../../../../responsive.dart';
 import '../../providers/product_providers.dart';
 import '../product_card.dart';
 
@@ -70,14 +71,14 @@ class ProductRelatedSection extends ConsumerWidget {
 
         // Horizontally scrollable products
         SizedBox(
-          height: 205, // Fixed height for product cards
+          height: 248,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
             itemCount: relatedProducts.length,
             itemBuilder: (context, index) {
               return Container(
-                width: 180, // Fixed width for each card
+                width: context.isTablet? 200: 190,
                 margin: EdgeInsets.only(
                   right: index == relatedProducts.length - 1 ? 0 : AppSizes.md,
                 ),

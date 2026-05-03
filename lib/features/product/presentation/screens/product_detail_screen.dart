@@ -10,6 +10,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../core/services/snackbar_service.dart';
 import '../../../branch/presentation/providers/branch_providers.dart';
 import '../../../review/presentation/providers/review_events.dart';
+import '../../../../responsive.dart';
 import '../../domain/entities/product.dart';
 import '../providers/product_providers.dart';
 import '../widgets/detail/product_cart_bottom_sheet.dart';
@@ -102,6 +103,10 @@ class ProductDetailScreen extends ConsumerWidget {
     final hasNutrition =
         product.nutrition != null && product.nutrition!.trim().isNotEmpty;
     final hasIngredients = product.ingredients.isNotEmpty;
+    final heroHeight = AppSizes.productHeroHeight(
+      screenHeight: MediaQuery.sizeOf(context).height,
+      isTablet: context.isTablet,
+    );
 
     // Listen to review events
     ref.listen<ReviewUiEvent?>(reviewUiEventsProvider, (previous, next) {
@@ -132,7 +137,7 @@ class ProductDetailScreen extends ConsumerWidget {
           // Image Hero Section
           SliverToBoxAdapter(
             child: SizedBox(
-              height: 280,
+              height: heroHeight,
               child: Stack(
                 children: [
                   // Curved background and carousel
@@ -149,7 +154,10 @@ class ProductDetailScreen extends ConsumerWidget {
                   //   child: ProductImageCarousel(images: product.imageUrls),
                   // ),
                   // Modern full-width image carousel with rounded bottom corners
-                  ProductImageCarouselModern(images: product.imageUrls),
+                  ProductImageCarouselModern(
+                    images: product.imageUrls,
+                    height: heroHeight,
+                  ),
 
                   // Floating Header
                   const ProductDetailHeader(),

@@ -86,4 +86,19 @@ class InfoRepositoryImpl implements InfoRepository {
 
     return result.fold((failure) => Left(failure), (_) => const Right(null));
   }
+
+  @override
+  Future<Either<Failure, void>> deleteMyAccount({
+    required String phone,
+    required String title,
+    required String reason,
+  }) async {
+    final result = await _remoteDataSource.deleteMyAccount(
+      phone: phone,
+      title: title,
+      reason: reason,
+    );
+
+    return result.fold((failure) => Left(failure), (_) => const Right(null));
+  }
 }

@@ -6,6 +6,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../app/components/skeleton/promo_banner_skeleton.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
+import '../../../../responsive.dart';
 import '../providers/promo_banner_providers.dart';
 import 'promo_banner_item.dart';
 
@@ -85,7 +86,7 @@ class _PromoBannerSliderState extends ConsumerState<PromoBannerSlider> {
                 );
               },
               options: CarouselOptions(
-                height: 110,
+                height: context.isTablet ? 150 : 110,
                 viewportFraction:
                     0.94, // Minimize gap while showing small preview of adjacent banners
                 enlargeCenterPage: true, // Enable scale animation

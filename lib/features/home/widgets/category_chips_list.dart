@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yamfoods_customer_app/responsive.dart';
 
 import '../../../../app/components/skeleton/category_chip_skeleton.dart';
 import '../../../../app/theme/app_sizes.dart';
@@ -20,7 +21,7 @@ class CategoryChipsList extends ConsumerWidget {
     final categoriesAsync = ref.watch(categoriesProvider(branchId));
 
     return SizedBox(
-      height: 105,
+      height: context.isTablet ? 128 : 108,
       child: categoriesAsync.when(
         data: (categories) {
           if (categories.isEmpty) {
@@ -43,12 +44,12 @@ class CategoryChipsList extends ConsumerWidget {
 
   ListView categorySkeleton() {
     return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: AppSizes.lg),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return const CategoryChipSkeleton();
-        },
-      );
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(horizontal: AppSizes.lg),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return const CategoryChipSkeleton();
+      },
+    );
   }
 }

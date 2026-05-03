@@ -34,7 +34,7 @@ class PromoBannerItem extends ConsumerWidget {
       onTap: hasAction ? onTap : null,
       child: Container(
         width: double.infinity,
-        height: AppSizes.bannerHeight,
+        height:  AppSizes.bannerHeight,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(AppSizes.radius),
           boxShadow: [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yamfoods_customer_app/responsive.dart';
 
 import '../../../../app/components/skeleton/horizontal_product_section_skeleton.dart';
 import '../../../../app/theme/app_sizes.dart';
@@ -28,7 +29,7 @@ class SpecialOfferForYouSection extends ConsumerWidget {
         }
 
         return SizedBox(
-          height: 253,
+          height:  296,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +67,7 @@ class SpecialOfferForYouSection extends ConsumerWidget {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     return SizedBox(
-                      width: 190,
+                      width: context.isTablet? 200: 190,
                       // height: kHorizontalProductSectionRowHeight,
                       child: Padding(
                         padding: EdgeInsets.only(right: AppSizes.sm),

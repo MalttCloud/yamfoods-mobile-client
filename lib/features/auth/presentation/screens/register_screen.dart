@@ -68,10 +68,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         //since we allow that existing user can register through google if provider is google
         else if (next.user.phone != null && next.user.phoneVerified == true) {
           context.go(RouteName.branches);
-        }else if (next.user.phone != null && next.user.phoneVerified == false) {
+        } else if (next.user.phone != null &&
+            next.user.phoneVerified == false) {
           context.push(RouteName.verifyPhone, extra: next.user);
         }
-
       } else if (next is RegisterFailure) {
         snackbar.showError(next.failure);
       }
@@ -83,15 +83,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
     return Scaffold(
       body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSizes.lg),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+        child: ConstrainedBox(
+          constraints:
+              const BoxConstraints(maxWidth: AppSizes.authScreensMaxWidth),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSizes.lg),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
                   const SizedBox(height: 60),
                   Text(
                     AppTexts.registerAccount,
@@ -228,7 +231,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             // Backend errors are handled by the auth event system
                             ref
                                 .read(authProvider.notifier)
-                                .googleSignIn(idToken: idToken, isRegistering: true);
+                                .googleSignIn(
+                                  idToken: idToken,
+                                  isRegistering: true,
+                                );
                           },
                     isLoading: isLoading,
                     isSocial: true,
@@ -297,7 +303,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       ),
                     ),
                   ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

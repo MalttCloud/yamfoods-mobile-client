@@ -62,11 +62,16 @@ class AddressScreen extends ConsumerWidget {
                 onAction: () => context.push(RouteName.createOrUpdateAddress),
               );
             }
-            return ListView.builder(
-              itemCount: addresses.length,
-              itemBuilder: (context, index) {
-                return AddressCard(address: addresses[index]);
-              },
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+                child: ListView.builder(
+                  itemCount: addresses.length,
+                  itemBuilder: (context, index) {
+                    return AddressCard(address: addresses[index]);
+                  },
+                ),
+              ),
             );
           },
           error: (error, stackTrace) => ErrorWidgett(

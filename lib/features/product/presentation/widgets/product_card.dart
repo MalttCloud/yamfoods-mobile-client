@@ -11,6 +11,7 @@ import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/utils/image_url_builder.dart';
 import '../../../../core/snacks/info_snack_bar.dart';
+import '../../../../responsive.dart';
 import '../../../app_configuration/presentation/providers/app_configuration_providers.dart';
 import '../../../cart/domain/entities/cart_request_data.dart';
 import '../../../cart/presentation/providers/cart_loading_providers.dart';
@@ -41,131 +42,138 @@ class ProductCard extends ConsumerWidget {
           )
         : null;
 
-    return GestureDetector(
-      onTap: () => context.push(RouteName.productDetail, extra: product),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(AppSizes.radius),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.grey.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            // Main content
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Product image with discount badge
-                SizedBox(
-                  height: 120,
-                  child: Stack(
-                    children: [
-                      // Image
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(AppSizes.radius),
-                          topRight: Radius.circular(AppSizes.radius),
+    final cardHeight = context.isTablet
+        ? AppSizes.productCardHeightTablet
+        : AppSizes.productCardHeightMobile;
+
+    return SizedBox(
+      height: cardHeight,
+      child: GestureDetector(
+        onTap: () => context.push(RouteName.productDetail, extra: product),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radius),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.grey.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              // Main content
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product image with discount badge
+                  SizedBox(
+                    height: AppSizes.productCardImageHeight,
+                    child: Stack(
+                      children: [
+                        // Image
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(AppSizes.radius),
+                            topRight: Radius.circular(AppSizes.radius),
+                          ),
+                          child: _buildImage(imageUrl, ref),
                         ),
-                        child: _buildImage(imageUrl, ref),
-                      ),
-                      // Discount badge
-                      if (product.hasDiscount)
-                        Positioned(
-                          top: AppSizes.xs,
-                          right: AppSizes.xs,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSizes.xs,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.success,
-                              borderRadius: BorderRadius.circular(
-                                AppSizes.radiusSm,
+                        // Discount badge
+                        if (product.hasDiscount)
+                          Positioned(
+                            top: AppSizes.xs,
+                            right: AppSizes.xs,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: AppSizes.xs,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.success,
+                                borderRadius: BorderRadius.circular(
+                                  AppSizes.radiusSm,
+                                ),
+                              ),
+                              child: Text(
+                                '${product.discountPercent.round()}% OFF',
+                                style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                            child: Text(
-                              '${product.discountPercent.round()}% OFF',
+                          ),
+                      ],
+                    ),
+                  ),
+                  // Product details
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          product.name,
+                          style: AppTextStyles.h5.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+
+                        // Rating
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.star, color: AppColors.warning, size: 14),
+                            SizedBox(width: 2),
+                            Text(
+                              _formatRating(product.averageRating),
                               style: AppTextStyles.caption.copyWith(
-                                color: AppColors.white,
-                                fontSize: 10,
+                                color: AppColors.warning,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                // Product details
-                Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        product.name,
-                        style: AppTextStyles.h5.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-
-                      // Rating
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.star, color: AppColors.warning, size: 14),
-                          SizedBox(width: 2),
-                          Text(
-                            _formatRating(product.averageRating),
-                            style: AppTextStyles.caption.copyWith(
-                              color: AppColors.warning,
-                              fontWeight: FontWeight.w600,
+                            SizedBox(width: 4),
+                            Text(
+                              product.reviewCount > 1
+                                  ? '(${product.reviewCount} reviews)'
+                                  : '(${product.reviewCount} review)',
+                              style: AppTextStyles.caption.copyWith(
+                                color: AppColors.txtSecondary,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            product.reviewCount > 1
-                                ? '(${product.reviewCount} reviews)'
-                                : '(${product.reviewCount} review)',
-                            style: AppTextStyles.caption.copyWith(
-                              color: AppColors.txtSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
 
-                      // Price row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildPrice(),
-                          // Cart action button/control at bottom right
-                          isInCart && cartItem != null
-                              ? ProductQuantityControl(
-                                  cart: cartItem,
-                                  branchId: product.branchId,
-                                  iconColor: AppColors.accentOrange,
-                                  textColor: AppColors.accentOrange,
-                                  buttonBackgroundColor: AppColors.primary,
-                                )
-                              : _buildAddButton(context, ref),
-                        ],
-                      ),
-                    ],
+                        // Price row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _buildPrice(),
+                            // Cart action button/control at bottom right
+                            isInCart && cartItem != null
+                                ? ProductQuantityControl(
+                                    cart: cartItem,
+                                    branchId: product.branchId,
+                                    iconColor: AppColors.accentOrange,
+                                    textColor: AppColors.accentOrange,
+                                    buttonBackgroundColor: AppColors.primary,
+                                  )
+                                : _buildAddButton(context, ref),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -122,105 +122,110 @@ class _ProductReviewFormSectionState
                   ],
                 ),
               ),
-
+        
               const SizedBox(height: AppSizes.lg),
-
+        
               // Form Content
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
-                child: Container(
-                  padding: const EdgeInsets.all(AppSizes.lg),
-                  decoration: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(AppSizes.radius),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.grey.withValues(alpha: 0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Rating Label
-                      Text(
-                        'Rating *',
-                        style: AppTextStyles.labelMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.txtSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: AppSizes.sm),
-
-                      // Rating Stars
-                      Center(
-                        child: RatingBar.builder(
-                          initialRating: _rating,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: false,
-                          itemCount: 5,
-                          itemSize: 40,
-                          itemPadding: const EdgeInsets.symmetric(
-                            horizontal: 4.0,
+              Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 700),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+                    child: Container(
+                      padding: const EdgeInsets.all(AppSizes.lg),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(AppSizes.radius),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.grey.withValues(alpha: 0.1),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star_rounded,
-                            color: AppColors.warning,
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Rating Label
+                          Text(
+                            'Rating *',
+                            style: AppTextStyles.labelMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.txtSecondary,
+                            ),
                           ),
-                          onRatingUpdate: (rating) {
-                            setState(() {
-                              _rating = rating;
-                            });
-                          },
-                        ),
+                          const SizedBox(height: AppSizes.sm),
+                            
+                          // Rating Stars
+                          Center(
+                            child: RatingBar.builder(
+                              initialRating: _rating,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              itemCount: 5,
+                              itemSize: 40,
+                              itemPadding: const EdgeInsets.symmetric(
+                                horizontal: 4.0,
+                              ),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star_rounded,
+                                color: AppColors.warning,
+                              ),
+                              onRatingUpdate: (rating) {
+                                setState(() {
+                                  _rating = rating;
+                                });
+                              },
+                            ),
+                          ),
+                            
+                          const SizedBox(height: AppSizes.lg),
+                            
+                          // Comment Field
+                          Text(
+                            'Comment *',
+                            style: AppTextStyles.labelMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.txtSecondary,
+                            ),
+                          ),
+                          const SizedBox(height: AppSizes.sm),
+                          InputTextfield(
+                            controller: _commentController,
+                            hintText: 'Write your review...',
+                            icon: Icons.comment_rounded,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Please enter a comment';
+                              }
+                              if (value.trim().length < 3) {
+                                return 'Comment must be at least 3 characters';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.multiline,
+                            maxLength: 100,
+                            maxLines: 4,
+                          ),
+                            
+                          const SizedBox(height: AppSizes.lg),
+                            
+                          // Submit Button
+                          Align(
+                            child: CustomOutlinedButton(
+                              height: 50,
+                              width: 200,
+                              text: 'Submit Review',
+                              onPressed: _handleSubmit,
+                              isLoading: isCreating,
+                              loadingText: 'Submitting...',
+                            ),
+                          ),
+                        ],
                       ),
-
-                      const SizedBox(height: AppSizes.lg),
-
-                      // Comment Field
-                      Text(
-                        'Comment *',
-                        style: AppTextStyles.labelMedium.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.txtSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: AppSizes.sm),
-                      InputTextfield(
-                        controller: _commentController,
-                        hintText: 'Write your review...',
-                        icon: Icons.comment_rounded,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Please enter a comment';
-                          }
-                          if (value.trim().length < 3) {
-                            return 'Comment must be at least 3 characters';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.multiline,
-                        maxLength: 100,
-                        maxLines: 4,
-                      ),
-
-                      const SizedBox(height: AppSizes.lg),
-
-                      // Submit Button
-                      Align(
-                        child: CustomOutlinedButton(
-                          height: 50,
-                          width: 200,
-                          text: 'Submit Review',
-                          onPressed: _handleSubmit,
-                          isLoading: isCreating,
-                          loadingText: 'Submitting...',
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),

@@ -6,6 +6,7 @@ import '../../../../app/theme/app_text_styles.dart';
 import '../../../../app/theme/app_texts.dart';
 import '../../../../core/utils/distance_calculator.dart';
 import '../../../../core/utils/link_launcher.dart';
+import '../../../../responsive.dart';
 import '../../domain/entities/branch.dart';
 import 'working_days_row.dart';
 
@@ -50,7 +51,7 @@ class BranchDetailsSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSizes.sm),
+          context.isTablet ? const SizedBox(height: AppSizes.lg) : const SizedBox(height: AppSizes.sm),
 
           // Day chips
           WorkingDaysRow(workingDays: branch.activeWorkingDays),

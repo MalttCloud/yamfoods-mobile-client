@@ -6,6 +6,7 @@ import '../../../../app/components/skeleton/product_grid_skeleton.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
+import '../../../responsive.dart';
 import '../../product/presentation/providers/product_providers.dart';
 import '../../product/presentation/widgets/product_card.dart';
 
@@ -63,10 +64,12 @@ class ProductSliverGrid extends ConsumerWidget {
                 padding: EdgeInsets.all(AppSizes.sm),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    crossAxisCount: context.isTabletInPortraitMOde ? 4 : context.isTablet ? 3 : 2 ,
                     crossAxisSpacing: AppSizes.sm,
                     mainAxisSpacing: AppSizes.sm,
-                    childAspectRatio: 0.88,
+                    mainAxisExtent: context.isTablet
+                        ? AppSizes.productCardHeightTablet
+                        : AppSizes.productCardHeightMobile,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) => ProductCard(product: products[index]),
@@ -78,8 +81,8 @@ class ProductSliverGrid extends ConsumerWidget {
           ),
         );
       },
-      loading: () => productGridSkeletonSectionSliver(),
-      error: (error, stackTrace) => productGridSkeletonSectionSliver(),
+      loading: () => productGridSkeletonSectionSliver(context: context),
+      error: (error, stackTrace) => productGridSkeletonSectionSliver(context: context),
     );
   }
 }

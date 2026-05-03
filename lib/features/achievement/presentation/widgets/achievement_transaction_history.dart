@@ -33,54 +33,59 @@ class AchievementTransactionHistory extends ConsumerWidget {
           );
         }
 
-        return Container(
-          //  margin: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
-          padding: const EdgeInsets.all(AppSizes.lg),
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-            border: Border.all(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              width: 1,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Section header
-              Padding(
-                padding: const EdgeInsets.only(bottom: AppSizes.md),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.history_rounded,
-                      color: AppColors.primary,
-                      size: 20,
-                    ),
-                    const SizedBox(width: AppSizes.sm),
-                    Text(
-                      'Wallet Transaction History',
-                      style: AppTextStyles.h5.copyWith(
-                        color: AppColors.txtPrimary,
-                      ),
-                    ),
-                  ],
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+            child: Container(
+              //  margin: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
+              padding: const EdgeInsets.all(AppSizes.lg),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  width: 1,
                 ),
               ),
-              // Transaction list
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: transactions.length,
-                itemBuilder: (context, index) {
-                  return AchievementTransactionItem(
-                    transaction: transactions[index],
-                    isFirst: index == 0,
-                    isLast: index == transactions.length - 1,
-                  );
-                },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Section header
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSizes.md),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.history_rounded,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
+                        const SizedBox(width: AppSizes.sm),
+                        Text(
+                          'Wallet Transaction History',
+                          style: AppTextStyles.h5.copyWith(
+                            color: AppColors.txtPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Transaction list
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: transactions.length,
+                    itemBuilder: (context, index) {
+                      return AchievementTransactionItem(
+                        transaction: transactions[index],
+                        isFirst: index == 0,
+                        isLast: index == transactions.length - 1,
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         );
       },

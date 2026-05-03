@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yamfoods_customer_app/responsive.dart';
 
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -33,15 +34,15 @@ class CategoryChip extends StatelessWidget {
         context.push(RouteName.categoryScreen, extra: category);
       },
       child: Container(
-        width: 80,
+        width: context.isTablet? 100 : 80,
         margin: EdgeInsets.only(right: AppSizes.sm),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // Category image - white background for premium surface
             Container(
-              width: 70,
-              height: 70,
+              width: context.isTablet? 90 :  70,
+              height: context.isTablet?90: 70,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.white,
@@ -57,8 +58,8 @@ class CategoryChip extends StatelessWidget {
                   ? ClipOval(
                       child: CachedNetworkImage(
                         imageUrl: imageUrl,
-                        width: 56,
-                        height: 56,
+                        width: context.isTablet? 76: 56,
+                        height: context.isTablet? 76: 56,
                         fit: BoxFit.cover,
                         placeholder: (context, url) => Container(
                           color: AppColors.white,

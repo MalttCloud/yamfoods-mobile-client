@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
+import '../../../../responsive.dart';
 
 /// A circular ring widget for branch selection.
 ///
@@ -38,8 +39,8 @@ class BranchRingSelector extends StatelessWidget {
         children: [
           // Circular ring
           Container(
-            width: 100,
-            height: 100,
+            width: context.isTablet ? 200 : 100,
+            height: context.isTablet ? 200 : 100,
             decoration: BoxDecoration(
               color: AppColors.white.withValues(alpha: 0.1),
               shape: BoxShape.circle,

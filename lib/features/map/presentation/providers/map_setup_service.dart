@@ -92,7 +92,9 @@ class MapSetupService {
       await controller.addSymbol(
         SymbolOptions(
           iconImage: 'restaurant',
-          iconSize: 0.25,
+          iconSize: 0.06,
+        iconRotate: 180,
+        iconAnchor: 'bottom',
           geometry: LatLng(startPoint.latitude, startPoint.longitude),
         ),
       );
@@ -102,7 +104,9 @@ class MapSetupService {
       _driverSymbol = await controller.addSymbol(
         SymbolOptions(
           iconImage: 'driver',
-          iconSize: 0.25,
+          iconSize: 0.06,
+        iconRotate: 180,
+        iconAnchor: 'bottom',
         //  geometry: LatLng(startPoint.latitude, startPoint.longitude),
           geometry: LatLng(0, 0),
         ),
@@ -112,7 +116,9 @@ class MapSetupService {
       await controller.addSymbol(
         SymbolOptions(
           iconImage: 'customer',
-          iconSize: 0.25,
+          iconSize: 0.06,
+          iconRotate: 180,
+          iconAnchor: 'bottom',
           geometry: LatLng(endPoint.latitude, endPoint.longitude),
         ),
       );

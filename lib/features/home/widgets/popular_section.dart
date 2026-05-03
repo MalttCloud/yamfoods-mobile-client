@@ -5,6 +5,7 @@ import '../../../../app/components/skeleton/horizontal_product_section_skeleton.
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../app/theme/app_colors.dart';
+import '../../../responsive.dart';
 import '../../product/presentation/providers/product_providers.dart';
 import '../../product/presentation/widgets/product_card.dart';
 
@@ -28,7 +29,7 @@ class PopularSection extends ConsumerWidget {
         }
 
         return SizedBox(
-          height: 253,
+          height: 296,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +64,7 @@ class PopularSection extends ConsumerWidget {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     return SizedBox(
-                      width: 250,
+                      width: context.isTablet? 260: 250,
                       child: Padding(
                         padding: EdgeInsets.only(right: AppSizes.sm),
                         child: ProductCard(product: products[index]),

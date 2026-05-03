@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:yamfoods_customer_app/responsive.dart';
 
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
@@ -18,65 +19,70 @@ class HomeSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSizes.lg),
-      child: Container(
-        height: 50,
-        decoration: BoxDecoration(
-          color: AppColors.white.withValues(alpha: 0.2),
-          borderRadius: BorderRadius.circular(AppSizes.radius),
-          border: Border.all(
-            color: AppColors.white.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
-        child: Row(
-          children: [
-            SizedBox(width: AppSizes.md),
-            // Search icon - white for premium surface
-            Icon(
-              Icons.search_rounded,
-              color: AppColors.white.withValues(alpha: 0.8),
-              size: 22,
-            ),
-            SizedBox(width: AppSizes.sm),
-            // Fuzzy placeholder text - white for premium surface
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  // Navigate to search screen (uses current branch from provider)
-                  context.push(RouteName.search);
-                },
-                child: Text(
-                  AppTexts.searchForFood,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.white.withValues(alpha: 0.6),
-                    fontWeight: FontWeight.w400,
-                    letterSpacing: 0.2,
-                  ),
-                ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: context.isTablet ? const BoxConstraints(maxWidth: 600) : const BoxConstraints(maxWidth: double.infinity) ,
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: AppColors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(AppSizes.radius),
+              border: Border.all(
+                color: AppColors.white.withValues(alpha: 0.3),
+                width: 1,
               ),
             ),
-            // Divider - white
-            Container(
-              height: 24,
-              width: 1,
-              color: AppColors.white.withValues(alpha: 0.3),
-            ),
-            // Filter button - white for premium surface
-            GestureDetector(
-              onTap: () {
-                // Navigate to search screen (uses current branch from provider)
-                context.push(RouteName.search);
-              },
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSizes.md),
-                child: Icon(
-                  Icons.tune_rounded,
-                  color: AppColors.white,
+            child: Row(
+              children: [
+                SizedBox(width: AppSizes.md),
+                // Search icon - white for premium surface
+                Icon(
+                  Icons.search_rounded,
+                  color: AppColors.white.withValues(alpha: 0.8),
                   size: 22,
                 ),
-              ),
+                SizedBox(width: AppSizes.sm),
+                // Fuzzy placeholder text - white for premium surface
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      // Navigate to search screen (uses current branch from provider)
+                      context.push(RouteName.search);
+                    },
+                    child: Text(
+                      AppTexts.searchForFood,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.white.withValues(alpha: 0.6),
+                        fontWeight: FontWeight.w400,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ),
+                ),
+                // Divider - white
+                Container(
+                  height: 24,
+                  width: 1,
+                  color: AppColors.white.withValues(alpha: 0.3),
+                ),
+                // Filter button - white for premium surface
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to search screen (uses current branch from provider)
+                    context.push(RouteName.search);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppSizes.md),
+                    child: Icon(
+                      Icons.tune_rounded,
+                      color: AppColors.white,
+                      size: 22,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

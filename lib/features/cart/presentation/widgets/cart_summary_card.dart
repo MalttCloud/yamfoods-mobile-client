@@ -6,6 +6,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../responsive.dart';
 import '../providers/cart_summary_provider.dart';
 
 /// Cart summary card displaying price breakdown and checkout button.
@@ -25,7 +26,7 @@ class CartSummaryCard extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.vertical(
+        borderRadius: context.isTablet ? BorderRadius.circular(AppSizes.radiusLg) : BorderRadius.vertical(
           top: Radius.circular(AppSizes.radiusLg),
         ),
         boxShadow: [

@@ -41,72 +41,77 @@ class _DriverStatusCardState extends State<DriverStatusCard>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(AppSizes.lg),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.7),
-        border: Border.all(color: AppColors.info.withValues(alpha: 0.5)),
-        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-        
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSizes.lg),
-        child: Row(
-          children: [
-            // Animated driver icon
-            AnimatedBuilder(
-              animation: _pulseAnimation,
-              builder: (context, child) => Transform.scale(
-                scale: _pulseAnimation.value,
-                child: child,
-              ),
-              child: Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: AppColors.info.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.info.withValues(alpha: 0.3),
-                    width: 2,
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: Container(
+          margin: const EdgeInsets.all(AppSizes.lg),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.7),
+            border: Border.all(color: AppColors.info.withValues(alpha: 0.5)),
+            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+            
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSizes.lg),
+            child: Row(
+              children: [
+                // Animated driver icon
+                AnimatedBuilder(
+                  animation: _pulseAnimation,
+                  builder: (context, child) => Transform.scale(
+                    scale: _pulseAnimation.value,
+                    child: child,
                   ),
-                ),
-                child: const Icon(
-                  Icons.delivery_dining_rounded,
-                  color: AppColors.primary,
-                  size: 28,
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSizes.lg),
-            // Text content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Your driver is on the way!',
-                    style: AppTextStyles.h6.copyWith(
-                      color: AppColors.info,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.2,
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: AppColors.info.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.info.withValues(alpha: 0.3),
+                        width: 2,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.delivery_dining_rounded,
+                      color: AppColors.primary,
+                      size: 28,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Hang tight >> Your order is heading your way',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.info.withValues(alpha: 0.85),
-                      height: 1.3,
-                    ),
+                ),
+                const SizedBox(width: AppSizes.lg),
+                // Text content
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Your driver is on the way!',
+                        style: AppTextStyles.h6.copyWith(
+                          color: AppColors.info,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Hang tight >> Your order is heading your way',
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: AppColors.info.withValues(alpha: 0.85),
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                // Animated dots indicator
+                _LiveIndicator(),
+              ],
             ),
-            // Animated dots indicator
-            _LiveIndicator(),
-          ],
+          ),
         ),
       ),
     );

@@ -15,8 +15,16 @@ import 'cart_card.dart';
 class CartList extends ConsumerWidget {
   final AsyncValue<List<Cart>> cartAsync;
   final int branchId;
+  final bool useBottomSheetSpacing;
+  final Widget? trailingWidget;
 
-  const CartList({super.key, required this.cartAsync, required this.branchId});
+  const CartList({
+    super.key,
+    required this.cartAsync,
+    required this.branchId,
+    this.useBottomSheetSpacing = true,
+    this.trailingWidget,
+  });
 
   /// Calculates bottom padding to ensure last cart item is visible above bottom sheet.
   ///
@@ -30,6 +38,13 @@ class CartList extends ConsumerWidget {
     // Conservative estimate to ensure last item is always visible
     const bottomSheetHeight = 320.0;
     return bottomSheetHeight + safeAreaBottom;
+  }
+
+  /// Reserved space to keep inline tablet summary above bottom nav.
+  double _inlineSummaryBottomPadding(BuildContext context) {
+    final safeAreaBottom = MediaQuery.of(context).padding.bottom;
+    const reservedSpace = 100.0;
+    return reservedSpace + safeAreaBottom;
   }
 
   @override
@@ -60,18 +75,20 @@ class CartList extends ConsumerWidget {
             left: AppSizes.sm,
             right: AppSizes.sm,
             top: AppSizes.sm,
-            bottom: _calculateBottomPadding(
-              context,
-            ), // Dynamic padding for bottom sheet
+            bottom: useBottomSheetSpacing
+                ? _calculateBottomPadding(context)
+                : _inlineSummaryBottomPadding(context),
           ),
-          itemCount: carts.length,
+          itemCount: carts.length + (trailingWidget != null ? 1 : 0),
           itemBuilder: (context, index) => Padding(
             padding: EdgeInsets.only(
               bottom: index < carts.length - 1
                   ? AppSizes.sm
                   : AppSizes.lg, // Extra space after last item
             ),
-            child: CartCard(cart: carts[index], branchId: branchId),
+            child: index < carts.length
+                ? CartCard(cart: carts[index], branchId: branchId)
+                : trailingWidget!,
           ),
         );
       },
@@ -87,7 +104,9 @@ class CartList extends ConsumerWidget {
           left: AppSizes.sm,
           right: AppSizes.sm,
           top: AppSizes.sm,
-          bottom: _calculateBottomPadding(context),
+          bottom: useBottomSheetSpacing
+              ? _calculateBottomPadding(context)
+              : _inlineSummaryBottomPadding(context),
         ),
         itemCount: 4,
         itemBuilder: (context, index) => Padding(
