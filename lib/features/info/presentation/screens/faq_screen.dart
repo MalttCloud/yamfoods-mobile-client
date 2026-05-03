@@ -42,20 +42,25 @@ class FaqScreen extends ConsumerWidget {
             color: AppColors.primary,
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: AppSizes.md),
-                  Text(
-                    'Frequently asked questions',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: AppSizes.md),
+                      Text(
+                        'Frequently asked questions',
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: AppSizes.md),
+                      FaqList(faqs: faqs),
+                      const SizedBox(height: AppSizes.lg),
+                    ],
                   ),
-                  const SizedBox(height: AppSizes.md),
-                  FaqList(faqs: faqs),
-                  const SizedBox(height: AppSizes.lg),
-                ],
+                ),
               ),
             ),
           );

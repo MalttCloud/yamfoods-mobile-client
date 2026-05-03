@@ -11,8 +11,19 @@ class SocketConfig {
   /// Socket.IO typically runs on the same server as the REST API
   static String getBaseUrl({bool isDevelopment = true}) {
     final apiUrl = ApiUrls.getBaseUrl(isDevelopment: isDevelopment);
-    // Remove /api suffix for socket connection
-    return apiUrl.replaceAll('/api', '');
+    final parsed = Uri.tryParse(apiUrl);
+    if (parsed == null || !parsed.hasScheme || parsed.host.isEmpty) {
+      return apiUrl;
+    }
+
+    // Remove only trailing "/api" from the path.
+    final normalizedPath =
+        parsed.path.endsWith('/api')
+            ? parsed.path.substring(0, parsed.path.length - 4)
+            : parsed.path;
+
+    final baseUri = parsed.replace(path: normalizedPath, query: null, fragment: null);
+    return baseUri.toString().replaceAll(RegExp(r'/$'), '');
   }
 
   /// Ping interval in milliseconds (25 seconds as per backend)

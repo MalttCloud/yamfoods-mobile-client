@@ -19,6 +19,8 @@ import '../../../domain/extensions/product_pricing_extensions.dart';
 import '../../providers/product_providers.dart';
 import '../product_quantity_control.dart';
 
+const double kProductCartBottomSheetContentHeight = 60.0;
+
 /// Bottom sheet for adding product to cart or managing quantity.
 ///
 /// Shows "Add to Cart" button if product is not in cart,
@@ -34,12 +36,14 @@ class ProductCartBottomSheet extends ConsumerWidget {
     final isAdding = ref.watch(cartAddLoadingProvider);
 
     return Container(
-      padding: EdgeInsets.only(
-        left: AppSizes.xl,
-        right: AppSizes.xl,
-        top: AppSizes.lg,
-        bottom: MediaQuery.of(context).padding.bottom + AppSizes.lg,
-      ),
+      padding: cartItem == null
+          ? EdgeInsets.only(top:5)
+          : EdgeInsets.only(
+              left: AppSizes.xl,
+              right: AppSizes.xl,
+              top: AppSizes.lg,
+              bottom: MediaQuery.of(context).padding.bottom + AppSizes.lg,
+            ),
       decoration: BoxDecoration(
         color: cartItem == null ? AppColors.white : AppColors.primary,
         borderRadius: const BorderRadius.only(
@@ -54,9 +58,12 @@ class ProductCartBottomSheet extends ConsumerWidget {
           ),
         ],
       ),
-      child: cartItem == null
-          ? _buildAddToCartButton(context, ref, isAdding)
-          : _buildQuantityControls(context, ref, cartItem),
+      child: SizedBox(
+        height: kProductCartBottomSheetContentHeight,
+        child: cartItem == null
+            ? _buildAddToCartButton(context, ref, isAdding)
+            : _buildQuantityControls(context, ref, cartItem),
+      ),
     );
   }
 
@@ -101,7 +108,7 @@ class ProductCartBottomSheet extends ConsumerWidget {
       color: AppColors.primary,
       textColor: AppColors.accentOrange,
       isLoading: isLoading,
-      height: 60,
+      height: kProductCartBottomSheetContentHeight,
     );
   }
 
@@ -120,7 +127,7 @@ class ProductCartBottomSheet extends ConsumerWidget {
     final totalPrice = currentCartItem.quantity * product.discountedPriceValue;
 
     return SizedBox(
-      height: 60,
+      height: kProductCartBottomSheetContentHeight,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

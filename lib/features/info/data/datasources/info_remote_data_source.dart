@@ -21,4 +21,10 @@ abstract class InfoRemoteDataSource {
     required String title,
     required String message,
   });
+
+  Future<Either<Failure, void>> deleteMyAccount({
+    required String phone,
+    required String title,
+    required String reason,
+  });
 }

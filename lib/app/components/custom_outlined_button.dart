@@ -34,10 +34,12 @@ class CustomOutlinedButton extends StatelessWidget {
     final effectiveBorderColor = borderColor ?? AppColors.primary;
     final effectiveTextColor = textColor ?? AppColors.primary;
 
-    return SizedBox(
-      width: width ?? double.infinity,
-      height: height,
-      child: OutlinedButton(
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: AppSizes.buttonMaxWidth),
+      child: SizedBox(
+        width: width ?? double.infinity,
+        height: height,
+        child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           foregroundColor: effectiveTextColor,
@@ -83,6 +85,7 @@ class CustomOutlinedButton extends StatelessWidget {
                   ),
                 ],
               ),
+        ),
       ),
     );
   }

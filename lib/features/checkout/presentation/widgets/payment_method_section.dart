@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yamfoods_customer_app/responsive.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_images.dart';
@@ -18,6 +19,7 @@ class PaymentMethodSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final checkoutState = ref.watch(checkoutProvider(branchId));
     final paymentMethod = checkoutState.paymentMethod;
+    final isTablet = context.isTablet;
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -47,49 +49,96 @@ class PaymentMethodSection extends ConsumerWidget {
             ),
           ),
           SizedBox(height: AppSizes.sm),
-          _PaymentOption(
-            label: 'telebirr (0% fee)',
-            isSelected: paymentMethod == PaymentMethod.telebirr.value,
-            onTap: () {
-              ref
-                  .read(checkoutProvider(branchId).notifier)
-                  .setPaymentMethod(PaymentMethod.telebirr.value);
-            },
-            imageRow: _PaymentLogo(
-              imagePath: AppImages.paymentTelebirr,
-              size: 64,
-            ),
-          ),
-          //add divider with primary color
-          Divider(
-            color: AppColors.background,
-            thickness: AppSizes.xs,
-            height: AppSizes.sm,
-          ),
-          _PaymentOption(
-            label: 'Chapa (2.5% fee)',
-            isSelected: paymentMethod == PaymentMethod.chapa.value,
-            onTap: () {
-              ref
-                  .read(checkoutProvider(branchId).notifier)
-                  .setPaymentMethod(PaymentMethod.chapa.value);
-            },
-            imageRow: Row(
+          if (isTablet)
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                    child: _PaymentLogo(imagePath: AppImages.paymentCbe)),
+                  child: _PaymentOption(
+                    label: 'telebirr (0% fee)',
+                    isSelected: paymentMethod == PaymentMethod.telebirr.value,
+                    onTap: () {
+                      ref
+                          .read(checkoutProvider(branchId).notifier)
+                          .setPaymentMethod(PaymentMethod.telebirr.value);
+                    },
+                    imageRow: _PaymentLogo(
+                      imagePath: AppImages.paymentTelebirr,
+                      size: 64,
+                    ),
+                  ),
+                ),
                 SizedBox(width: AppSizes.sm),
                 Expanded(
-                    child: _PaymentLogo(imagePath: AppImages.paymentMpesa)),
-                SizedBox(width: AppSizes.sm),
-                Expanded(
-                    child: _PaymentLogo(imagePath: AppImages.paymentTelebirr)),
-                SizedBox(width: AppSizes.sm),
-                Expanded(
-                    child: _PaymentLogo(imagePath: AppImages.paymentEbirr)),
+                  child: _PaymentOption(
+                    label: 'Chapa (2.5% fee)',
+                    isSelected: paymentMethod == PaymentMethod.chapa.value,
+                    onTap: () {
+                      ref
+                          .read(checkoutProvider(branchId).notifier)
+                          .setPaymentMethod(PaymentMethod.chapa.value);
+                    },
+                    imageRow: Row(
+                      children: [
+                        Expanded(
+                            child: _PaymentLogo(imagePath: AppImages.paymentCbe)),
+                        SizedBox(width: AppSizes.sm),
+                        Expanded(
+                            child: _PaymentLogo(imagePath: AppImages.paymentMpesa)),
+                        SizedBox(width: AppSizes.sm),
+                        Expanded(
+                            child: _PaymentLogo(imagePath: AppImages.paymentTelebirr)),
+                        SizedBox(width: AppSizes.sm),
+                        Expanded(
+                            child: _PaymentLogo(imagePath: AppImages.paymentEbirr)),
+                      ],
+                    ),
+                  ),
+                ),
               ],
+            )
+          else ...[
+            _PaymentOption(
+              label: 'telebirr (0% fee)',
+              isSelected: paymentMethod == PaymentMethod.telebirr.value,
+              onTap: () {
+                ref
+                    .read(checkoutProvider(branchId).notifier)
+                    .setPaymentMethod(PaymentMethod.telebirr.value);
+              },
+              imageRow: _PaymentLogo(
+                imagePath: AppImages.paymentTelebirr,
+                size: 64,
+              ),
             ),
-          ),
+            //add divider with primary color
+            Divider(
+              color: AppColors.background,
+              thickness: AppSizes.xs,
+              height: AppSizes.sm,
+            ),
+            _PaymentOption(
+              label: 'Chapa (2.5% fee)',
+              isSelected: paymentMethod == PaymentMethod.chapa.value,
+              onTap: () {
+                ref
+                    .read(checkoutProvider(branchId).notifier)
+                    .setPaymentMethod(PaymentMethod.chapa.value);
+              },
+              imageRow: Row(
+                children: [
+                  Expanded(child: _PaymentLogo(imagePath: AppImages.paymentCbe)),
+                  SizedBox(width: AppSizes.sm),
+                  Expanded(child: _PaymentLogo(imagePath: AppImages.paymentMpesa)),
+                  SizedBox(width: AppSizes.sm),
+                  Expanded(
+                      child: _PaymentLogo(imagePath: AppImages.paymentTelebirr)),
+                  SizedBox(width: AppSizes.sm),
+                  Expanded(child: _PaymentLogo(imagePath: AppImages.paymentEbirr)),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );

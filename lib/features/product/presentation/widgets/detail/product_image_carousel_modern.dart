@@ -7,6 +7,7 @@ import '../../../../../app/theme/app_colors.dart';
 import '../../../../../app/theme/app_sizes.dart';
 import '../../../../../core/constants/api_urls.dart';
 import '../../../../../core/utils/image_url_builder.dart';
+import '../../../../../responsive.dart';
 import '../../../domain/entities/product_image.dart';
 
 /// Modern professional image carousel for product detail screen.
@@ -19,8 +20,13 @@ import '../../../domain/entities/product_image.dart';
 /// - Premium, modern design without background colors
 class ProductImageCarouselModern extends ConsumerStatefulWidget {
   final List<ProductImage> images;
+  final double? height;
 
-  const ProductImageCarouselModern({super.key, required this.images});
+  const ProductImageCarouselModern({
+    super.key,
+    required this.images,
+    this.height,
+  });
 
   @override
   ConsumerState<ProductImageCarouselModern> createState() =>
@@ -53,17 +59,23 @@ class _ProductImageCarouselModernState
   @override
   Widget build(BuildContext context) {
     if (widget.images.isEmpty) {
-      return _buildPlaceholder();
+      return _buildPlaceholder(context);
     }
 
     // Sort images so main image comes first
     final sortedImages = _getSortedImages();
 
+    final carouselHeight = widget.height ??
+        AppSizes.productHeroHeight(
+          screenHeight: MediaQuery.sizeOf(context).height,
+          isTablet: context.isTablet,
+        );
+
     return Stack(
       children: [
         // Image carousel
         SizedBox(
-          height: 280,
+          height: carouselHeight,
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: _onPageChanged,
@@ -130,9 +142,14 @@ class _ProductImageCarouselModernState
     return images;
   }
 
-  Widget _buildPlaceholder() {
+  Widget _buildPlaceholder(BuildContext context) {
+    final placeholderHeight = widget.height ??
+        AppSizes.productHeroHeight(
+          screenHeight: MediaQuery.sizeOf(context).height,
+          isTablet: context.isTablet,
+        );
     return Container(
-      height: 280,
+      height: placeholderHeight,
       decoration: BoxDecoration(
         color: AppColors.grey.withValues(alpha: 0.1),
         borderRadius: const BorderRadius.only(

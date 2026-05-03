@@ -39,68 +39,71 @@ class EtaInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.xl,
-        vertical: AppSizes.lg,
-      ),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.08),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
-            spreadRadius: 0,
-          ),
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-            spreadRadius: -2,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // ETA Section
-          Expanded(
-            child: _InfoItem(
-              icon: Icons.schedule_rounded,
-              iconColor: AppColors.info,
-              label: 'Estimated Time',
-              value: _formatTime(timeTakenSeconds),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 500),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.xl,
+          vertical: AppSizes.lg,
+        ),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withValues(alpha: 0.08),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+              spreadRadius: 0,
             ),
-          ),
-          // Divider
-          Container(
-            width: 1,
-            height: 40,
-            margin: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  AppColors.grey.withValues(alpha: 0.1),
-                  AppColors.grey.withValues(alpha: 0.3),
-                  AppColors.grey.withValues(alpha: 0.1),
-                ],
+            BoxShadow(
+              color: AppColors.primary.withValues(alpha: 0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+              spreadRadius: -2,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // ETA Section
+            Expanded(
+              child: _InfoItem(
+                icon: Icons.schedule_rounded,
+                iconColor: AppColors.info,
+                label: 'Estimated Time',
+                value: _formatTime(timeTakenSeconds),
               ),
             ),
-          ),
-          // Distance Section
-          Expanded(
-            child: _InfoItem(
-              icon: Icons.route_rounded,
-              iconColor: AppColors.primary,
-              label: 'Distance',
-              value: _formatDistance(distanceKm),
+            // Divider
+            Container(
+              width: 1,
+              height: 40,
+              margin: const EdgeInsets.symmetric(horizontal: AppSizes.md),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.grey.withValues(alpha: 0.1),
+                    AppColors.grey.withValues(alpha: 0.3),
+                    AppColors.grey.withValues(alpha: 0.1),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            // Distance Section
+            Expanded(
+              child: _InfoItem(
+                icon: Icons.route_rounded,
+                iconColor: AppColors.primary,
+                label: 'Distance',
+                value: _formatDistance(distanceKm),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -76,38 +76,41 @@ class _ErrorWidgettState extends State<ErrorWidgett> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSizes.xl),
-            ElevatedButton(
-              onPressed: _isRetrying ? null : _handleRetry,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.btnPrimary,
-                foregroundColor: AppColors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSizes.xl,
-                  vertical: AppSizes.md,
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: ElevatedButton(
+                onPressed: _isRetrying ? null : _handleRetry,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.btnPrimary,
+                  foregroundColor: AppColors.white,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.xl,
+                    vertical: AppSizes.md,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(AppSizes.radius),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.radius),
-                ),
-              ),
-              child: _isRetrying
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.white,
+                child: _isRetrying
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.white,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: AppSizes.sm),
-                        Text('Retrying...', style: AppTextStyles.buttonMedium),
-                      ],
-                    )
-                  : Text('Retry', style: AppTextStyles.buttonMedium),
+                          const SizedBox(width: AppSizes.sm),
+                          Text('Retrying...', style: AppTextStyles.buttonMedium),
+                        ],
+                      )
+                    : Text('Retry', style: AppTextStyles.buttonMedium),
+              ),
             ),
             //the height of bottom sheet. we added this because we used extendedbody in the bottom nav screen to allow the active tab background to be transparent
             SizedBox(height: 60),

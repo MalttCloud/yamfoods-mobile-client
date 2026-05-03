@@ -103,43 +103,46 @@ class _PaymentVerificationDialogState
   }
 
   Widget _buildLoadingContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSizes.sm),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            // Fixed viewport: we clip a larger Lottie into this area (crop-only).
-            height: 190,
-            child: ClipRect(
-              child: Center(
-                child: OverflowBox(
-                  alignment: Alignment.center,
-                  minWidth: 0,
-                  minHeight: 0,
-                  maxWidth: 330,
-                  maxHeight: 330,
-                  child: SizedBox(
-                    width: 330,
-                    height: 330,
-                    child: Lottie.asset(
-                      AppImages.processPaymentAnime,
-                      fit: BoxFit.contain,
-                      repeat: true,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSizes.sm),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              // Fixed viewport: we clip a larger Lottie into this area (crop-only).
+              height: 190,
+              child: ClipRect(
+                child: Center(
+                  child: OverflowBox(
+                    alignment: Alignment.center,
+                    minWidth: 0,
+                    minHeight: 0,
+                    maxWidth: 330,
+                    maxHeight: 330,
+                    child: SizedBox(
+                      width: 330,
+                      height: 330,
+                      child: Lottie.asset(
+                        AppImages.processPaymentAnime,
+                        fit: BoxFit.contain,
+                        repeat: true,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: AppSizes.sm),
-          Text(
-            'We are processing your payment, Please wait...',
-            style: AppTextStyles.h6.copyWith(color: AppColors.txtPrimary),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSizes.lg),
-        ],
+            const SizedBox(height: AppSizes.sm),
+            Text(
+              'We are processing your payment, Please wait...',
+              style: AppTextStyles.h6.copyWith(color: AppColors.txtPrimary),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSizes.lg),
+          ],
+        ),
       ),
     );
   }
@@ -158,53 +161,56 @@ class _PaymentVerificationDialogState
   }
 
   Widget _buildErrorContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSizes.lg),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Center(
-            child: Image.asset(
-              'assets/images/error/payment_error.png',
-              height: 120,
-              fit: BoxFit.contain,
-            ),
-          ),
-
-          const SizedBox(height: AppSizes.sm),
-          Text(
-            'We couldn’t verify your payment. Please try again or use a different payment method. You can also check your order status in order page',
-            style: AppTextStyles.buttonLarge.copyWith(
-              color: AppColors.txtPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSizes.xl),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: CustomOutlinedButton(
-                  text: 'Retry',
-                  onPressed: () =>
-                      ref.invalidate(queryOrderProvider(widget.request)),
-                  icon: Icons.refresh,
-                  textColor: AppColors.accentOrange,
-                ),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Padding(
+        padding: const EdgeInsets.all(AppSizes.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Image.asset(
+                'assets/images/error/payment_error.png',
+                height: 120,
+                fit: BoxFit.contain,
               ),
-              const SizedBox(width: AppSizes.sm),
-              Expanded(
-                child: CustomOutlinedButton(
-                  text: 'Skip',
-                  onPressed: () => Navigator.of(context).pop(),
-                  textColor: AppColors.txtPrimary,
-                ),
+            ),
+      
+            const SizedBox(height: AppSizes.sm),
+            Text(
+              'We couldn’t verify your payment. Please try again or use a different payment method. You can also check your order status in order page',
+              style: AppTextStyles.buttonLarge.copyWith(
+                color: AppColors.txtPrimary,
+                fontWeight: FontWeight.w500,
               ),
-            ],
-          ),
-        ],
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSizes.xl),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: CustomOutlinedButton(
+                    text: 'Retry',
+                    onPressed: () =>
+                        ref.invalidate(queryOrderProvider(widget.request)),
+                    icon: Icons.refresh,
+                    textColor: AppColors.accentOrange,
+                  ),
+                ),
+                const SizedBox(width: AppSizes.sm),
+                Expanded(
+                  child: CustomOutlinedButton(
+                    text: 'Skip',
+                    onPressed: () => Navigator.of(context).pop(),
+                    textColor: AppColors.txtPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

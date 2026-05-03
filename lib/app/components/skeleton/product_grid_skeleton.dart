@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../responsive.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_sizes.dart';
 import '../../theme/app_text_styles.dart';
@@ -8,15 +9,15 @@ import 'product_card_skeleton.dart';
 /// Reusable product grid skeleton as a [Sliver] for [CustomScrollView].
 ///
 /// Use in home, search, or any sliver list that shows a 2-column product grid.
-SliverPadding productGridSkeletonSliver({int itemCount = 6}) {
+SliverPadding productGridSkeletonSliver({required BuildContext context, int itemCount = 6}) {
   return SliverPadding(
     padding: EdgeInsets.all(AppSizes.sm),
     sliver: SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount:  context.isTabletInPortraitMOde ? 4 : context.isTablet ? 3 : 2 ,
         crossAxisSpacing: AppSizes.sm,
         mainAxisSpacing: AppSizes.sm,
-        childAspectRatio: 0.75,
+        childAspectRatio: 0.88,
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) => const ProductCardSkeleton(),
@@ -34,6 +35,7 @@ DecoratedSliver productGridSkeletonSectionSliver({
   String sectionTitle = 'All menu',
   TextStyle? titleStyle,
   int itemCount = 6,
+  required BuildContext context,
 }) {
   return DecoratedSliver(
     decoration: const BoxDecoration(color: AppColors.background),
@@ -50,7 +52,7 @@ DecoratedSliver productGridSkeletonSectionSliver({
             child: Text(sectionTitle, style: titleStyle ?? AppTextStyles.h4),
           ),
         ),
-        productGridSkeletonSliver(itemCount: itemCount),
+        productGridSkeletonSliver(context: context, itemCount: itemCount),
       ],
     ),
   );
@@ -70,11 +72,11 @@ class ProductGridSkeleton extends StatelessWidget {
       padding: EdgeInsets.all(AppSizes.sm),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount:  context.isTabletInPortraitMOde ? 4 : context.isTablet ? 3 : 2 ,
         crossAxisSpacing: AppSizes.sm,
         mainAxisSpacing: AppSizes.sm,
-        childAspectRatio: 0.75,
+        childAspectRatio: 0.88,
       ),
       itemCount: itemCount,
       itemBuilder: (context, index) => const ProductCardSkeleton(),

@@ -128,133 +128,138 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.all(AppSizes.lg),
         child:
-            Form(
-                  key: _formKey,
-                  child: Container(
-                    padding: const EdgeInsets.all(AppSizes.lg),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.08),
-                          blurRadius: 20,
-                          offset: const Offset(0, 4),
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: AppSizes.authScreensMaxWidth),
+                child: Form(
+                      key: _formKey,
+                      child: Container(
+                        padding: const EdgeInsets.all(AppSizes.lg),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.08),
+                              blurRadius: 20,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Image Picker
-                        Center(
-                          child: Stack(
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: AppColors.primary.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                    width: 3,
-                                  ),
-                                  color:
-                                      _pickedImage == null && imageUrl == null
-                                      ? AppColors.primary.withValues(alpha: 0.1)
-                                      : null,
-                                ),
-                                child: ClipOval(
-                                  child: _buildAvatarContent(imageUrl),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: InkWell(
-                                  onTap: _pickImage,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Image Picker
+                            Center(
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    height: 100,
                                     decoration: BoxDecoration(
-                                      color: AppColors.primary,
                                       shape: BoxShape.circle,
                                       border: Border.all(
-                                        color: Colors.white,
-                                        width: 2,
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                        width: 3,
                                       ),
+                                      color:
+                                          _pickedImage == null && imageUrl == null
+                                          ? AppColors.primary.withValues(alpha: 0.1)
+                                          : null,
                                     ),
-                                    child: const Icon(
-                                      Icons.camera_alt_rounded,
-                                      color: Colors.white,
-                                      size: 16,
+                                    child: ClipOval(
+                                      child: _buildAvatarContent(imageUrl),
                                     ),
                                   ),
-                                ),
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: InkWell(
+                                      onTap: _pickImage,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.primary,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          Icons.camera_alt_rounded,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: AppSizes.lg),
+                
+                            // Name Field
+                            _buildLabel('Full Name'),
+                            const SizedBox(height: AppSizes.sm),
+                            InputTextfield(
+                              controller: _nameController,
+                              hintText: 'Enter your full name',
+                              icon: Icons.person_outline_rounded,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                if (value.trim().length < 2) {
+                                  return 'Name must be at least 2 characters';
+                                }
+                                return null;
+                              },
+                            ),
+                
+                            const SizedBox(height: AppSizes.lg),
+                
+                            // Email Field
+                            _buildLabel('Email Address'),
+                            const SizedBox(height: AppSizes.sm),
+                            InputTextfield(
+                              controller: _emailController,
+                              hintText: 'Enter your email',
+                              icon: Icons.email_outlined,
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Please enter your email';
+                                }
+                                if (!RegExp(
+                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                                ).hasMatch(value.trim())) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
+                              },
+                            ),
+                
+                            const SizedBox(height: AppSizes.xl),
+                
+                            // Submit Button
+                            CustomButton(
+                              text: 'Save Change',
+                              onPressed: _handleSubmit,
+                              isLoading: isLoading,
+                              loadingText: 'Saving change...',
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: AppSizes.lg),
-
-                        // Name Field
-                        _buildLabel('Full Name'),
-                        const SizedBox(height: AppSizes.sm),
-                        InputTextfield(
-                          controller: _nameController,
-                          hintText: 'Enter your full name',
-                          icon: Icons.person_outline_rounded,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Please enter your name';
-                            }
-                            if (value.trim().length < 2) {
-                              return 'Name must be at least 2 characters';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: AppSizes.lg),
-
-                        // Email Field
-                        _buildLabel('Email Address'),
-                        const SizedBox(height: AppSizes.sm),
-                        InputTextfield(
-                          controller: _emailController,
-                          hintText: 'Enter your email',
-                          icon: Icons.email_outlined,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return 'Please enter your email';
-                            }
-                            if (!RegExp(
-                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                            ).hasMatch(value.trim())) {
-                              return 'Please enter a valid email';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: AppSizes.xl),
-
-                        // Submit Button
-                        CustomButton(
-                          text: 'Save Change',
-                          onPressed: _handleSubmit,
-                          isLoading: isLoading,
-                          loadingText: 'Saving change...',
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-                .animate()
-                .fadeIn(duration: 400.ms, delay: 100.ms)
-                .slideY(begin: 0.1, end: 0),
+                      ),
+                    )
+                    .animate()
+                    .fadeIn(duration: 400.ms, delay: 100.ms)
+                    .slideY(begin: 0.1, end: 0),
+              ),
+            ),
       ),
     );
   }

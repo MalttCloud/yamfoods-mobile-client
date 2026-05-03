@@ -163,173 +163,177 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSizes.lg),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    AppTexts.loginAccount,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    AppTexts.welcomeBack,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 30),
-                  CustomTextField(
-                    labelText: AppTexts.enterPhone,
-                    controller: _phoneController,
-                    validator: (value) {
-                      final isValid = Validators.isValidEthiopianPhone(
-                        value ?? '',
-                      );
-                      return isValid ? null : AppTexts.enterValidPhone;
-                    },
-                    prefixIcon: Icons.phone,
-                    // Visual prefix
-                    prefixText: '+251 ',
-                    inputType: TextInputType.phone,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(10),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  CustomTextField(
-                    labelText: AppTexts.enterPassword,
-                    controller: _passwordController,
-                    validator: (value) {
-                      final isValid = Validators.isValidPassword(value ?? '');
-                      return isValid ? null : AppTexts.enterValidPassword;
-                    },
-                    obscureText: _obscurePassword,
-                    prefixIcon: Icons.lock,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: AppColors.primary,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
+        child: ConstrainedBox(
+          constraints:
+              const BoxConstraints(maxWidth: AppSizes.authScreensMaxWidth),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSizes.lg),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      AppTexts.loginAccount,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        context.push(RouteName.forgotPassword);
+                    const SizedBox(height: 10),
+                    Text(
+                      AppTexts.welcomeBack,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(height: 30),
+                    CustomTextField(
+                      labelText: AppTexts.enterPhone,
+                      controller: _phoneController,
+                      validator: (value) {
+                        final isValid = Validators.isValidEthiopianPhone(
+                          value ?? '',
+                        );
+                        return isValid ? null : AppTexts.enterValidPhone;
                       },
-                      child: Text(
-                        AppTexts.forgotPassword,
-                        style: TextStyle(
+                      prefixIcon: Icons.phone,
+                      // Visual prefix
+                      prefixText: '+251 ',
+                      inputType: TextInputType.phone,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      labelText: AppTexts.enterPassword,
+                      controller: _passwordController,
+                      validator: (value) {
+                        final isValid = Validators.isValidPassword(value ?? '');
+                        return isValid ? null : AppTexts.enterValidPassword;
+                      },
+                      obscureText: _obscurePassword,
+                      prefixIcon: Icons.lock,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: AppColors.primary,
-                          decoration: TextDecoration.underline,
                         ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  CustomButton(
-                    text: AppTexts.login,
-                    onPressed: _submit,
-                    isLoading: isLoading,
-                    loadingText: 'Logging in...',
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    children: <Widget>[
-                      const Expanded(
-                        child: Divider(thickness: 1, color: Colors.grey),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                    const SizedBox(height: 5),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          context.push(RouteName.forgotPassword);
+                        },
                         child: Text(
-                          AppTexts.or,
+                          AppTexts.forgotPassword,
                           style: TextStyle(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.w600,
+                            color: AppColors.primary,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ),
-                      const Expanded(
-                        child: Divider(thickness: 1, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: AppTexts.loginWithGoogle,
-                    onPressed: isLoading
-                        ? null
-                        : () async {
-                            String? idToken;
-                            try {
-                              // Get Firebase ID token from Google Sign-In
-                              // Only catch errors from token retrieval
-                              idToken = await GoogleSignInService.signIn();
-                            } catch (e) {
-                              // Handle Google Sign-In token retrieval errors
-                              final snackbar = ref.read(
-                                snackbarServiceProvider,
-                              );
-                              snackbar.showError(
-                                Failure.unexpected(
-                                  message:
-                                      'Something went wrong when signing in with Google. Please contact support!',
-                                ),
-                              );
-                              return; // Exit early if token retrieval fails
-                            }
-
-                            // If idToken is null, user cancelled - do nothing
-                            if (idToken == null) return;
-
-                            // Authenticate with backend
-                            // Backend errors are handled by the auth event system
-                            ref
-                                .read(authProvider.notifier)
-                                .googleSignIn(idToken: idToken);
-                          },
-                    isLoading: isLoading,
-                    isSocial: true,
-                    color: AppColors.btnSecondary,
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                        text: AppTexts.dontHaveAccount,
-                        style: TextStyle(color: AppColors.txtSecondary),
-                        children: [
-                          TextSpan(
-                            text: AppTexts.signup,
+                    ),
+                    const SizedBox(height: 5),
+                    CustomButton(
+                      text: AppTexts.login,
+                      onPressed: _submit,
+                      isLoading: isLoading,
+                      loadingText: 'Logging in...',
+                    ),
+                    const SizedBox(height: 15),
+                    Row(
+                      children: <Widget>[
+                        const Expanded(
+                          child: Divider(thickness: 1, color: Colors.grey),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            AppTexts.or,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
-                              decoration: TextDecoration.underline,
+                              color: Colors.grey[700],
+                              fontWeight: FontWeight.w600,
                             ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                context.push(RouteName.register);
-                              },
                           ),
-                        ],
+                        ),
+                        const Expanded(
+                          child: Divider(thickness: 1, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    CustomButton(
+                      text: AppTexts.loginWithGoogle,
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                              String? idToken;
+                              try {
+                                // Get Firebase ID token from Google Sign-In
+                                // Only catch errors from token retrieval
+                                idToken = await GoogleSignInService.signIn();
+                              } catch (e) {
+                                // Handle Google Sign-In token retrieval errors
+                                final snackbar = ref.read(
+                                  snackbarServiceProvider,
+                                );
+                                snackbar.showError(
+                                  Failure.unexpected(
+                                    message:
+                                        'Something went wrong when signing in with Google. Please contact support!',
+                                  ),
+                                );
+                                return; // Exit early if token retrieval fails
+                              }
+
+                              // If idToken is null, user cancelled - do nothing
+                              if (idToken == null) return;
+
+                              // Authenticate with backend
+                              // Backend errors are handled by the auth event system
+                              ref
+                                  .read(authProvider.notifier)
+                                  .googleSignIn(idToken: idToken);
+                            },
+                      isLoading: isLoading,
+                      isSocial: true,
+                      color: AppColors.btnSecondary,
+                    ),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                          text: AppTexts.dontHaveAccount,
+                          style: TextStyle(color: AppColors.txtSecondary),
+                          children: [
+                            TextSpan(
+                              text: AppTexts.signup,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  context.push(RouteName.register);
+                                },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -70,110 +70,114 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
     return Scaffold(
       body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSizes.lg),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 60),
-                  Text(
-                    AppTexts.resetPassword,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    AppTexts.resetPasswordDesc,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(AppSizes.lg),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(AppSizes.radius),
-                      border: Border.all(color: Colors.grey.shade300),
+        child: ConstrainedBox(
+          constraints:
+              const BoxConstraints(maxWidth: AppSizes.authScreensMaxWidth),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSizes.lg),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 60),
+                    Text(
+                      AppTexts.resetPassword,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.phone,
-                          size: AppSizes.iconSize,
+                    const SizedBox(height: 10),
+                    Text(
+                      AppTexts.resetPasswordDesc,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(AppSizes.lg),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(AppSizes.radius),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.phone,
+                            size: AppSizes.iconSize,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: AppSizes.sm),
+                          Text(
+                            widget.phoneNumber,
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: AppColors.txtSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      labelText: AppTexts.enterNewPassword,
+                      controller: _newPasswordController,
+                      validator: (value) {
+                        final isValid = Validators.isValidPassword(value ?? '');
+                        return isValid ? null : AppTexts.enterValidPassword;
+                      },
+                      obscureText: _obscureNewPassword,
+                      prefixIcon: Icons.lock,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureNewPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: AppColors.primary,
                         ),
-                        const SizedBox(width: AppSizes.sm),
-                        Text(
-                          widget.phoneNumber,
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(
-                                color: AppColors.txtSecondary,
-                                fontWeight: FontWeight.w500,
-                              ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureNewPassword = !_obscureNewPassword;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    CustomTextField(
+                      labelText: AppTexts.enterConfirmPassword,
+                      controller: _confirmPasswordController,
+                      validator: (val) => Validators.confirmPassword(
+                        val,
+                        _newPasswordController.text,
+                      ),
+                      obscureText: _obscureConfirmPassword,
+                      prefixIcon: Icons.lock,
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirmPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: AppColors.primary,
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  CustomTextField(
-                    labelText: AppTexts.enterNewPassword,
-                    controller: _newPasswordController,
-                    validator: (value) {
-                      final isValid = Validators.isValidPassword(value ?? '');
-                      return isValid ? null : AppTexts.enterValidPassword;
-                    },
-                    obscureText: _obscureNewPassword,
-                    prefixIcon: Icons.lock,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureNewPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: AppColors.primary,
+                        onPressed: () {
+                          setState(() {
+                            _obscureConfirmPassword = !_obscureConfirmPassword;
+                          });
+                        },
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureNewPassword = !_obscureNewPassword;
-                        });
-                      },
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                  CustomTextField(
-                    labelText: AppTexts.enterConfirmPassword,
-                    controller: _confirmPasswordController,
-                    validator: (val) => Validators.confirmPassword(
-                      val,
-                      _newPasswordController.text,
+                    const SizedBox(height: 30),
+                    CustomButton(
+                      text: AppTexts.resetPassword,
+                      onPressed: _resetPassword,
+                      isLoading: isLoading,
+                      loadingText: 'Resetting password...',
                     ),
-                    obscureText: _obscureConfirmPassword,
-                    prefixIcon: Icons.lock,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: AppColors.primary,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureConfirmPassword = !_obscureConfirmPassword;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  CustomButton(
-                    text: AppTexts.resetPassword,
-                    onPressed: _resetPassword,
-                    isLoading: isLoading,
-                    loadingText: 'Resetting password...',
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

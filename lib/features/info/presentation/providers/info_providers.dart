@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/network/di/dio_client.dart';
@@ -65,7 +66,9 @@ Future<GetFaqsUsecase> getFaqsUsecase(Ref ref) async {
 
 /// Get terms and conditions usecase provider
 @riverpod
-Future<GetTermsAndConditionsUsecase> getTermsAndConditionsUsecase(Ref ref) async {
+Future<GetTermsAndConditionsUsecase> getTermsAndConditionsUsecase(
+  Ref ref,
+) async {
   final repository = await ref.watch(infoRepositoryProvider.future);
   return GetTermsAndConditionsUsecase(repository);
 }
@@ -95,10 +98,7 @@ Future<HelpSupport> helpSupport(Ref ref) async {
   final usecase = await ref.watch(getHelpSupportUsecaseProvider.future);
   final result = await usecase.call();
 
-  return result.fold(
-    (failure) => throw failure,
-    (helpSupport) => helpSupport,
-  );
+  return result.fold((failure) => throw failure, (helpSupport) => helpSupport);
 }
 
 /// FAQs list provider
@@ -110,10 +110,7 @@ Future<List<Faq>> faqs(Ref ref) async {
   final usecase = await ref.watch(getFaqsUsecaseProvider.future);
   final result = await usecase.call();
 
-  return result.fold(
-    (failure) => throw failure,
-    (faqs) => faqs,
-  );
+  return result.fold((failure) => throw failure, (faqs) => faqs);
 }
 
 /// Terms and conditions list provider
@@ -125,10 +122,7 @@ Future<List<TermsAndConditions>> termsAndConditions(Ref ref) async {
   final usecase = await ref.watch(getTermsAndConditionsUsecaseProvider.future);
   final result = await usecase.call();
 
-  return result.fold(
-    (failure) => throw failure,
-    (terms) => terms,
-  );
+  return result.fold((failure) => throw failure, (terms) => terms);
 }
 
 /// Privacy policy list provider
@@ -149,7 +143,14 @@ Future<List<PrivacyPolicy>> privacyPolicy(Ref ref) async {
 // ==================== Mutations ====================
 
 /// Parameters for submitting feedback
-typedef SubmitFeedbackParams = ({FeedbackType type, String title, String message});
+typedef SubmitFeedbackParams = ({
+  FeedbackType type,
+  String title,
+  String message,
+});
+
+/// Parameters for deleting account
+typedef DeleteMyAccountParams = ({String phone, String title, String reason});
 
 /// Submit feedback provider (family)
 @riverpod
@@ -159,6 +160,19 @@ Future<void> submitFeedback(Ref ref, SubmitFeedbackParams params) async {
     type: params.type,
     title: params.title,
     message: params.message,
+  );
+  return result.fold((failure) => throw failure, (_) => null);
+}
+
+Future<void> deleteMyAccountMutation(
+  WidgetRef ref,
+  DeleteMyAccountParams params,
+) async {
+  final repository = await ref.watch(infoRepositoryProvider.future);
+  final result = await repository.deleteMyAccount(
+    phone: params.phone,
+    title: params.title,
+    reason: params.reason,
   );
   return result.fold((failure) => throw failure, (_) => null);
 }

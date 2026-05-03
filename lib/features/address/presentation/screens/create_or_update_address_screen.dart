@@ -234,187 +234,192 @@ class _CreateOrUpdateAddressScreenState
           physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.all(AppSizes.lg),
           child:
-              Form(
-                    key: _formKey,
-                    child: Container(
-                      padding: const EdgeInsets.all(AppSizes.lg),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: 0.08),
-                            blurRadius: 20,
-                            offset: const Offset(0, 4),
+              Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+                  child: Form(
+                        key: _formKey,
+                        child: Container(
+                          padding: const EdgeInsets.all(AppSizes.lg),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.08),
+                                blurRadius: 20,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Location Selection Section
-                          const LocationSelectionSection(),
-                          const SizedBox(height: AppSizes.xl),
-      
-                          // Address Field (Required)
-                          Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildLabel('Address *'),
-                              if (isFetchingAddress) ...[
-                                const SizedBox(width: AppSizes.sm),
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      AppColors.primary,
+                              // Location Selection Section
+                              const LocationSelectionSection(),
+                              const SizedBox(height: AppSizes.xl),
+                        
+                              // Address Field (Required)
+                              Row(
+                                children: [
+                                  _buildLabel('Address *'),
+                                  if (isFetchingAddress) ...[
+                                    const SizedBox(width: AppSizes.sm),
+                                    SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          AppColors.primary,
+                                        ),
+                                      ),
                                     ),
+                                    const SizedBox(width: AppSizes.xs),
+                                    Text(
+                                      'Fetching address...',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: AppColors.txtSecondary,
+                                        fontStyle: FontStyle.italic,
+                                      ),
+                                    ),
+                                  ],
+                                  const Spacer(),
+                                  if (lat != null &&
+                                      lng != null &&
+                                      locationState.mode ==
+                                          LocationSelectionMode.currentLocation)
+                                    Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () => ref
+                                            .read(locationSelectionProvider.notifier)
+                                            .refreshCurrentLocation(),
+                                        borderRadius: BorderRadius.circular(
+                                          AppSizes.radius,
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: AppSizes.xs,
+                                            horizontal: AppSizes.sm,
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.refresh_rounded,
+                                                size: 18,
+                                                color: AppColors.primary,
+                                              ),
+                                              SizedBox(width: AppSizes.xs),
+                                              Text(
+                                                'Refresh',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: AppSizes.sm),
+                              InputTextfield(
+                                controller: _addressController,
+                                hintText: 'Enter full address',
+                                icon: Icons.location_on_rounded,
+                                validator: Validators.validateAddress,
+                                keyboardType: TextInputType.multiline,
+                                maxLength: 100,
+                                maxLines: 3,
+                              ),
+                              const SizedBox(height: AppSizes.lg),
+                        
+                              // Receiver Name (Optional)
+                              _buildLabel('Receiver Name'),
+                              const SizedBox(height: AppSizes.sm),
+                              InputTextfield(
+                                controller: _receiverNameController,
+                                hintText: 'Enter receiver name',
+                                icon: Icons.person_rounded,
+                                validator: Validators.validateReceiverName,
+                                keyboardType: TextInputType.name,
+                                maxLength: 30,
+                              ),
+                              const SizedBox(height: AppSizes.lg),
+                        
+                              // Receiver Phone (Optional)
+                              _buildLabel('Receiver Phone'),
+                              const SizedBox(height: AppSizes.sm),
+                              InputTextfield(
+                                controller: _receiverPhoneController,
+                                hintText: 'Enter receiver phone',
+                                icon: Icons.phone_rounded,
+                                validator: Validators.validateReceiverPhone,
+                                keyboardType: TextInputType.phone,
+                                maxLength: 20,
+                              ),
+                              const SizedBox(height: AppSizes.lg),
+                        
+                              // Label: Home, Work, Other (Optional)
+                              _buildLabel('Label'),
+                              const SizedBox(height: AppSizes.sm),
+                              Row(
+                                children: [
+                                  _buildLabelChip(
+                                    AddressLabel.home,
+                                    'Home',
+                                    Icons.home_rounded,
                                   ),
-                                ),
-                                const SizedBox(width: AppSizes.xs),
-                                Text(
-                                  'Fetching address...',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.txtSecondary,
-                                    fontStyle: FontStyle.italic,
+                                  SizedBox(width: AppSizes.sm),
+                                  _buildLabelChip(
+                                    AddressLabel.work,
+                                    'Work',
+                                    Icons.work_rounded,
                                   ),
+                                  SizedBox(width: AppSizes.sm),
+                                  _buildLabelChip(
+                                    AddressLabel.other,
+                                    'Other',
+                                    Icons.label_rounded,
+                                  ),
+                                ],
+                              ),
+                              if (_selectedLabel == AddressLabel.other) ...[
+                                const SizedBox(height: AppSizes.sm),
+                                InputTextfield(
+                                  controller: _labelOtherController,
+                                  hintText: 'Enter label (e.g. Gym, Parents)',
+                                  icon: Icons.edit_rounded,
+                                  keyboardType: TextInputType.text,
+                                  maxLength: 50,
                                 ),
                               ],
-                              const Spacer(),
-                              if (lat != null &&
-                                  lng != null &&
-                                  locationState.mode ==
-                                      LocationSelectionMode.currentLocation)
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () => ref
-                                        .read(locationSelectionProvider.notifier)
-                                        .refreshCurrentLocation(),
-                                    borderRadius: BorderRadius.circular(
-                                      AppSizes.radius,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: AppSizes.xs,
-                                        horizontal: AppSizes.sm,
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.refresh_rounded,
-                                            size: 18,
-                                            color: AppColors.primary,
-                                          ),
-                                          SizedBox(width: AppSizes.xs),
-                                          Text(
-                                            'Refresh',
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: AppColors.primary,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: AppSizes.sm),
-                          InputTextfield(
-                            controller: _addressController,
-                            hintText: 'Enter full address',
-                            icon: Icons.location_on_rounded,
-                            validator: Validators.validateAddress,
-                            keyboardType: TextInputType.multiline,
-                            maxLength: 100,
-                            maxLines: 3,
-                          ),
-                          const SizedBox(height: AppSizes.lg),
-      
-                          // Receiver Name (Optional)
-                          _buildLabel('Receiver Name'),
-                          const SizedBox(height: AppSizes.sm),
-                          InputTextfield(
-                            controller: _receiverNameController,
-                            hintText: 'Enter receiver name',
-                            icon: Icons.person_rounded,
-                            validator: Validators.validateReceiverName,
-                            keyboardType: TextInputType.name,
-                            maxLength: 30,
-                          ),
-                          const SizedBox(height: AppSizes.lg),
-      
-                          // Receiver Phone (Optional)
-                          _buildLabel('Receiver Phone'),
-                          const SizedBox(height: AppSizes.sm),
-                          InputTextfield(
-                            controller: _receiverPhoneController,
-                            hintText: 'Enter receiver phone',
-                            icon: Icons.phone_rounded,
-                            validator: Validators.validateReceiverPhone,
-                            keyboardType: TextInputType.phone,
-                            maxLength: 20,
-                          ),
-                          const SizedBox(height: AppSizes.lg),
-      
-                          // Label: Home, Work, Other (Optional)
-                          _buildLabel('Label'),
-                          const SizedBox(height: AppSizes.sm),
-                          Row(
-                            children: [
-                              _buildLabelChip(
-                                AddressLabel.home,
-                                'Home',
-                                Icons.home_rounded,
-                              ),
-                              SizedBox(width: AppSizes.sm),
-                              _buildLabelChip(
-                                AddressLabel.work,
-                                'Work',
-                                Icons.work_rounded,
-                              ),
-                              SizedBox(width: AppSizes.sm),
-                              _buildLabelChip(
-                                AddressLabel.other,
-                                'Other',
-                                Icons.label_rounded,
+                              const SizedBox(height: AppSizes.xl),
+                        
+                              // Submit Button
+                              CustomButton(
+                                text: isCreating ? 'Add Address' : 'Update Address',
+                                onPressed: _handleSubmit,
+                                isLoading: isLoading,
+                                loadingText: isCreating
+                                    ? 'Adding address...'
+                                    : 'Updating address...',
                               ),
                             ],
                           ),
-                          if (_selectedLabel == AddressLabel.other) ...[
-                            const SizedBox(height: AppSizes.sm),
-                            InputTextfield(
-                              controller: _labelOtherController,
-                              hintText: 'Enter label (e.g. Gym, Parents)',
-                              icon: Icons.edit_rounded,
-                              keyboardType: TextInputType.text,
-                              maxLength: 50,
-                            ),
-                          ],
-                          const SizedBox(height: AppSizes.xl),
-      
-                          // Submit Button
-                          CustomButton(
-                            text: isCreating ? 'Add Address' : 'Update Address',
-                            onPressed: _handleSubmit,
-                            isLoading: isLoading,
-                            loadingText: isCreating
-                                ? 'Adding address...'
-                                : 'Updating address...',
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .animate()
-                  .fadeIn(duration: 400.ms, delay: 100.ms)
-                  .slideY(begin: 0.1, end: 0),
+                        ),
+                      )
+                      .animate()
+                      .fadeIn(duration: 400.ms, delay: 100.ms)
+                      .slideY(begin: 0.1, end: 0),
+                ),
+              ),
         ),
       ),
     );

@@ -13,6 +13,7 @@ import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/request_reset_password_otp_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/save_phone_number_screen.dart';
+import '../../shared/models/validate_otp_arg.dart';
 import '../../features/auth/presentation/screens/validate_otp_screen.dart';
 import '../../features/auth/presentation/screens/verify_phone_screen.dart';
 import '../../features/cart/presentation/screens/cart_screen.dart';
@@ -45,6 +46,7 @@ import '../../features/info/presentation/screens/privacy_policy_screen.dart';
 import '../../features/info/presentation/screens/help_support_screen.dart';
 import '../../features/info/presentation/screens/faq_screen.dart';
 import '../../features/info/presentation/screens/feedback_screen.dart';
+import '../../features/info/presentation/screens/delete_account_screen.dart';
 
 // Thanks future self: CheckoutScreen uses RouteAware to know when the user
 // returns from the Chapa payment screen (Chapa SDK pushes a route; when it
@@ -117,8 +119,18 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteName.validateOtp,
       builder: (context, state) {
-        final phone = state.extra as String;
-        return ValidateOtpScreen(phoneNumber: phone);
+        final extra = state.extra;
+        if (extra is ValidateOtpArg) {
+          return ValidateOtpScreen(
+            phoneNumber: extra.phoneNumber,
+            isDeleteAccountFlow: extra.isDeleteAccountFlow,
+          );
+        }
+        if (extra is String) {
+          return ValidateOtpScreen(phoneNumber: extra);
+        }
+        final phoneNumber = extra as String;
+        return ValidateOtpScreen(phoneNumber: phoneNumber);
       },
     ),
     GoRoute(
@@ -259,6 +271,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteName.feedback,
       builder: (context, state) => const FeedbackScreen(),
+    ),
+    GoRoute(
+      path: RouteName.deleteAccount,
+      builder: (context, state) => const DeleteAccountScreen(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {

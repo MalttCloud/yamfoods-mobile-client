@@ -77,4 +77,21 @@ class InfoRemoteDataSourceImpl implements InfoRemoteDataSource {
       return Left(ErrorHandler.handleException(e));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteMyAccount({
+    required String phone,
+    required String title,
+    required String reason,
+  }) async {
+    try {
+      final requestData = {'phone': phone, 'title': title, 'reason': reason};
+      final body = RequestWrapper.wrap(requestData);
+
+      await _apiService.deleteMyAccount(body);
+      return const Right(null);
+    } catch (e) {
+      return Left(ErrorHandler.handleException(e));
+    }
+  }
 }

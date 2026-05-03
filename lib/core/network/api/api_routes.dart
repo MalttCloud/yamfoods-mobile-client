@@ -128,4 +128,5 @@ class ApiRoutes {
   static const String getTermsAndConditions = '$_infoBase/terms-and-conditions';
   static const String getPrivacyPolicy = '$_infoBase/privacy-policy';
   static const String submitFeedback = '$_infoBase/feedback';
+  static const String deleteMyAccount = '$_infoBase/delete-my-account';
 }

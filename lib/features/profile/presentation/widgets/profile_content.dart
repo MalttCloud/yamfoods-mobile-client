@@ -55,12 +55,12 @@ class ProfileContent extends StatelessWidget {
                   ),
                   //we should hide this for user who is authenticated with google because we don't have a password for them
                   if (user.provider != 'google')
-                  MenuItem(
-                    icon: Icons.lock_outline_rounded,
-                    title: 'Change Password',
-                    subtitle: 'Update your security credentials',
-                    onTap: () => context.push(RouteName.changePassword),
-                  ),
+                    MenuItem(
+                      icon: Icons.lock_outline_rounded,
+                      title: 'Change Password',
+                      subtitle: 'Update your security credentials',
+                      onTap: () => context.push(RouteName.changePassword),
+                    ),
                   MenuItem(
                     icon: Icons.location_on_outlined,
                     title: 'Addresses',
@@ -108,6 +108,19 @@ class ProfileContent extends StatelessWidget {
                     title: 'Send Feedback',
                     subtitle: 'Help us improve',
                     onTap: () => context.push(RouteName.feedback),
+                  ),
+                  //account setting
+                  // MenuItem(
+                  //   icon: Icons.settings_outlined,
+                  //   title: 'Account Settings',
+                  //   subtitle: 'Manage your account settings',
+                  //   // onTap: () => context.push(RouteName.accountSettings),
+                  // ),
+                  MenuItem(
+                    icon: Icons.delete_outline_rounded,
+                    title: 'Delete Account',
+                    subtitle: 'Request permanent account deletion',
+                    onTap: () => context.push(RouteName.deleteAccount),
                   ),
                 ],
               ),

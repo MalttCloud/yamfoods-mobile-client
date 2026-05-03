@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/components/empty_state.dart';
 import '../../../../app/components/skeleton/product_grid_skeleton.dart';
 import '../../../../app/theme/app_sizes.dart';
+import '../../../../responsive.dart';
 import '../../../product/presentation/providers/product_providers.dart';
 import '../../../product/presentation/widgets/product_card.dart';
 import '../../../subcategory/domain/entities/subcategory.dart';
@@ -42,11 +43,13 @@ class CategoryProductsGrid extends ConsumerWidget {
 
         return GridView.builder(
           padding: EdgeInsets.all(AppSizes.sm),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount:  context.isTabletInPortraitMOde ? 4 : context.isTablet ? 3 : 2 ,
             crossAxisSpacing: AppSizes.sm,
             mainAxisSpacing: AppSizes.sm,
-            childAspectRatio: 0.88,
+            mainAxisExtent: context.isTablet
+                        ? AppSizes.productCardHeightTablet
+                        : AppSizes.productCardHeightMobile,
           ),
           itemCount: products.length,
           itemBuilder: (context, index) {

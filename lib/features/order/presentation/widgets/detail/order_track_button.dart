@@ -41,45 +41,50 @@ class OrderTrackButton extends StatelessWidget {
     final deliveryLng = order.deliveryLocation.lng!;
 
   
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton.icon(
-        onPressed: () {
-          final restaurantLocation = AddressLocation(
-            latitude: branchLat,
-            longitude: branchLng,
-          );
-
-          final customerLocation = AddressLocation(
-            latitude: deliveryLat,
-            longitude: deliveryLng,
-          );
-
-          context.push(
-            RouteName.orderTracking,
-            extra: MapScreenArgs(
-              customerLocation: customerLocation,
-              restaurantLocation: restaurantLocation,
-              orderId: order.id,
-              delivererPhone: order.delivererPhone,
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+            onPressed: () {
+              final restaurantLocation = AddressLocation(
+                latitude: branchLat,
+                longitude: branchLng,
+              );
+          
+              final customerLocation = AddressLocation(
+                latitude: deliveryLat,
+                longitude: deliveryLng,
+              );
+          
+              context.push(
+                RouteName.orderTracking,
+                extra: MapScreenArgs(
+                  customerLocation: customerLocation,
+                  restaurantLocation: restaurantLocation,
+                  orderId: order.id,
+                  delivererPhone: order.delivererPhone,
+                ),
+              );
+            },
+            icon: Icon(Icons.my_location, size: 18, color: AppColors.primary),
+            label: Text(
+              'Track Order',
+              style: AppTextStyles.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColors.primary,
+              ),
             ),
-          );
-        },
-        icon: Icon(Icons.my_location, size: 18, color: AppColors.primary),
-        label: Text(
-          'Track Order',
-          style: AppTextStyles.bodyMedium.copyWith(
-            fontWeight: FontWeight.w600,
-            color: AppColors.primary,
+            style: OutlinedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: AppSizes.sm),
+              side: BorderSide(color: AppColors.primary, width: 1.5),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSizes.radius),
+              ),
+              backgroundColor: AppColors.primary.withValues(alpha: 0.05),
+            ),
           ),
-        ),
-        style: OutlinedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: AppSizes.sm),
-          side: BorderSide(color: AppColors.primary, width: 1.5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSizes.radius),
-          ),
-          backgroundColor: AppColors.primary.withValues(alpha: 0.05),
         ),
       ),
     );

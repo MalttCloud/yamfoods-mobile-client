@@ -99,105 +99,109 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
 
     return Scaffold(
       body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSizes.lg),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 60),
-                  Text(
-                    AppTexts.verifyPhone,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    AppTexts.verifyPhoneDesc,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(AppSizes.lg),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(AppSizes.radius),
-                      border: Border.all(color: Colors.grey.shade300),
+        child: ConstrainedBox(
+          constraints:
+              const BoxConstraints(maxWidth: AppSizes.authScreensMaxWidth),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSizes.lg),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 60),
+                    Text(
+                      AppTexts.verifyPhone,
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.phone,
-                          size: AppSizes.iconSize,
-                          color: AppColors.primary,
-                        ),
-                        const SizedBox(width: AppSizes.sm),
-                        Text(
-                          getPhone(),
-                          style: Theme.of(context).textTheme.bodyLarge
-                              ?.copyWith(
-                                color: AppColors.txtSecondary,
-                                fontWeight: FontWeight.w500,
-                              ),
-                        ),
-                      ],
+                    const SizedBox(height: 10),
+                    Text(
+                      AppTexts.verifyPhoneDesc,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  CustomTextField(
-                    labelText: AppTexts.enterOTP,
-                    controller: _otpController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return AppTexts.enterValidOTP;
-                      }
-                      if (value.length != 6) {
-                        return 'OTP must be 6 digits';
-                      }
-                      return null;
-                    },
-                    prefixIcon: Icons.security,
-                    inputType: TextInputType.number,
-                  ),
-                  const SizedBox(height: 30),
-                  CustomButton(
-                    text: AppTexts.verifyPhone,
-                    onPressed: _verifyPhone,
-                    isLoading: isLoading,
-                    loadingText: 'Verifying...',
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      TextButton(
-                        onPressed: _resendOTP,
-                        child: Text(
-                          AppTexts.resendOTP,
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
+                    const SizedBox(height: 20),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(AppSizes.lg),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(AppSizes.radius),
+                        border: Border.all(color: Colors.grey.shade300),
                       ),
-                      if (widget.user != null)
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.phone,
+                            size: AppSizes.iconSize,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: AppSizes.sm),
+                          Text(
+                            getPhone(),
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(
+                                  color: AppColors.txtSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      labelText: AppTexts.enterOTP,
+                      controller: _otpController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppTexts.enterValidOTP;
+                        }
+                        if (value.length != 6) {
+                          return 'OTP must be 6 digits';
+                        }
+                        return null;
+                      },
+                      prefixIcon: Icons.security,
+                      inputType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 30),
+                    CustomButton(
+                      text: AppTexts.verifyPhone,
+                      onPressed: _verifyPhone,
+                      isLoading: isLoading,
+                      loadingText: 'Verifying...',
+                    ),
+                    const SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
                         TextButton(
-                          onPressed: _editPhone,
+                          onPressed: _resendOTP,
                           child: Text(
-                            AppTexts.editPhone,
+                            AppTexts.resendOTP,
                             style: TextStyle(
                               color: AppColors.primary,
                               decoration: TextDecoration.underline,
                             ),
                           ),
                         ),
-                    ],
-                  ),
-                ],
+                        if (widget.user != null)
+                          TextButton(
+                            onPressed: _editPhone,
+                            child: Text(
+                              AppTexts.editPhone,
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

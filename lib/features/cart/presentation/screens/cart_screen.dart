@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:yamfoods_customer_app/app/components/app_loading_indicator.dart';
+import 'package:yamfoods_customer_app/responsive.dart';
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_sizes.dart';
 import '../../../../core/services/snackbar_service.dart';
 import '../../../branch/presentation/providers/branch_providers.dart';
 import '../../../checkout/models/checkout_args.dart';
@@ -60,6 +62,17 @@ class CartScreen extends ConsumerWidget {
     }
 
     final cartAsync = ref.watch(cartProvider(branchId));
+    final isTablet = context.isTablet;
+    final summaryCard = CartSummaryCard(
+      branchId: branchId,
+      onPlaceOrder: () {
+        final carts = cartAsync.value ?? [];
+        context.push(
+          RouteName.checkout,
+          extra: CheckoutArgs(branchId: branchId, carts: carts),
+        );
+      },
+    );
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -86,24 +99,33 @@ class CartScreen extends ConsumerWidget {
             ],
           ),
         ),
-        child: CartList(cartAsync: cartAsync, branchId: branchId),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+            child: CartList(
+              cartAsync: cartAsync,
+              branchId: branchId,
+              useBottomSheetSpacing: !isTablet,
+              trailingWidget: isTablet && cartAsync.value?.isNotEmpty == true
+                  ? Align(
+                      alignment: Alignment.center,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 600),
+                        child: summaryCard,
+                      ),
+                    )
+                  : null,
+            ),
+          ),
+        ),
       ),
       // Bottom sheet with summary and checkout
-      bottomSheet: cartAsync.value?.isNotEmpty == true
+      bottomSheet: !isTablet && cartAsync.value?.isNotEmpty == true
           ? Padding(
               padding: const EdgeInsets.only(
                 bottom: 60.0,
               ), //the height of bottom sheet. we added this because we used extendedbody in the bottom nav screen to allow the active tab background to be transparent
-              child: CartSummaryCard(
-                branchId: branchId,
-                onPlaceOrder: () {
-                  final carts = cartAsync.value ?? [];
-                  context.push(
-                    RouteName.checkout,
-                    extra: CheckoutArgs(branchId: branchId, carts: carts),
-                  );
-                },
-              ),
+              child: summaryCard,
             )
           : null,
     );

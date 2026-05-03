@@ -6,6 +6,7 @@ import '../../../../app/components/error_widget.dart' as app_error;
 import '../../../../app/components/skeleton/product_grid_skeleton.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../core/errors/failure.dart';
+import '../../../../responsive.dart';
 import '../../../product/data/models/product_filter_request_model.dart';
 import '../../../product/presentation/providers/product_providers.dart';
 import '../../../product/presentation/widgets/product_card.dart';
@@ -48,11 +49,13 @@ class ProductSliverGrid extends ConsumerWidget {
           padding: EdgeInsets.all(AppSizes.sm),
           sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: AppSizes.sm,
-              mainAxisSpacing: AppSizes.sm,
-              childAspectRatio: 0.75,
-            ),
+               crossAxisCount: context.isTabletInPortraitMOde ? 4 : context.isTablet ? 3 : 2 ,
+                    crossAxisSpacing: AppSizes.sm,
+                    mainAxisSpacing: AppSizes.sm,
+                    mainAxisExtent: context.isTablet
+                        ? AppSizes.productCardHeightTablet
+                        : AppSizes.productCardHeightMobile,
+                  ),
             delegate: SliverChildBuilderDelegate(
               (context, index) => ProductCard(product: products[index]),
               childCount: products.length,
@@ -60,7 +63,7 @@ class ProductSliverGrid extends ConsumerWidget {
           ),
         );
       },
-      loading: () => productGridSkeletonSliver(),
+      loading: () => productGridSkeletonSliver(context: context),
       error: (error, stackTrace) => SliverFillRemaining(
         hasScrollBody: false,
         child: Center(

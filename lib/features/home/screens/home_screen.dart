@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
+import '../../../responsive.dart';
 import '../../branch/presentation/providers/branch_providers.dart';
 import '../../category/presentation/providers/category_providers.dart';
 import '../../product/presentation/providers/product_providers.dart';
@@ -25,6 +26,8 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final size = MediaQuery.of(context).size;
+    print('The size of this device is: $size, width: ${size.width}, height: ${size.height}');
     // Get current branch ID - guaranteed to exist since branch selection is enforced
     final branchId = ref.watch(currentBranchProvider)!;
 
@@ -69,73 +72,69 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-          body: Stack(
-            children: [
-              RefreshIndicator(
-                onRefresh: onHomePageRefresh,
-                child: CustomScrollView(
-                  slivers: [
-                    // Premium surface section (banner, categories) with gradient
-                    SliverToBoxAdapter(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              AppColors.primary.withValues(alpha: 0.9),
-                              AppColors.background,
-                            ],
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 2),
-                            // Promo banner slider
-                            const PromoBannerSlider(),
-
-                            SizedBox(height: AppSizes.lg),
-
-                            // Category chips list
-                            CategoryChipsList(branchId: branchId),
-                          ],
-                        ),
+          body: RefreshIndicator(
+            onRefresh: onHomePageRefresh,
+            child: CustomScrollView(
+              slivers: [
+                // Premium surface section (banner, categories) with gradient
+                SliverToBoxAdapter(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          AppColors.primary.withValues(alpha: 0.9),
+                          AppColors.background,
+                        ],
                       ),
                     ),
-
-                    // Special offer + Popular with gradient (primary → white) like top section
-                    SliverToBoxAdapter(
-                      child: Container(
-                        color: AppColors.background,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SpecialOfferForYouSection(branchId: branchId),
-                            PopularSection(branchId: branchId),
-                          ],
-                        ),
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                         SizedBox(height:  context.isTablet ? 30 : 2),
+                        // Promo banner slider
+                        const PromoBannerSlider(),
+          
+                        SizedBox(height: AppSizes.lg),
+          
+                        // Category chips list
+                        CategoryChipsList(branchId: branchId),
+                      ],
                     ),
-
-                    // Product grid - scrolls with content
-                    ProductSliverGrid(branchId: branchId),
-
-                    // Bottom padding for safe area (background so content area ends on white)
-                    SliverToBoxAdapter(
-                      child: Container(
-                        color: AppColors.background,
-                        child: SizedBox(
-                          height:
-                              MediaQuery.of(context).padding.bottom +
-                              AppSizes.lg,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+          
+                // Special offer + Popular with gradient (primary → white) like top section
+                SliverToBoxAdapter(
+                  child: Container(
+                    color: AppColors.background,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SpecialOfferForYouSection(branchId: branchId),
+                        PopularSection(branchId: branchId),
+                      ],
+                    ),
+                  ),
+                ),
+          
+                // Product grid - scrolls with content
+                ProductSliverGrid(branchId: branchId),
+          
+                // Bottom padding for safe area (background so content area ends on white)
+                SliverToBoxAdapter(
+                  child: Container(
+                    color: AppColors.background,
+                    child: SizedBox(
+                      height:
+                          MediaQuery.of(context).padding.bottom +
+                          AppSizes.lg,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
 

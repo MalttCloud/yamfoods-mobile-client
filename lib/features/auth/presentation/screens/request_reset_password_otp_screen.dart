@@ -61,52 +61,56 @@ class _RequestResetPasswordOtpScreenState
 
     return Scaffold(
       body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSizes.lg),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 60),
-                  Text(
-                    AppTexts.requestResetOTP,
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    AppTexts.requestResetDesc,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 30),
-                  CustomTextField(
-                    labelText: AppTexts.enterPhone,
-                    controller: _phoneController,
-                    validator: (value) {
-                      final isValid = Validators.isValidEthiopianPhone(
-                        value ?? '',
-                      );
-                      return isValid ? null : AppTexts.enterValidPhone;
-                    },
-                    prefixIcon: Icons.phone,
-                    prefixText: '+251 ',
-                    inputType: TextInputType.phone,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(10),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  CustomButton(
-                    text: AppTexts.sendOTP,
-                    onPressed: _sendOTP,
-                    isLoading: isLoading,
-                    loadingText: 'Sending OTP...',
-                  ),
-                ],
+        child: ConstrainedBox(
+          constraints:
+              const BoxConstraints(maxWidth: AppSizes.authScreensMaxWidth),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(AppSizes.lg),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 60),
+                    Text(
+                      AppTexts.requestResetOTP,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      AppTexts.requestResetDesc,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    CustomTextField(
+                      labelText: AppTexts.enterPhone,
+                      controller: _phoneController,
+                      validator: (value) {
+                        final isValid = Validators.isValidEthiopianPhone(
+                          value ?? '',
+                        );
+                        return isValid ? null : AppTexts.enterValidPhone;
+                      },
+                      prefixIcon: Icons.phone,
+                      prefixText: '+251 ',
+                      inputType: TextInputType.phone,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(10),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    CustomButton(
+                      text: AppTexts.sendOTP,
+                      onPressed: _sendOTP,
+                      isLoading: isLoading,
+                      loadingText: 'Sending OTP...',
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

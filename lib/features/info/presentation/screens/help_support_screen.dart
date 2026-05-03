@@ -59,24 +59,29 @@ class HelpSupportScreen extends ConsumerWidget {
               color: AppColors.primary,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: AppSizes.md),
-                    Text(
-                      'Need help? Contact us using any option below.',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: AppSizes.md),
+                        Text(
+                          'Need help? Contact us using any option below.',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: AppSizes.md),
+                        HelpSupportFaqEntry(
+                          onTap: () => context.push(RouteName.faq),
+                        ),
+                        const SizedBox(height: AppSizes.sm),
+                        HelpSupportContent(data: data),
+                        const SizedBox(height: AppSizes.lg),
+                      ],
                     ),
-                    const SizedBox(height: AppSizes.md),
-                    HelpSupportFaqEntry(
-                      onTap: () => context.push(RouteName.faq),
-                    ),
-                    const SizedBox(height: AppSizes.sm),
-                    HelpSupportContent(data: data),
-                    const SizedBox(height: AppSizes.lg),
-                  ],
+                  ),
                 ),
               ),
             );

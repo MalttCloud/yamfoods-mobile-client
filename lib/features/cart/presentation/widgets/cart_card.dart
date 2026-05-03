@@ -10,6 +10,7 @@ import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/api_urls.dart';
 import '../../../../core/utils/image_url_builder.dart';
+import '../../../../responsive.dart';
 import '../../../product/domain/extensions/product_image_extensions.dart';
 import '../../domain/entities/cart.dart';
 import '../providers/cart_notifier.dart';
@@ -104,8 +105,8 @@ class _CartCardState extends ConsumerState<CartCard> {
                   child: imageUrl != null
                       ? CachedNetworkImage(
                           imageUrl: imageUrl,
-                          width: 70,
-                          height: 70,
+                          width: context.isTablet ? 100 : 70,
+                          height: context.isTablet ? 100 : 70,
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Container(
                             width: 70,

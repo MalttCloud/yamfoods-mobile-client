@@ -67,6 +67,9 @@ class ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      constraints: const BoxConstraints(
+        maxWidth: AppSizes.confirmationDialogMaxWidth,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppSizes.radiusLg),
       ),

@@ -96,4 +96,7 @@ class RouteName {
 
   /// Feedback route.
   static const String feedback = '/feedback';
+
+  /// Delete account route.
+  static const String deleteAccount = '/delete-account';
 }

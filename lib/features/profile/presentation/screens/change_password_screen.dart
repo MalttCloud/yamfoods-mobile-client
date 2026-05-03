@@ -63,30 +63,35 @@ class _ChangePasswordScreenState extends ConsumerState<ChangePasswordScreen> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(AppSizes.lg),
-        child: Column(
-          children: [
-            // Security Icon
-            _buildSecurityHeader()
-                .animate()
-                .fadeIn(duration: 400.ms)
-                .scale(begin: const Offset(0.9, 0.9), end: const Offset(1, 1)),
-
-            const SizedBox(height: AppSizes.xl),
-
-            // Info Card
-            _buildInfoCard()
-                .animate()
-                .fadeIn(duration: 400.ms, delay: 100.ms)
-                .slideY(begin: 0.1, end: 0),
-
-            const SizedBox(height: AppSizes.xl),
-
-            // Form
-            _buildForm(isLoading)
-                .animate()
-                .fadeIn(duration: 400.ms, delay: 200.ms)
-                .slideY(begin: 0.1, end: 0),
-          ],
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppSizes.authScreensMaxWidth),
+            child: Column(
+              children: [
+                // Security Icon
+                _buildSecurityHeader()
+                    .animate()
+                    .fadeIn(duration: 400.ms)
+                    .scale(begin: const Offset(0.9, 0.9), end: const Offset(1, 1)),
+            
+                const SizedBox(height: AppSizes.xl),
+            
+                // Info Card
+                _buildInfoCard()
+                    .animate()
+                    .fadeIn(duration: 400.ms, delay: 100.ms)
+                    .slideY(begin: 0.1, end: 0),
+            
+                const SizedBox(height: AppSizes.xl),
+            
+                // Form
+                _buildForm(isLoading)
+                    .animate()
+                    .fadeIn(duration: 400.ms, delay: 200.ms)
+                    .slideY(begin: 0.1, end: 0),
+              ],
+            ),
+          ),
         ),
       ),
     );
