@@ -5,10 +5,10 @@ class AppImages {
   static const String offerImage = 'assets/images/offer_image.png';
   static const String rewardProgress = 'assets/images/reward_progress.png';
 
-  //onboarding images
-  static const String onboardingImg1 = 'assets/onboarding/onboarding_img_1.png';
-  static const String onboardingImg2 = 'assets/onboarding/onboarding_img_2.png';
-  static const String onboardingImg3 = 'assets/onboarding/onboarding_img_3.png';
+  // onboarding (dotLottie)
+  static const String onboardingAnime1 = 'assets/anime/delivery-to-door.lottie';
+  static const String onboardingAnime2 = 'assets/anime/sweet-meals.lottie';
+  static const String onboardingAnime3 = 'assets/anime/all-in-place.lottie';
 
   //splash screen image
   static const String splashScreenImage = 'assets/images/splash_image.png';
@@ -21,7 +21,7 @@ class AppImages {
   static const String paymentMpesa = 'assets/payment/mpesa.png';
 
   // icons
-  static const String appIcon = 'assets/icons/app_icon.png';
+  static const String appIcon = 'assets/images/splash_image.png';
   static const String orderSuccessIcon = 'assets/icons/order_success_icon.png';
 
   // lottie animations

@@ -32,18 +32,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         data: (onboardingState) => onboardingState.when(
           initial: () => const AppLoadingIndicator(),
           loading: () => const AppLoadingIndicator(),
-          loaded: (pages, currentPageIndex, pageController) => Stack(
+          loaded: (pages, currentPageIndex, pageController) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              PageView.builder(
-                controller: pageController,
-                itemCount: pages.length,
-                onPageChanged: (index) => ref
-                    .read(onboardingProvider.notifier)
-                    .updatePageIndicator(index),
-                itemBuilder: (context, index) =>
-                    OnboardingPageWidget(onboardingPage: pages[index]),
-              ),
-              const Dot(),
               Skip(
                 onNavigate: () async {
                   final shouldNavigate = await ref
@@ -57,6 +49,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     });
                   }
                 },
+              ),
+              Expanded(
+                flex: 3,
+                child: PageView.builder(
+                  controller: pageController,
+                  itemCount: pages.length,
+                  onPageChanged: (index) => ref
+                      .read(onboardingProvider.notifier)
+                      .updatePageIndicator(index),
+                  itemBuilder: (context, index) =>
+                      OnboardingPageWidget(onboardingPage: pages[index]),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: const Dot(),
               ),
               Next(
                 onNavigate: () async {

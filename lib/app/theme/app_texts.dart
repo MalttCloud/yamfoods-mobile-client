@@ -64,16 +64,16 @@ class AppTexts {
   static const String enterConfirmPassword = 'Confirm New Password';
 
   // Onboarding texts
-  static const String onboardingTitle1 = 'Freshly Baked Just for You!';
+  static const String onboardingTitle1 = 'Your Cravings, Instantly Satisfied!';
   static const String onboardingSubtitle1 =
-      ' Discover the taste of freshness with Yam Bakery. From soft breads to flaky pastries  your favorite treats are just a tap away.';
-  static const String onboardingTitle2 = 'Order in Seconds';
+      'See your favorite meals come to life in seconds, juicy burgers, fresh juices, warm cookies, and more. Pick what you love and get it faster than your cravings can wait.';
+  static const String onboardingTitle2 = 'Track Every Step, In Real Time';
   static const String onboardingSubtitle2 =
-      ' Craving something sweet? Browse our menu, customize your order, and get it delivered fast all from your phone!';
+      'From the kitchen to your doorstep, track every move in real time. Fast, smooth delivery you can follow every second of the way.';
   static const String onboardingTitle3 =
-      'Fresh Ingredients Daily'; // Duplicated from screen 2
+      'Endless Choices, One Place'; // Duplicated from screen 2
   static const String onboardingSubtitle3 =
-      'Enjoy meals made with the freshest ingredients.';
+      'Explore top bakeries and food spots offering everything from cakes and bread to snacks and full meals, all ready whenever you are.';
 
   //Order general
   static const String delivererDashboard = 'Deliverer Dashboard';

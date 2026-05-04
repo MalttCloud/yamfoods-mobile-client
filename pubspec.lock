@@ -426,6 +426,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  dotlottie_flutter:
+    dependency: "direct main"
+    description:
+      name: dotlottie_flutter
+      sha256: "6db4f69659617ac246d7610900488b773a665276b57d8120018aaf6687e40e7e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.4"
   draggable_float_widget:
     dependency: "direct main"
     description:

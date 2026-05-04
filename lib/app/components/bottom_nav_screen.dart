@@ -189,7 +189,7 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
                   children: [
                     Container(
                       width: 30,
-                      height: 59,
+                      height: widget.navigationShell.currentIndex == 0 ? 58 : 60,
                       decoration: const BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.only(
@@ -200,7 +200,7 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
                     _buildNavigationBar(),
                     Container(
                       width: 30,
-                      height: 59,
+                      height: widget.navigationShell.currentIndex == 3 ? 58 : 60,
                       decoration: const BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.only(
