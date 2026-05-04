@@ -15,19 +15,23 @@ class Dot extends ConsumerWidget {
     final state = ref.watch(onboardingProvider);
     return state.when(
       data: (onboardingState) => onboardingState.maybeWhen(
-        loaded: (pages, currentPageIndex, pageController) => Positioned(
-          bottom: MediaQuery.of(context).padding.bottom + AppSizes.lg,
-          left: AppSizes.lg,
-          child: SmoothPageIndicator(
-            controller: pageController,
-            count: pages.length,
-            onDotClicked: (index) =>
-                ref.read(onboardingProvider.notifier).dotNavigationClick(index),
-            effect: ExpandingDotsEffect(
-              activeDotColor: AppColors.primary,
-              dotColor: AppColors.secondary,
-              dotHeight: 6,
-              dotWidth: 10,
+        loaded: (pages, currentPageIndex, pageController) => Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: AppSizes.sm,
+          ),
+          child: Center(
+            child: SmoothPageIndicator(
+              controller: pageController,
+              count: pages.length,
+              onDotClicked: (index) => ref
+                  .read(onboardingProvider.notifier)
+                  .dotNavigationClick(index),
+              effect: ExpandingDotsEffect(
+                activeDotColor: AppColors.primary,
+                dotColor: AppColors.secondary,
+                dotHeight: 6,
+                dotWidth: 18,
+              ),
             ),
           ),
         ),

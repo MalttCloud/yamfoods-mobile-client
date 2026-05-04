@@ -6,8 +6,11 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/enums/payment_method.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/services/snackbar_service.dart';
+import '../../../../core/utils/payment_fee_calculator.dart';
+import '../providers/checkout_notifier.dart';
 import '../../../order/presentation/providers/order_loading_providers.dart';
 import '../providers/checkout_summary_provider.dart';
 import '../providers/checkout_validation_provider.dart';
@@ -36,9 +39,28 @@ class CheckoutSummaryCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final summary = ref.watch(checkoutSummaryProvider(branchId));
+    final checkoutState = ref.watch(checkoutProvider(branchId));
     final validation = ref.watch(checkoutValidationProvider(branchId));
     final isLoading = ref.watch(orderCreationLoadingProvider);
     final snackbar = ref.read(snackbarServiceProvider);
+    final baseTotal = summary.subtotal + summary.vatTotal + summary.deliveryFee;
+    final isTelebirr =
+        checkoutState.paymentMethod == PaymentMethod.telebirr.value;
+    final telebirrDisplayFee = isTelebirr
+        ? PaymentFeeCalculator.telebirrDisplayFee(baseTotal)
+        : 0.0;
+    final telebirrDisplayPercent = isTelebirr
+        ? PaymentFeeCalculator.telebirrDisplayPercent(baseTotal)
+        : 0.0;
+    final displayTransactionFee = isTelebirr
+        ? telebirrDisplayFee
+        : summary.transactionFee;
+    final displayTotalAmount = isTelebirr
+        ? summary.totalAmount + telebirrDisplayFee
+        : summary.totalAmount;
+    final transactionFeeLabel = isTelebirr
+        ? 'Transaction fee (${telebirrDisplayPercent.toStringAsFixed(2)}%)'
+        : 'Transaction fee (2.5%)';
 
     return SafeArea(
       child: Container(
@@ -129,12 +151,12 @@ class CheckoutSummaryCard extends ConsumerWidget {
                   isTotal: false,
                 ),
               ],
-              // Transaction fee (Chapa 2.5%)
-              if (summary.transactionFee > 0) ...[
+              // Transaction fee (payment provider specific)
+              if (displayTransactionFee > 0) ...[
                 SizedBox(height: AppSizes.xs),
                 _PriceRow(
-                  label: 'Transaction fee (2.5%)',
-                  value: summary.transactionFee,
+                  label: transactionFeeLabel,
+                  value: displayTransactionFee,
                   isTotal: false,
                 ),
               ],
@@ -146,7 +168,7 @@ class CheckoutSummaryCard extends ConsumerWidget {
               // Total Amount
               _PriceRow(
                 label: 'Total',
-                value: summary.totalAmount,
+                value: displayTotalAmount,
                 isTotal: true,
               ),
               SizedBox(height: AppSizes.sm),

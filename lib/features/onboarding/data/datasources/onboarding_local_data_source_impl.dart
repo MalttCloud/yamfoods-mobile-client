@@ -18,18 +18,18 @@ class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
     try {
       return Right([
         const OnboardingPageModel(
-          imagePath: AppImages.onboardingImg1,
+          imagePath: AppImages.onboardingAnime2,
           title: AppTexts.onboardingTitle1,
           subtitle: AppTexts.onboardingSubtitle1,
         ),
         const OnboardingPageModel(
-          imagePath: AppImages.onboardingImg2,
+          imagePath: AppImages.onboardingAnime1,
           title: AppTexts.onboardingTitle2,
           subtitle: AppTexts.onboardingSubtitle2,
         ),
         const OnboardingPageModel(
-          imagePath: AppImages.onboardingImg3,
-          title: 'Fast Delivery, Fresh Food',
+          imagePath: AppImages.onboardingAnime3,
+          title: AppTexts.onboardingTitle3,
           subtitle: AppTexts.onboardingSubtitle3,
         ),
       ]);

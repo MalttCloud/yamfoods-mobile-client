@@ -8,6 +8,7 @@ import '../../../../../app/theme/app_sizes.dart';
 import '../../../../../app/theme/app_text_styles.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/snacks/info_snack_bar.dart';
+import '../../../../../responsive.dart';
 import '../../../../app_configuration/presentation/providers/app_configuration_providers.dart';
 import '../../../../cart/domain/entities/cart.dart';
 import '../../../../cart/domain/entities/cart_request_data.dart';
@@ -35,34 +36,37 @@ class ProductCartBottomSheet extends ConsumerWidget {
     final cartItem = ref.watch(productCartItemProvider(product));
     final isAdding = ref.watch(cartAddLoadingProvider);
 
-    return Container(
-      padding: cartItem == null
-          ? EdgeInsets.only(top:5)
-          : EdgeInsets.only(
-              left: AppSizes.xl,
-              right: AppSizes.xl,
-              top: AppSizes.lg,
-              bottom: MediaQuery.of(context).padding.bottom + AppSizes.lg,
-            ),
-      decoration: BoxDecoration(
-        color: cartItem == null ? AppColors.white : AppColors.primary,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(AppSizes.radiusLg),
-          topRight: Radius.circular(AppSizes.radiusLg),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.grey.withValues(alpha: 0.1),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
+    return SizedBox(
+      width: 410.0,
+      child: Container(
+        padding: cartItem == null
+            ? EdgeInsets.only(top: 5)
+            : EdgeInsets.only(
+                left: AppSizes.xl,
+                right: AppSizes.xl,
+                top: AppSizes.lg,
+                bottom: MediaQuery.of(context).padding.bottom + AppSizes.lg,
+              ),
+        decoration: BoxDecoration(
+          color: cartItem == null ? AppColors.white : AppColors.primary,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(AppSizes.radiusLg),
+            topRight: Radius.circular(AppSizes.radiusLg),
           ),
-        ],
-      ),
-      child: SizedBox(
-        height: kProductCartBottomSheetContentHeight,
-        child: cartItem == null
-            ? _buildAddToCartButton(context, ref, isAdding)
-            : _buildQuantityControls(context, ref, cartItem),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.grey.withValues(alpha: 0.1),
+              blurRadius: 20,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: SizedBox(
+          height: kProductCartBottomSheetContentHeight,
+          child: cartItem == null
+              ? _buildAddToCartButton(context, ref, isAdding)
+              : _buildQuantityControls(context, ref, cartItem),
+        ),
       ),
     );
   }

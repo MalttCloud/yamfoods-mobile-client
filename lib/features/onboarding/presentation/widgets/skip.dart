@@ -11,18 +11,24 @@ class Skip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: MediaQuery.of(context).padding.top + AppSizes.sm,
-      right: AppSizes.lg,
-      child: TextButton(
-        onPressed: onNavigate,
-        child: Text(
-          'Skip',
-          style: TextStyle(
-            fontFamily: AppFonts.defaultFamily,
-            fontWeight: AppFontWeight.medium,
-            fontSize: AppSizes.lg,
-            color: AppColors.primary,
+    return Padding(
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top + AppSizes.sm,
+        left: AppSizes.lg,
+        right: AppSizes.lg,
+      ),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: TextButton(
+          onPressed: onNavigate,
+          child: Text(
+            'Skip',
+            style: TextStyle(
+              fontFamily: AppFonts.defaultFamily,
+              fontWeight: AppFontWeight.medium,
+              fontSize: AppSizes.lg,
+              color: AppColors.primary,
+            ),
           ),
         ),
       ),

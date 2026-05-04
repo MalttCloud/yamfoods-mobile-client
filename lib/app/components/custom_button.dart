@@ -80,7 +80,11 @@ class CustomButton extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (isSocial) ...[
-                        Image.asset(AppImages.googleLogo, width: 24, height: 24),
+                        Image.asset(
+                          AppImages.googleLogo,
+                          width: 24,
+                          height: 24,
+                        ),
                         const SizedBox(width: AppSizes.sm),
                       ] else if (icon != null) ...[
                         Icon(

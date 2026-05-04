@@ -7,7 +7,9 @@ import '../../../../app/theme/app_images.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../core/enums/payment_method.dart';
+import '../../../../core/utils/payment_fee_calculator.dart';
 import '../providers/checkout_notifier.dart';
+import '../providers/checkout_summary_provider.dart';
 
 /// Payment method selection: Telebirr or Chapa.
 class PaymentMethodSection extends ConsumerWidget {
@@ -18,8 +20,12 @@ class PaymentMethodSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final checkoutState = ref.watch(checkoutProvider(branchId));
+    final summary = ref.watch(checkoutSummaryProvider(branchId));
     final paymentMethod = checkoutState.paymentMethod;
     final isTablet = context.isTablet;
+    final baseTotal = summary.subtotal + summary.vatTotal + summary.deliveryFee;
+    final telebirrPercent = PaymentFeeCalculator.telebirrDisplayPercent(baseTotal);
+    final telebirrLabel = 'telebirr (${telebirrPercent.toStringAsFixed(2)}% fee)';
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -55,7 +61,7 @@ class PaymentMethodSection extends ConsumerWidget {
               children: [
                 Expanded(
                   child: _PaymentOption(
-                    label: 'telebirr (0% fee)',
+                    label: telebirrLabel,
                     isSelected: paymentMethod == PaymentMethod.telebirr.value,
                     onTap: () {
                       ref
@@ -99,7 +105,7 @@ class PaymentMethodSection extends ConsumerWidget {
             )
           else ...[
             _PaymentOption(
-              label: 'telebirr (0% fee)',
+              label: telebirrLabel,
               isSelected: paymentMethod == PaymentMethod.telebirr.value,
               onTap: () {
                 ref
