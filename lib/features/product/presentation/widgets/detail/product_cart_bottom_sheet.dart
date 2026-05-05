@@ -8,7 +8,6 @@ import '../../../../../app/theme/app_sizes.dart';
 import '../../../../../app/theme/app_text_styles.dart';
 import '../../../../../core/constants/app_constants.dart';
 import '../../../../../core/snacks/info_snack_bar.dart';
-import '../../../../../responsive.dart';
 import '../../../../app_configuration/presentation/providers/app_configuration_providers.dart';
 import '../../../../cart/domain/entities/cart.dart';
 import '../../../../cart/domain/entities/cart_request_data.dart';
@@ -39,13 +38,11 @@ class ProductCartBottomSheet extends ConsumerWidget {
     return SizedBox(
       width: 410.0,
       child: Container(
-        padding: cartItem == null
-            ? EdgeInsets.only(top: 5)
-            : EdgeInsets.only(
+        padding: EdgeInsets.only(
                 left: AppSizes.xl,
                 right: AppSizes.xl,
-                top: AppSizes.lg,
-                bottom: MediaQuery.of(context).padding.bottom + AppSizes.lg,
+                top: AppSizes.sm,
+                bottom: MediaQuery.of(context).padding.bottom + AppSizes.sm,
               ),
         decoration: BoxDecoration(
           color: cartItem == null ? AppColors.white : AppColors.primary,

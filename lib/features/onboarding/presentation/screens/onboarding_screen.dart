@@ -7,6 +7,7 @@ import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/snacks/error_snack_bar.dart';
+import '../../../../responsive.dart';
 import '../providers/onboarding_notifier.dart';
 import '../providers/onboarding_state.dart';
 import '../widgets/dots.dart';
@@ -51,7 +52,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 },
               ),
               Expanded(
-                flex: 3,
+                flex: context.isTablet ? 3 : 5,
                 child: PageView.builder(
                   controller: pageController,
                   itemCount: pages.length,

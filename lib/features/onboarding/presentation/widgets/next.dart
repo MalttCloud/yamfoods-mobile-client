@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/components/custom_button.dart';
 import '../../../../app/theme/app_sizes.dart';
+import '../../../../responsive.dart';
 import '../providers/onboarding_notifier.dart';
 import '../providers/onboarding_state.dart';
 
@@ -21,7 +22,7 @@ class Next extends ConsumerWidget {
             left: AppSizes.lg,
             right: AppSizes.lg,
             top: AppSizes.sm,
-            bottom: MediaQuery.of(context).padding.bottom + AppSizes.xxxl,
+            bottom: context.isTablet ? MediaQuery.of(context).padding.bottom + AppSizes.xxxl : AppSizes.xxl,
           ),
           child: Align(
             alignment: Alignment.centerRight,
