@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_fonts.dart';
 import '../../../../app/theme/app_sizes.dart';
+import '../../../../responsive.dart';
 import '../../domain/entities/onboarding_page.dart';
 
 class OnboardingPageWidget extends StatelessWidget {
@@ -21,7 +22,7 @@ class OnboardingPageWidget extends StatelessWidget {
         children: [
           Expanded(
             child: FractionallySizedBox(
-              widthFactor: 0.8,
+              widthFactor: context.isTablet ? 0.8 : 1,
               child: _OnboardingMedia(path: onboardingPage.imagePath),
             ),
           ),
@@ -30,7 +31,7 @@ class OnboardingPageWidget extends StatelessWidget {
             onboardingPage.title,
             style: TextStyle(
               fontWeight: AppFontWeight.bold,
-              fontSize: AppSizes.xxl,
+              fontSize: context.isTablet ? AppSizes.xxl : AppSizes.xl,
               color: AppColors.primary,
             ),
             textAlign: TextAlign.center,
