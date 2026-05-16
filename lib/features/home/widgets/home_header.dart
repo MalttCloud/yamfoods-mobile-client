@@ -97,10 +97,11 @@ class HomeHeader extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               PopupMenuButton<int>(
-                color: AppColors.white,
-                elevation: 8,
+                color: Color(0xFFF5F5F5),
+                elevation: 12,
+                shadowColor: Colors.black.withValues(alpha: 0.12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.radius),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 onSelected: (branchId) {
                   final selected = branches
@@ -124,82 +125,181 @@ class HomeHeader extends ConsumerWidget {
                         ? null
                         : '${DistanceCalculator.distanceInKm(userPosition, branch.location).toStringAsFixed(1)} km';
                     final detailsText = distanceText == null
-                        ? _formatWorkingHours(branch.openingHour, branch.closingHour)
-                        : '${_formatWorkingHours(branch.openingHour, branch.closingHour)} • $distanceText';
+                        ? _formatWorkingHours(
+                            branch.openingHour,
+                            branch.closingHour,
+                          )
+                        : '${_formatWorkingHours(branch.openingHour, branch.closingHour)} · $distanceText';
                     final isSelected = branch.id == selectedBranchId;
+
                     return PopupMenuItem<int>(
                       value: branch.id,
-                      padding: EdgeInsets.symmetric(horizontal: 1),
-                      child: Container(
-                        width: double.infinity,
+                      padding: EdgeInsets.zero,
+                      child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: AppSizes.sm,
-                          vertical: AppSizes.xs,
+                          horizontal: 6,
+                          vertical: 2,
                         ),
-                        decoration: isSelected
-                            ? BoxDecoration(
-                                color: AppColors.background,
-                                borderRadius: BorderRadius.circular(AppSizes.radiusSm,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppColors.primary.withValues(alpha: 0.07)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppColors.primary.withValues(alpha: 0.3)
+                                  : Colors.transparent,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              // Icon container
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                width: 34,
+                                height: 34,
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : AppColors.background,
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                border: Border.all(color: AppColors.primary, width: 1),
-                              )
-                            : null,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    branch.name,
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      color: AppColors.txtPrimary,
-                                      fontWeight: FontWeight.w600,
+                                child: Icon(
+                                  Icons.storefront_outlined,
+                                  size: 17,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : AppColors.txtSecondary,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+
+                              // Text
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      branch.name,
+                                      style: AppTextStyles.bodyMedium.copyWith(
+                                        color: AppColors.txtPrimary,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      detailsText,
+                                      style: AppTextStyles.bodySmall.copyWith(
+                                        color: AppColors.txtSecondary,
+                                        fontSize: 12,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // Badge
+                              if (isSelected)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
                                   ),
-                                  Text(
-                                    detailsText,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.check,
+                                        size: 11,
+                                        color: Colors.white,
+                                      ),
+                                      const SizedBox(width: 3),
+                                      Text(
+                                        'Active',
+                                        style: AppTextStyles.bodySmall.copyWith(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              else if (distanceText != null)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.background,
+                                    borderRadius: BorderRadius.circular(20),
+                                    border: Border.all(
+                                      color: Color(0xFFE0E0E0),
+                                      width: 0.5,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    distanceText,
                                     style: AppTextStyles.bodySmall.copyWith(
                                       color: AppColors.txtSecondary,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ],
-                              ),
-                            ),
-                            if (isSelected) ...[
-                              SizedBox(width: AppSizes.xs),
-                              Icon(
-                                Icons.location_on,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.primary,
-                                size: 24, 
-                              ),
+                                ),
                             ],
-                          ],
+                          ),
                         ),
                       ),
                     );
                   }).toList();
                 },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppSizes.xs,
-                    vertical: AppSizes.sm,
+
+                // ── Trigger button ──
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 7,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(100),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.25),
+                      width: 0.5,
+                    ),
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      //gps icon
-                      Icon(
-                        Icons.location_on,
-                        color: AppColors.white,
-                        size: 16,
+                      Container(
+                        width: 7,
+                        height: 7,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF4ECFA8),
+                          shape: BoxShape.circle,
+                        ),
                       ),
-                      SizedBox(width: AppSizes.xs),
+                      const SizedBox(width: 7),
                       ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 120),
                         child: Text(
@@ -207,16 +307,17 @@ class HomeHeader extends ConsumerWidget {
                           style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.white,
                             fontWeight: FontWeight.w600,
-                            fontSize: 16,
+                            fontSize: 14,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      const SizedBox(width: 2),
                       Icon(
-                        Icons.arrow_drop_down,
-                        color: AppColors.white,
-                        size: 20,
+                        Icons.keyboard_arrow_down_rounded,
+                        color: Colors.white.withValues(alpha: 0.7),
+                        size: 18,
                       ),
                     ],
                   ),

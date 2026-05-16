@@ -31,6 +31,7 @@ import '../../features/home/screens/home_screen.dart';
 import '../../features/product/domain/entities/product.dart';
 import '../../features/product/presentation/screens/product_detail_screen.dart';
 import '../../features/achievement/presentation/screens/achievement_screen.dart';
+import '../../features/promocode/presentation/screens/promo_code_list_screen.dart';
 import '../../features/checkout/models/checkout_args.dart';
 import '../../features/checkout/presentation/screens/checkout_screen.dart';
 import '../../features/checkout/presentation/screens/order_success_screen.dart';
@@ -203,6 +204,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteName.achievement,
       builder: (context, state) => const AchievementScreen(),
+    ),
+    GoRoute(
+      path: RouteName.promoCodes,
+      builder: (context, state) => const PromoCodeListScreen(),
     ),
     GoRoute(
       path: RouteName.checkout,

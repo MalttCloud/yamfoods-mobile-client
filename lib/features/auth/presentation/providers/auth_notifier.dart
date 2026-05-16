@@ -207,13 +207,21 @@ class AuthNotifier extends _$AuthNotifier {
     }
   }
 
-  Future<void> verifyPhone({required String otp, required String phone}) async {
+  Future<void> verifyPhone({
+    required String otp,
+    required String phone,
+    String? inviterReferralCode,
+  }) async {
     state = true;
     try {
       final verifyPhoneUsecase = await ref.read(
         verifyPhoneUsecaseProvider.future,
       );
-      final result = await verifyPhoneUsecase(otp: otp, phone: phone);
+      final result = await verifyPhoneUsecase(
+        otp: otp,
+        phone: phone,
+        inviterReferralCode: inviterReferralCode,
+      );
       result.fold(
         (failure) => ref
             .read(verifyPhoneEventsProvider.notifier)

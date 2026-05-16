@@ -61,6 +61,9 @@ class RouteName {
   /// Achievement points route.
   static const String achievement = '/achievement';
 
+  /// Promo codes list route.
+  static const String promoCodes = '/promo-codes';
+
   /// Checkout route.
   static const String checkout = '/checkout';
 

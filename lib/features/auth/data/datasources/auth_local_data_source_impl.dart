@@ -69,6 +69,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         "imageUrl": user.imageUrl,
         "googleId": user.googleId,
         "phoneVerified": user.phoneVerified,
+        "referralCode": user.referralCode,
         "createdAt": user.createdAt.toIso8601String(),
         "updatedAt": user.updatedAt.toIso8601String(),
       };
@@ -106,6 +107,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
         imageUrl: data["imageUrl"],
         googleId: data["googleId"],
         phoneVerified: phoneVerified,
+        referralCode: data["referralCode"] as String?,
         createdAt: DateTime.parse(data["createdAt"]),
         updatedAt: DateTime.parse(data["updatedAt"]),
       );

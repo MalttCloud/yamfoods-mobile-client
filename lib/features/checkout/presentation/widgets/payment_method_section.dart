@@ -195,40 +195,84 @@ class _PaymentOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSizes.sm),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppSizes.radiusSm),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : Colors.transparent,
-            width: isSelected ? 1 : 0,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppSizes.radius),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.all(AppSizes.sm),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppColors.primary.withValues(alpha: 0.1)
+                : AppColors.white,
+            borderRadius: BorderRadius.circular(AppSizes.radius),
+            border: Border.all(
+              color: isSelected
+                  ? AppColors.primary
+                  : AppColors.grey.withValues(alpha: 0.35),
+              width: isSelected ? 2 : 1,
+            ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.12),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Row 1: label ........... selection icon only
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    label,
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.txtPrimary,
-                      fontWeight: FontWeight.w600,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  _SelectionCircle(isSelected: isSelected),
+                  SizedBox(width: AppSizes.sm),
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.txtPrimary.withValues(alpha: 0.75),
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-                _SelectionCircle(isSelected: isSelected),
-              ],
-            ),
-            SizedBox(height: AppSizes.sm),
-            // Row 2: image(s)
-            imageRow,
-          ],
+                  if (isSelected)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.sm,
+                        vertical: AppSizes.xs / 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+                      ),
+                      child: Text(
+                        'Selected',
+                        style: AppTextStyles.labelSmall.copyWith(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              SizedBox(height: AppSizes.sm),
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: isSelected ? 1 : 0.95,
+                child: imageRow,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -242,19 +286,22 @@ class _SelectionCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 24,
-      height: 24,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      width: 22,
+      height: 22,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isSelected ? AppColors.primary : Colors.transparent,
+        color: isSelected ? AppColors.primary : AppColors.white,
         border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.grey,
+          color: isSelected
+              ? AppColors.primary
+              : AppColors.grey.withValues(alpha: 0.6),
           width: 2,
         ),
       ),
       child: isSelected
-          ? const Icon(Icons.check, size: 16, color: AppColors.white)
+          ? const Icon(Icons.check, size: 14, color: AppColors.white)
           : null,
     );
   }

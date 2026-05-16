@@ -13,6 +13,7 @@ _AchievementTransactionModel _$AchievementTransactionModelFromJson(
     id: $checkedConvert('id', (v) => (v as num).toInt()),
     userId: $checkedConvert('userId', (v) => (v as num).toInt()),
     type: $checkedConvert('type', (v) => v as String),
+    achievmentType: $checkedConvert('achievmentType', (v) => v as String?),
     points: $checkedConvert('points', (v) => (v as num).toInt()),
     relatedUserId: $checkedConvert(
       'relatedUserId',
@@ -32,6 +33,7 @@ Map<String, dynamic> _$AchievementTransactionModelToJson(
   'id': instance.id,
   'userId': instance.userId,
   'type': instance.type,
+  'achievmentType': instance.achievmentType,
   'points': instance.points,
   'relatedUserId': instance.relatedUserId,
   'relatedUserPhone': instance.relatedUserPhone,

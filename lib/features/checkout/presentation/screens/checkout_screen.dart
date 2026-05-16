@@ -5,12 +5,16 @@ import 'package:yamfoods_customer_app/responsive.dart';
 
 import 'package:uuid/uuid.dart';
 
+import '../../../../app/components/app_loading_indicator.dart';
+import '../../../../app/components/empty_state.dart';
+import '../../../../app/components/error_widget.dart';
 import '../../../../app/routes/app_router.dart';
 import '../../../../app/routes/route_names.dart';
 import '../../../../core/enums/order_type.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
+import '../../../../app/theme/app_texts.dart';
 import '../../../../app/widgets/custom_app_bar.dart';
 import '../../../../core/enums/payment_method.dart';
 import '../../../../core/services/chapa_payment_service.dart';
@@ -29,6 +33,7 @@ import '../providers/checkout_notifier.dart';
 import '../providers/checkout_summary_provider.dart';
 import '../widgets/address_section.dart';
 import '../widgets/checkout_summary_card.dart';
+import '../widgets/delivery_availability_note.dart';
 import '../widgets/delivery_type_section.dart';
 import '../widgets/item_section.dart';
 import '../widgets/points_section.dart';
@@ -252,6 +257,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen>
   @override
   Widget build(BuildContext context) {
     final checkoutState = ref.watch(checkoutProvider(widget.branchId));
+    final availableOrderTypes = ref.watch(orderTypesProvider);
     final isTablet = context.isTablet;
     // Listen to order events (payment is already handled inside order notifier)
     ref.listen<OrderUiEvent?>(orderUiEventsProvider, (previous, next) {
@@ -309,47 +315,110 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen>
       backgroundColor: AppColors.background,
       appBar: const CustomAppBar(title: 'Checkout'),
       body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
-          child: Column( 
-            children: [
-              // Scrollable content
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Order Summary Section
-                      ItemSection(carts: widget.carts),
-                      // Delivery Type Section
-                      DeliveryTypeSection(branchId: widget.branchId),
-                      // Address Section (only shown for delivery)
-                      AddressSection(branchId: widget.branchId),
-                      // Promo Code and Points sections
-                      if (isTablet)
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: PromoCodeSection(branchId: widget.branchId),
-                            ),
-                            Expanded(
-                              child: PointsSection(branchId: widget.branchId),
-                            ),
+        child: availableOrderTypes.when(
+          data: (orderTypes) {
+            if (orderTypes.isEmpty) {
+              return EmptyState(
+                icon: Icons.restaurant_menu_outlined,
+                title: AppTexts.checkoutOrdersUnavailableTitle,
+                subtitle: AppTexts.checkoutOrdersUnavailableMessage,
+                onAction: () => context.pop(),
+                actionText: 'Go back',
+              );
+            }
+            return ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxWidth: AppSizes.defaultMaxScreenWidth,
+              ),
+              child: Column(
+                children: [
+                  // Scrollable content
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Order Summary Section
+                          ItemSection(carts: widget.carts),
+                          // Delivery Type Section
+                          DeliveryTypeSection(
+                            branchId: widget.branchId,
+                            availableOrderTypes: orderTypes,
+                          ),
+                          DeliveryAvailabilityNote(
+                            branchId: widget.branchId,
+                            availableOrderTypes: orderTypes,
+                          ),
+                          // Address Section (only shown for delivery)
+                          AddressSection(branchId: widget.branchId),
+                          // Promo Code and Points sections
+                          if (isTablet)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: PromoCodeSection(
+                                    branchId: widget.branchId,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: PointsSection(
+                                    branchId: widget.branchId,
+                                  ),
+                                ),
+                              ],
+                            )
+                          else ...[
+                            PromoCodeSection(branchId: widget.branchId),
+                            PointsSection(branchId: widget.branchId),
                           ],
-                        )
-                      else ...[
-                        PromoCodeSection(branchId: widget.branchId),
-                        PointsSection(branchId: widget.branchId),
-                      ],
-                      // Schedule and Special Instructions sections
-                      if (isTablet &&
-                          checkoutState.orderType.toOrderType() == OrderType.pickup)
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Consumer(
+                          // Schedule and Special Instructions sections
+                          if (isTablet &&
+                              checkoutState.orderType.toOrderType() ==
+                                  OrderType.pickup)
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Consumer(
+                                    builder: (context, ref, child) {
+                                      final appConfig = ref
+                                          .watch(appConfigurationProvider)
+                                          .value;
+                                      final maxDaysAhead =
+                                          appConfig?.maxOrderSchedulingDays ??
+                                          7;
+                                      final workingHours = ref.watch(
+                                        currentBranchWorkingHoursProvider,
+                                      );
+                                      return ScheduleSection(
+                                        branchId: widget.branchId,
+                                        workingHourStart:
+                                            workingHours?.opening ??
+                                            const TimeOfDay(hour: 9, minute: 0),
+                                        workingHourEnd:
+                                            workingHours?.closing ??
+                                            const TimeOfDay(
+                                              hour: 22,
+                                              minute: 0,
+                                            ),
+                                        maxDaysAhead: maxDaysAhead,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  child: SpecialInstructionsSection(
+                                    branchId: widget.branchId,
+                                  ),
+                                ),
+                              ],
+                            )
+                          else ...[
+                            // Schedule Order Section, only visible if order type is pickup
+                            if (checkoutState.orderType.toOrderType() ==
+                                OrderType.pickup)
+                              Consumer(
                                 builder: (context, ref, child) {
                                   final appConfig = ref
                                       .watch(appConfigurationProvider)
@@ -371,57 +440,37 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen>
                                   );
                                 },
                               ),
-                            ),
-                            Expanded(
-                              child: SpecialInstructionsSection(
-                                branchId: widget.branchId,
-                              ),
+                            // Special Instructions Section
+                            SpecialInstructionsSection(
+                              branchId: widget.branchId,
                             ),
                           ],
-                        )
-                      else ...[
-                        // Schedule Order Section, only visible if order type is pickup
-                        if (checkoutState.orderType.toOrderType() == OrderType.pickup)
-                          Consumer(
-                            builder: (context, ref, child) {
-                              final appConfig = ref
-                                  .watch(appConfigurationProvider)
-                                  .value;
-                              final maxDaysAhead =
-                                  appConfig?.maxOrderSchedulingDays ?? 7;
-                              final workingHours = ref.watch(
-                                currentBranchWorkingHoursProvider,
-                              );
-                              return ScheduleSection(
-                                branchId: widget.branchId,
-                                workingHourStart:
-                                    workingHours?.opening ??
-                                    const TimeOfDay(hour: 9, minute: 0),
-                                workingHourEnd:
-                                    workingHours?.closing ??
-                                    const TimeOfDay(hour: 22, minute: 0),
-                                maxDaysAhead: maxDaysAhead,
-                              );
-                            },
-                          ),
-                        // Special Instructions Section
-                        SpecialInstructionsSection(branchId: widget.branchId),
-                      ],
-                      // Payment Method Section
-                      PaymentMethodSection(branchId: widget.branchId),
-                      // Bottom padding for summary card
-                      SizedBox(height: AppSizes.lg),
-                    ],
+                          // Payment Method Section
+                          PaymentMethodSection(branchId: widget.branchId),
+                          // Bottom padding for summary card
+                          SizedBox(height: AppSizes.lg),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  // Fixed summary card at bottom
+                  CheckoutSummaryCard(
+                    branchId: widget.branchId,
+                    onPlaceOrder: () => _handlePlaceOrder(context),
+                  ),
+                ],
               ),
-              // Fixed summary card at bottom
-              CheckoutSummaryCard(
-                branchId: widget.branchId,
-                onPlaceOrder: () => _handlePlaceOrder(context),
-              ),
-            ],
+            );
+          },
+          error: (error, stackTrace) => ErrorWidgett(
+            icon: Icons.restaurant_menu_outlined,
+            title: AppTexts.checkoutOrdersUnavailableTitle,
+            failure: Failure.unexpected(
+              message: AppTexts.checkoutOrdersUnavailableMessage,
+            ),
+            onRetry: () => ref.refresh(orderTypesProvider.future),
           ),
+          loading: () => const AppLoadingIndicator(),
         ),
       ),
     );

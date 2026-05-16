@@ -17,6 +17,7 @@ extension AchievementTransactionModelMapper on AchievementTransactionModel {
       id: id,
       userId: userId,
       type: type,
+      achievmentType: achievmentType,
       points: points,
       relatedUserId: relatedUserId,
       relatedUserPhone: relatedUserPhone,

@@ -25,6 +25,7 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, LoginDataModel>> verifyPhone({
     required String otp,
     required String phone,
+    String? inviterReferralCode,
   });
 
   Future<Either<Failure, LoginDataModel>> login({

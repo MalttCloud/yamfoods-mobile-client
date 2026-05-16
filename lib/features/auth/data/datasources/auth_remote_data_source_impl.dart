@@ -72,9 +72,14 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<Either<Failure, LoginDataModel>> verifyPhone({
     required String otp,
     required String phone,
+    String? inviterReferralCode,
   }) async {
     try {
-      final data = {'otp': otp, 'phone': phone};
+      final data = {
+        'otp': otp,
+        'phone': phone,
+        'inviterReferralCode': ?inviterReferralCode,
+      };
       final body = RequestWrapper.wrap(data);
 
       final response = await _apiService.verifyPhone(body);

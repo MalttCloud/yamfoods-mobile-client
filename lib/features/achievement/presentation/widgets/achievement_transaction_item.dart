@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
+import '../../../../core/enums/achievement_transaction_type.dart';
+import '../../../../core/enums/achievement_type.dart';
 import '../../../../core/utils/date_formatter.dart';
 import '../../domain/entities/achievement_transaction.dart';
 
@@ -20,8 +22,29 @@ class AchievementTransactionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final typeInfo = _getTypeInfo(transaction.type);
+    final achievementType = transaction.achievmentType;
+    final transactionType = transaction.type.toAchievementTransactionType();
+
+    final label = achievementType != null
+        ? achievementType.toAchievementType().label
+        : transactionType.label;
+    final icon = achievementType != null
+        ? achievementType.toAchievementType().icon
+        : transactionType.icon;
+    final color = achievementType != null
+        ? achievementType.toAchievementType().color
+        : transactionType.color;
+
     final isPositive = transaction.points > 0;
+    final isTransfer = transactionType == AchievementTransactionType.transferIn ||
+        transactionType == AchievementTransactionType.transferOut;
+    final phone = transaction.relatedUserPhone?.trim();
+    final subtitle = _buildSubtitle(
+      transactionType: transactionType,
+      isTransfer: isTransfer,
+      phone: phone,
+      description: transaction.description,
+    );
 
     return Container(
       margin: EdgeInsets.only(bottom: isLast ? 0 : AppSizes.sm),
@@ -44,7 +67,7 @@ class AchievementTransactionItem extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(typeInfo.icon, color: typeInfo.color, size: 20),
+          Icon(icon, color: color, size: 20),
           const SizedBox(width: AppSizes.sm),
           Expanded(
             child: Column(
@@ -52,18 +75,20 @@ class AchievementTransactionItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  typeInfo.label,
+                  label,
                   style: AppTextStyles.bodyMedium.copyWith(
                     color: AppColors.txtPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (transaction.relatedUserPhone != null) ...[
+                if (subtitle != null) ...[
                   const SizedBox(height: 2),
                   Text(
-                    transaction.relatedUserPhone!,
+                    subtitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.txtSecondary.withValues(alpha: 0.7),
+                      color: AppColors.txtSecondary.withValues(alpha: 0.8),
                     ),
                   ),
                 ],
@@ -89,47 +114,23 @@ class AchievementTransactionItem extends StatelessWidget {
     );
   }
 
-  _TypeInfo _getTypeInfo(String type) {
-    switch (type.toLowerCase()) {
-      case 'transfer_in':
-        return _TypeInfo(
-          label: 'Transfer In',
-          icon: Icons.call_received_rounded,
-          color: AppColors.success,
-        );
-      case 'transfer_out':
-        return _TypeInfo(
-          label: 'Transfer Out',
-          icon: Icons.call_made_rounded,
-          color: AppColors.warning,
-        );
-      case 'spend':
-        return _TypeInfo(
-          label: 'Spend',
-          icon: Icons.shopping_cart_outlined,
-          color: AppColors.error,
-        );
-      case 'reward':
-      case 'earn':
-        return _TypeInfo(
-          label: 'Reward',
-          icon: Icons.star_rounded,
-          color: AppColors.primary,
-        );
-      default:
-        return _TypeInfo(
-          label: 'Other',
-          icon: Icons.info_outline_rounded,
-          color: AppColors.grey,
-        );
+  String? _buildSubtitle({
+    required AchievementTransactionType transactionType,
+    required bool isTransfer,
+    required String? phone,
+    required String? description,
+  }) {
+    if (isTransfer) {
+      if (phone == null || phone.isEmpty) return null;
+      return switch (transactionType) {
+        AchievementTransactionType.transferOut => 'Sent to $phone',
+        AchievementTransactionType.transferIn => 'Received from $phone',
+        _ => null,
+      };
     }
+
+    final text = description?.trim();
+    if (text == null || text.isEmpty) return null;
+    return text;
   }
-}
-
-class _TypeInfo {
-  final String label;
-  final IconData icon;
-  final Color color;
-
-  _TypeInfo({required this.label, required this.icon, required this.color});
 }

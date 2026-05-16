@@ -11,6 +11,7 @@ sealed class AchievementTransactionModel with _$AchievementTransactionModel {
     required int id,
     @JsonKey(name: 'userId') required int userId,
     required String type,
+    String? achievmentType,
     required int points,
     @JsonKey(name: 'relatedUserId') int? relatedUserId,
     @JsonKey(name: 'relatedUserPhone') String? relatedUserPhone,

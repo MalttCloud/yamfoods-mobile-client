@@ -245,3 +245,92 @@ final class AppConfigurationProvider
 }
 
 String _$appConfigurationHash() => r'eeb654cbcbc0ba9781315f06da202297c8f2ea36';
+
+@ProviderFor(getOrderTypesUsecase)
+const getOrderTypesUsecaseProvider = GetOrderTypesUsecaseProvider._();
+
+final class GetOrderTypesUsecaseProvider
+    extends
+        $FunctionalProvider<
+          GetOrderTypesUsecase,
+          GetOrderTypesUsecase,
+          GetOrderTypesUsecase
+        >
+    with $Provider<GetOrderTypesUsecase> {
+  const GetOrderTypesUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getOrderTypesUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getOrderTypesUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetOrderTypesUsecase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  GetOrderTypesUsecase create(Ref ref) {
+    return getOrderTypesUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetOrderTypesUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetOrderTypesUsecase>(value),
+    );
+  }
+}
+
+String _$getOrderTypesUsecaseHash() =>
+    r'f28e25db97f82097216ecbd31f50b0e5c9e2ff12';
+
+@ProviderFor(orderTypes)
+const orderTypesProvider = OrderTypesProvider._();
+
+final class OrderTypesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<OrderTypeConfig>>,
+          List<OrderTypeConfig>,
+          FutureOr<List<OrderTypeConfig>>
+        >
+    with
+        $FutureModifier<List<OrderTypeConfig>>,
+        $FutureProvider<List<OrderTypeConfig>> {
+  const OrderTypesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'orderTypesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$orderTypesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<OrderTypeConfig>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<OrderTypeConfig>> create(Ref ref) {
+    return orderTypes(ref);
+  }
+}
+
+String _$orderTypesHash() => r'50cdf18ee1e47a5b8459da66ecbe8795bf42930b';

@@ -10,6 +10,7 @@ extension UserModelMapper on UserModel {
     role: role,
     email: email,
     phoneVerified: phoneVerified == 1 ? true : false,
+    referralCode: referralCode,
     googleId: googleId,
     provider: provider,
     createdAt: createdAt,
