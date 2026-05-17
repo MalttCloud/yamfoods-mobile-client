@@ -10,6 +10,7 @@ import 'menu_item.dart';
 import 'profile_info.dart';
 import 'profile_legal_footer.dart';
 import 'profile_menu.dart';
+import 'profile_referral_section.dart';
 
 class ProfileContent extends StatelessWidget {
   final User user;
@@ -43,6 +44,8 @@ class ProfileContent extends StatelessWidget {
             children: [
               ProfileInfo(user: user, sectionTitle: 'Profile Information'),
               const SizedBox(height: AppSizes.sm),
+              ProfileReferralSection(user: user),
+              const SizedBox(height: AppSizes.sm),
               ProfileMenu(
                 sectionTitle: 'Account',
                 items: [
@@ -66,6 +69,12 @@ class ProfileContent extends StatelessWidget {
                     title: 'Addresses',
                     subtitle: 'Manage your addresses',
                     onTap: () => context.push(RouteName.addresses),
+                  ),
+                  MenuItem(
+                    icon: Icons.local_offer_outlined,
+                    title: 'Promo Codes',
+                    subtitle: 'View available discounts and offers',
+                    onTap: () => context.push(RouteName.promoCodes),
                   ),
                   MenuItem(
                     icon: Icons.account_balance_wallet_outlined,

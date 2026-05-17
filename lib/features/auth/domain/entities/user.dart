@@ -12,6 +12,7 @@ sealed class User with _$User {
     required String role,
     required String email,
     required bool phoneVerified,
+    String? referralCode,
     String? googleId,
     required String provider,
     required DateTime createdAt,

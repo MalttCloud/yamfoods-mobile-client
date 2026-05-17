@@ -12,8 +12,13 @@ class VerifyPhoneUsecase {
   Future<Either<Failure, ({User user, AuthToken tokens})>> call({
     required String otp,
     required String phone,
+    String? inviterReferralCode,
   }) async {
-    return await _repository.verifyPhone(otp: otp, phone: phone);
+    return await _repository.verifyPhone(
+      otp: otp,
+      phone: phone,
+      inviterReferralCode: inviterReferralCode,
+    );
 
     //NOTE: we can do like below for validation if needed but 
     //currently i am validate forms on the presentation 

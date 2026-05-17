@@ -8,6 +8,7 @@ sealed class AchievementTransaction with _$AchievementTransaction {
     required int id,
     required int userId,
     required String type,
+    String? achievmentType,
     required int points,
     int? relatedUserId,
     String? relatedUserPhone,

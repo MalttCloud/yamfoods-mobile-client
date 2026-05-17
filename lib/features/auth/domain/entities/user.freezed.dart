@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$User {
 
- int get id; String? get imageUrl; String get name; String? get phone; String get role; String get email; bool get phoneVerified; String? get googleId; String get provider; DateTime get createdAt; DateTime get updatedAt;
+ int get id; String? get imageUrl; String get name; String? get phone; String get role; String get email; bool get phoneVerified; String? get referralCode; String? get googleId; String get provider; DateTime get createdAt; DateTime get updatedAt;
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UserCopyWith<User> get copyWith => _$UserCopyWithImpl<User>(this as User, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.role, role) || other.role == role)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&(identical(other.googleId, googleId) || other.googleId == googleId)&&(identical(other.provider, provider) || other.provider == provider)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is User&&(identical(other.id, id) || other.id == id)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.role, role) || other.role == role)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&(identical(other.referralCode, referralCode) || other.referralCode == referralCode)&&(identical(other.googleId, googleId) || other.googleId == googleId)&&(identical(other.provider, provider) || other.provider == provider)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,imageUrl,name,phone,role,email,phoneVerified,googleId,provider,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,imageUrl,name,phone,role,email,phoneVerified,referralCode,googleId,provider,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'User(id: $id, imageUrl: $imageUrl, name: $name, phone: $phone, role: $role, email: $email, phoneVerified: $phoneVerified, googleId: $googleId, provider: $provider, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'User(id: $id, imageUrl: $imageUrl, name: $name, phone: $phone, role: $role, email: $email, phoneVerified: $phoneVerified, referralCode: $referralCode, googleId: $googleId, provider: $provider, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $UserCopyWith<$Res>  {
   factory $UserCopyWith(User value, $Res Function(User) _then) = _$UserCopyWithImpl;
 @useResult
 $Res call({
- int id, String? imageUrl, String name, String? phone, String role, String email, bool phoneVerified, String? googleId, String provider, DateTime createdAt, DateTime updatedAt
+ int id, String? imageUrl, String name, String? phone, String role, String email, bool phoneVerified, String? referralCode, String? googleId, String provider, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -62,7 +62,7 @@ class _$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? imageUrl = freezed,Object? name = null,Object? phone = freezed,Object? role = null,Object? email = null,Object? phoneVerified = null,Object? googleId = freezed,Object? provider = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? imageUrl = freezed,Object? name = null,Object? phone = freezed,Object? role = null,Object? email = null,Object? phoneVerified = null,Object? referralCode = freezed,Object? googleId = freezed,Object? provider = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,8 @@ as String,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable
 as String?,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,phoneVerified: null == phoneVerified ? _self.phoneVerified : phoneVerified // ignore: cast_nullable_to_non_nullable
-as bool,googleId: freezed == googleId ? _self.googleId : googleId // ignore: cast_nullable_to_non_nullable
+as bool,referralCode: freezed == referralCode ? _self.referralCode : referralCode // ignore: cast_nullable_to_non_nullable
+as String?,googleId: freezed == googleId ? _self.googleId : googleId // ignore: cast_nullable_to_non_nullable
 as String?,provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? imageUrl,  String name,  String? phone,  String role,  String email,  bool phoneVerified,  String? googleId,  String provider,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? imageUrl,  String name,  String? phone,  String role,  String email,  bool phoneVerified,  String? referralCode,  String? googleId,  String provider,  DateTime createdAt,  DateTime updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.email,_that.phoneVerified,_that.googleId,_that.provider,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.email,_that.phoneVerified,_that.referralCode,_that.googleId,_that.provider,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? imageUrl,  String name,  String? phone,  String role,  String email,  bool phoneVerified,  String? googleId,  String provider,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? imageUrl,  String name,  String? phone,  String role,  String email,  bool phoneVerified,  String? referralCode,  String? googleId,  String provider,  DateTime createdAt,  DateTime updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _User():
-return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.email,_that.phoneVerified,_that.googleId,_that.provider,_that.createdAt,_that.updatedAt);}
+return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.email,_that.phoneVerified,_that.referralCode,_that.googleId,_that.provider,_that.createdAt,_that.updatedAt);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -195,10 +196,10 @@ return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? imageUrl,  String name,  String? phone,  String role,  String email,  bool phoneVerified,  String? googleId,  String provider,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? imageUrl,  String name,  String? phone,  String role,  String email,  bool phoneVerified,  String? referralCode,  String? googleId,  String provider,  DateTime createdAt,  DateTime updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _User() when $default != null:
-return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.email,_that.phoneVerified,_that.googleId,_that.provider,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.email,_that.phoneVerified,_that.referralCode,_that.googleId,_that.provider,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -210,7 +211,7 @@ return $default(_that.id,_that.imageUrl,_that.name,_that.phone,_that.role,_that.
 
 
 class _User implements User {
-  const _User({required this.id, this.imageUrl, required this.name, this.phone, required this.role, required this.email, required this.phoneVerified, this.googleId, required this.provider, required this.createdAt, required this.updatedAt});
+  const _User({required this.id, this.imageUrl, required this.name, this.phone, required this.role, required this.email, required this.phoneVerified, this.referralCode, this.googleId, required this.provider, required this.createdAt, required this.updatedAt});
   
 
 @override final  int id;
@@ -220,6 +221,7 @@ class _User implements User {
 @override final  String role;
 @override final  String email;
 @override final  bool phoneVerified;
+@override final  String? referralCode;
 @override final  String? googleId;
 @override final  String provider;
 @override final  DateTime createdAt;
@@ -235,16 +237,16 @@ _$UserCopyWith<_User> get copyWith => __$UserCopyWithImpl<_User>(this, _$identit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.role, role) || other.role == role)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&(identical(other.googleId, googleId) || other.googleId == googleId)&&(identical(other.provider, provider) || other.provider == provider)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _User&&(identical(other.id, id) || other.id == id)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.name, name) || other.name == name)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.role, role) || other.role == role)&&(identical(other.email, email) || other.email == email)&&(identical(other.phoneVerified, phoneVerified) || other.phoneVerified == phoneVerified)&&(identical(other.referralCode, referralCode) || other.referralCode == referralCode)&&(identical(other.googleId, googleId) || other.googleId == googleId)&&(identical(other.provider, provider) || other.provider == provider)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,imageUrl,name,phone,role,email,phoneVerified,googleId,provider,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,imageUrl,name,phone,role,email,phoneVerified,referralCode,googleId,provider,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'User(id: $id, imageUrl: $imageUrl, name: $name, phone: $phone, role: $role, email: $email, phoneVerified: $phoneVerified, googleId: $googleId, provider: $provider, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'User(id: $id, imageUrl: $imageUrl, name: $name, phone: $phone, role: $role, email: $email, phoneVerified: $phoneVerified, referralCode: $referralCode, googleId: $googleId, provider: $provider, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -255,7 +257,7 @@ abstract mixin class _$UserCopyWith<$Res> implements $UserCopyWith<$Res> {
   factory _$UserCopyWith(_User value, $Res Function(_User) _then) = __$UserCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String? imageUrl, String name, String? phone, String role, String email, bool phoneVerified, String? googleId, String provider, DateTime createdAt, DateTime updatedAt
+ int id, String? imageUrl, String name, String? phone, String role, String email, bool phoneVerified, String? referralCode, String? googleId, String provider, DateTime createdAt, DateTime updatedAt
 });
 
 
@@ -272,7 +274,7 @@ class __$UserCopyWithImpl<$Res>
 
 /// Create a copy of User
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? imageUrl = freezed,Object? name = null,Object? phone = freezed,Object? role = null,Object? email = null,Object? phoneVerified = null,Object? googleId = freezed,Object? provider = null,Object? createdAt = null,Object? updatedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? imageUrl = freezed,Object? name = null,Object? phone = freezed,Object? role = null,Object? email = null,Object? phoneVerified = null,Object? referralCode = freezed,Object? googleId = freezed,Object? provider = null,Object? createdAt = null,Object? updatedAt = null,}) {
   return _then(_User(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,imageUrl: freezed == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -281,7 +283,8 @@ as String,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable
 as String?,role: null == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,phoneVerified: null == phoneVerified ? _self.phoneVerified : phoneVerified // ignore: cast_nullable_to_non_nullable
-as bool,googleId: freezed == googleId ? _self.googleId : googleId // ignore: cast_nullable_to_non_nullable
+as bool,referralCode: freezed == referralCode ? _self.referralCode : referralCode // ignore: cast_nullable_to_non_nullable
+as String?,googleId: freezed == googleId ? _self.googleId : googleId // ignore: cast_nullable_to_non_nullable
 as String?,provider: null == provider ? _self.provider : provider // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,updatedAt: null == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable

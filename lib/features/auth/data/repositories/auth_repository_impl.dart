@@ -65,8 +65,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, ({User user, AuthToken tokens})>> verifyPhone({
     required String otp,
     required String phone,
+    String? inviterReferralCode,
   }) async {
-    final result = await _remoteDataSource.verifyPhone(otp: otp, phone: phone);
+    final result = await _remoteDataSource.verifyPhone(
+      otp: otp,
+      phone: phone,
+      inviterReferralCode: inviterReferralCode,
+    );
 
     return result.fold((failure) => Left(failure), (loginData) async {
       // Map to domain entities

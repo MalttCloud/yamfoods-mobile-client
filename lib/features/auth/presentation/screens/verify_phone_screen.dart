@@ -27,6 +27,7 @@ class VerifyPhoneScreen extends ConsumerStatefulWidget {
 class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
   final _formKey = GlobalKey<FormState>();
   final _otpController = TextEditingController();
+  final _referralCodeController = TextEditingController();
   String phone = '';
 
   String getPhone() {
@@ -41,12 +42,13 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
   void _verifyPhone() {
     if (_formKey.currentState?.validate() ?? false) {
       final otp = _otpController.text.trim();
-      ref
-          .read(authProvider.notifier)
-          .verifyPhone(
+      final referralCode = _referralCodeController.text.trim();
+      ref.read(authProvider.notifier).verifyPhone(
             otp: otp,
             phone: getPhone(),
-          ); //we are very sure phone is never null
+            inviterReferralCode:
+                referralCode.isEmpty ? null : referralCode,
+          );
     }
   }
 
@@ -61,6 +63,7 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
   @override
   void dispose() {
     _otpController.dispose();
+    _referralCodeController.dispose();
     super.dispose();
   }
 
@@ -165,6 +168,22 @@ class _VerifyPhoneScreenState extends ConsumerState<VerifyPhoneScreen> {
                       },
                       prefixIcon: Icons.security,
                       inputType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      labelText: AppTexts.referralCodeOptional,
+                      controller: _referralCodeController,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return null;
+                        }
+                        if (value.trim().length < 6) {
+                          return AppTexts.enterValidReferralCode;
+                        }
+                        return null;
+                      },
+                      prefixIcon: Icons.card_giftcard_outlined,
+                      inputType: TextInputType.text,
                     ),
                     const SizedBox(height: 30),
                     CustomButton(

@@ -2,9 +2,11 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/errors/failure.dart';
 import '../../domain/entities/app_configuration.dart';
+import '../../domain/entities/order_type_config.dart';
 import '../../domain/repositories/app_configuration_repository.dart';
 import '../datasources/app_configuration_remote_data_source.dart';
 import '../mappers/app_configuration_mapper.dart';
+import '../mappers/order_type_config_mapper.dart';
 
 class AppConfigurationRepositoryImpl implements AppConfigurationRepository {
   final AppConfigurationRemoteDataSource _remoteDataSource;
@@ -18,6 +20,16 @@ class AppConfigurationRepositoryImpl implements AppConfigurationRepository {
     return result.fold((failure) => Left(failure), (appConfigurationModel) {
       final appConfiguration = appConfigurationModel.toDomain();
       return Right(appConfiguration);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<OrderTypeConfig>>> getOrderTypes() async {
+    final result = await _remoteDataSource.getOrderTypes();
+
+    return result.fold((failure) => Left(failure), (models) {
+      final orderTypes = models.map((m) => m.toDomain()).toList();
+      return Right(orderTypes);
     });
   }
 }

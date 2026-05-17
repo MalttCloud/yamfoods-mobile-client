@@ -45,6 +45,13 @@ class AppTexts {
       'Enter the verification code sent to your phone';
   static const String enterOTP = 'Enter OTP';
   static const String enterValidOTP = 'Enter a valid OTP';
+  static const String referralCodeOptional = 'Referral code (optional)';
+  static const String enterValidReferralCode =
+      'Referral code must be at least 6 characters';
+  static const String yourReferralCode = 'Your Referral Code';
+  static const String referralCodeShareHint =
+      'Share this code with friends. When they join using your referral code, '
+      'you earn reward points you can use for order discounts.';
   static const String resendOTP = 'Resend OTP';
   static const String editPhone = 'Edit Phone';
 
@@ -105,6 +112,13 @@ class AppTexts {
   static const houseNumber = 'House No.';
   static const building = 'Building';
   static const addressNote = 'Address Note';
+
+  // Checkout — order availability
+  static const String checkoutOrdersUnavailableTitle =
+      'Orders unavailable right now';
+  static const String checkoutOrdersUnavailableMessage =
+      "We're sorry, we're not accepting orders at the moment. "
+      'This is only temporary. Please try again in a little while.';
 
   //payment
   static const String paymentDetails = 'Payment Details';

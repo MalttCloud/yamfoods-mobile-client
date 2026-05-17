@@ -21,6 +21,13 @@ class AchievementWalletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gradientColors = [
+      const Color(0xFF5A2F08),
+      Color.lerp(AppColors.primary, Colors.black, 0.15)!,
+      Color.lerp(AppColors.primary, Colors.black, 0.35)!,
+      Color.lerp(AppColors.primary, Colors.black, 0.55)!,
+    ];
+
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 500),
       child: Container(
@@ -28,15 +35,10 @@ class AchievementWalletCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppColors.primary, // Rich brown
-              Color(0xFF5A2F08), // Darker brown
-              Color(0xFF4A2506), // Very dark brown
-              Color(0xFF2D1503), // Near black brown
-            ],
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: gradientColors,
             stops: [0.0, 0.3, 0.7, 1.0],
           ),
           boxShadow: [
@@ -54,24 +56,19 @@ class AchievementWalletCard extends StatelessWidget {
             children: [
               // Background gradient
               Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.primary, // Rich brown
-                      Color(0xFF5A2F08), // Darker brown
-                      Color(0xFF4A2506), // Very dark brown
-                      Color(0xFF2D1503), // Near black brown
-                    ],
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: gradientColors,
                     stops: [0.0, 0.3, 0.7, 1.0],
                   ),
                 ),
               ),
-      
+
               // Grain texture overlay
               _GrainOverlay(),
-      
+
               // Subtle light reflection/divider
               Positioned(
                 top: 0,
@@ -89,7 +86,7 @@ class AchievementWalletCard extends StatelessWidget {
                   ),
                 ),
               ),
-      
+
               // Content
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -125,9 +122,9 @@ class AchievementWalletCard extends StatelessWidget {
                         ),
                       ],
                     ),
-      
+
                     const Spacer(),
-      
+
                     // Main content: Wallet balance
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,9 +173,9 @@ class AchievementWalletCard extends StatelessWidget {
                         ),
                       ],
                     ),
-      
+
                     const SizedBox(height: 10),
-      
+
                     // Action area: Send button
                     Align(
                       alignment: Alignment.centerRight,

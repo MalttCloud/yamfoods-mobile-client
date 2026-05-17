@@ -15,6 +15,7 @@ sealed class UserModel with _$UserModel {
     required String role,
     required String email,
     required int phoneVerified,
+    String? referralCode,
     String? googleId,
     required String provider,
     required DateTime createdAt,

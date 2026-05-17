@@ -7,17 +7,21 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/enums/order_type.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
+import '../../../app_configuration/domain/entities/order_type_config.dart';
+import '../../../app_configuration/domain/extensions/order_type_config_extensions.dart';
 import '../providers/checkout_notifier.dart';
 
 /// Modern segmented control for delivery type selection (Pickup, Delivery, Dining).
 /// When Dining is selected, shows a table number field.
 class DeliveryTypeSection extends ConsumerStatefulWidget {
   final int branchId;
+  final List<OrderTypeConfig> availableOrderTypes;
 
-  const DeliveryTypeSection({super.key, required this.branchId});
+  const DeliveryTypeSection({super.key, required this.branchId, required this.availableOrderTypes});
 
   @override
-  ConsumerState<DeliveryTypeSection> createState() => _DeliveryTypeSectionState();
+  ConsumerState<DeliveryTypeSection> createState() =>
+      _DeliveryTypeSectionState();
 }
 
 class _DeliveryTypeSectionState extends ConsumerState<DeliveryTypeSection> {
@@ -35,14 +39,34 @@ class _DeliveryTypeSectionState extends ConsumerState<DeliveryTypeSection> {
     super.dispose();
   }
 
+  String _labelFor(OrderType type) => switch (type) {
+        OrderType.dining => 'Dine in',
+        _ => type.name,
+      };
+
   @override
   Widget build(BuildContext context) {
     final checkoutState = ref.watch(checkoutProvider(widget.branchId));
     final orderType = checkoutState.orderType.toOrderType();
-    final isPickup = orderType == OrderType.pickup;
-    final isDelivery = orderType == OrderType.delivery;
     final isDining = orderType == OrderType.dining;
-    
+    final orderTypes = widget.availableOrderTypes
+        .where((config) => config.isAvailableNow)
+        .toList();
+
+    if (orderTypes.isNotEmpty &&
+        !orderTypes.any((config) => config.type == orderType)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref
+            .read(checkoutProvider(widget.branchId).notifier)
+            .setOrderType(orderTypes.first.type.value);
+      });
+    }
+
+    if (orderTypes.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: AppSizes.sm,
@@ -71,56 +95,49 @@ class _DeliveryTypeSectionState extends ConsumerState<DeliveryTypeSection> {
             ),
           ),
           SizedBox(height: AppSizes.sm),
-          // Row with Expanded so each option takes equal horizontal space
-          Row(
-            children: [
-              Expanded(
-                child: _DeliveryOption(
-                  label: 'Pickup',
-                  icon: Icons.store_outlined,
-                  isSelected: isPickup,
-                  onTap: () {
-                    ref
-                        .read(checkoutProvider(widget.branchId).notifier)
-                        .setOrderType(OrderType.pickup.value);
+          LayoutBuilder(
+            builder: (context, constraints) {
+              const separatorWidth = 1.0;
+              final separatorCount =
+                  orderTypes.length > 1 ? orderTypes.length - 1 : 0;
+              final itemWidth =
+                  (constraints.maxWidth - separatorCount * separatorWidth) /
+                  orderTypes.length;
+
+              return SizedBox(
+                height: 56,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: orderTypes.length,
+                  separatorBuilder: (_, _) => Container(
+                    width: separatorWidth,
+                    height: 40,
+                    color: AppColors.grey.withValues(alpha: 0.3),
+                  ),
+                  itemBuilder: (context, index) {
+                    final config = orderTypes[index];
+                    final type = config.type;
+
+                    return SizedBox(
+                      width: itemWidth,
+                      child: _DeliveryOption(
+                        label: _labelFor(type),
+                        icon: type.icon,
+                        isSelected: orderType == type,
+                        onTap: () {
+                          ref
+                              .read(
+                                checkoutProvider(widget.branchId).notifier,
+                              )
+                              .setOrderType(type.value);
+                        },
+                      ),
+                    );
                   },
                 ),
-              ),
-              Container(
-                width: 1,
-                height: 40,
-                color: AppColors.grey.withValues(alpha: 0.3),
-              ),
-              Expanded(
-                child: _DeliveryOption(
-                  label: 'Delivery',
-                  icon: Icons.local_shipping_outlined,
-                  isSelected: isDelivery,
-                  onTap: () {
-                    ref
-                        .read(checkoutProvider(widget.branchId).notifier)
-                        .setOrderType(OrderType.delivery.value);
-                  },
-                ),
-              ),
-              Container(
-                width: 1,
-                height: 40,
-                color: AppColors.grey.withValues(alpha: 0.3),
-              ),
-              Expanded(
-                child: _DeliveryOption(
-                  label: 'Dine in',
-                  icon: Icons.restaurant_outlined,
-                  isSelected: isDining,
-                  onTap: () {
-                    ref
-                        .read(checkoutProvider(widget.branchId).notifier)
-                        .setOrderType(OrderType.dining.value);
-                  },
-                ),
-              ),
-            ],
+              );
+            },
           ),
           if (isDining) ...[
             SizedBox(height: AppSizes.sm),
@@ -128,14 +145,12 @@ class _DeliveryTypeSectionState extends ConsumerState<DeliveryTypeSection> {
               controller: _tableNumberController,
               hintText: 'Enter table number',
               icon: Icons.table_restaurant_outlined,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(20),
-              ],
+              inputFormatters: [LengthLimitingTextInputFormatter(20)],
               onChanged: (value) {
                 final trimmed = value.trim();
-                ref.read(checkoutProvider(widget.branchId).notifier).setTableNumber(
-                      trimmed.isEmpty ? null : trimmed,
-                    );
+                ref
+                    .read(checkoutProvider(widget.branchId).notifier)
+                    .setTableNumber(trimmed.isEmpty ? null : trimmed);
               },
             ),
           ],
@@ -201,7 +216,9 @@ class _DeliveryOption extends StatelessWidget {
                 label,
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: isSelected ? AppColors.primary : AppColors.txtSecondary,
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.txtSecondary,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 ),
               ),

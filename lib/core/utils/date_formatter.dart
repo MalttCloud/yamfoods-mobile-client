@@ -69,26 +69,43 @@ class DateFormatter {
 
   /// Formats a date for transaction history display.
   ///
+  /// Uses local time. Recent same-calendar-day entries are relative; older
+  /// entries use [May-15-2026] style.
+  ///
   /// Examples:
-  /// - "14:30" (today)
+  /// - "Just now"
+  /// - "5 mins ago"
+  /// - "2 hrs ago"
   /// - "Yesterday"
-  /// - "Mon" (this week)
-  /// - "Jan 15, 2024" (older)
-  static String formatTransactionDate(DateTime date) {
+  /// - "May-15-2026"
+  static String formatTransactionDate(DateTime dateTime) {
+    final local = dateTime.toLocal();
     final now = DateTime.now();
-    final difference = now.difference(date);
+    final difference = now.difference(local);
 
-    if (difference.inDays == 0) {
-      return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
-    } else if (difference.inDays == 1) {
-      return 'Yesterday';
-    } else if (difference.inDays < 7) {
-      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      return days[date.weekday - 1];
-    } else {
-      final month = _getMonthAbbreviation(date.month);
-      return '$month ${date.day}, ${date.year}';
+    final today = DateTime(now.year, now.month, now.day);
+    final dateDay = DateTime(local.year, local.month, local.day);
+    final calendarDaysAgo = today.difference(dateDay).inDays;
+
+    if (calendarDaysAgo == 0) {
+      if (difference.inMinutes < 1) {
+        return 'Just now';
+      }
+      if (difference.inHours < 1) {
+        final minutes = difference.inMinutes;
+        return '$minutes ${minutes == 1 ? 'min' : 'mins'} ago';
+      }
+      final hours = difference.inHours;
+      return '$hours ${hours == 1 ? 'hr' : 'hrs'} ago';
     }
+
+    if (calendarDaysAgo == 1) {
+      return 'Yesterday';
+    }
+
+    final month = _getMonthAbbreviation(local.month);
+    final day = local.day.toString().padLeft(2, '0');
+    return '$month-$day-${local.year}';
   }
 
   /// Gets the abbreviated month name.
