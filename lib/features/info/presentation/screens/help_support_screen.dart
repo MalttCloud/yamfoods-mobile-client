@@ -12,6 +12,7 @@ import '../../../../app/theme/app_text_styles.dart';
 import '../../../../app/widgets/custom_app_bar.dart';
 import '../../../../core/errors/failure.dart';
 import '../providers/info_providers.dart';
+import '../widgets/help_support_collaboration_entry.dart';
 import '../widgets/help_support_content.dart';
 import '../widgets/help_support_faq_entry.dart';
 
@@ -75,6 +76,11 @@ class HelpSupportScreen extends ConsumerWidget {
                         const SizedBox(height: AppSizes.md),
                         HelpSupportFaqEntry(
                           onTap: () => context.push(RouteName.faq),
+                        ),
+                        const SizedBox(height: AppSizes.sm),
+                        HelpSupportCollaborationEntry(
+                          onTap: () =>
+                              context.push(RouteName.collaborationRequest),
                         ),
                         const SizedBox(height: AppSizes.sm),
                         HelpSupportContent(data: data),

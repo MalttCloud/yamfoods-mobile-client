@@ -22,6 +22,16 @@ abstract class InfoRemoteDataSource {
     required String message,
   });
 
+  Future<Either<Failure, void>> submitCollaborationRequest({
+    required String name,
+    required String phone,
+    String? email,
+    String? organization,
+    String? website,
+    required String title,
+    required String proposal,
+  });
+
   Future<Either<Failure, void>> deleteMyAccount({
     required String phone,
     required String title,

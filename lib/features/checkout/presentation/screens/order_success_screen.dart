@@ -10,6 +10,8 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_images.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../order/domain/entities/order_payment_query_result.dart';
 
 /// Confetti colors using app theme.
 const List<Color> _confettiColors = [AppColors.primary, AppColors.white];
@@ -20,9 +22,14 @@ const List<Color> _confettiColors = [AppColors.primary, AppColors.white];
 /// [orderId] is passed so "View order" can open that order's detail.
 /// Launches confetti from both sides for a short celebration.
 class OrderSuccessScreen extends StatefulWidget {
-  const OrderSuccessScreen({super.key, required this.orderId});
+  const OrderSuccessScreen({
+    super.key,
+    required this.orderId,
+    required this.paymentResult,
+  });
 
   final int orderId;
+  final OrderPaymentQueryResult paymentResult;
 
   @override
   State<OrderSuccessScreen> createState() => _OrderSuccessScreenState();
@@ -109,11 +116,14 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
       child: Scaffold(
         backgroundColor: AppColors.background,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSizes.xl,
+              vertical: AppSizes.lg,
+            ),
             child: Column(
               children: [
-                const Spacer(flex: 3),
+                const SizedBox(height: AppSizes.xl),
                 const _SuccessIcon(),
                 const SizedBox(height: AppSizes.xxl),
                 Text(
@@ -133,7 +143,9 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const Spacer(flex: 2),
+                const SizedBox(height: AppSizes.xl),
+                _PaymentDetailsCard(paymentResult: widget.paymentResult),
+                const SizedBox(height: AppSizes.xxl),
                 CustomButton(
                   text: 'View order',
                   onPressed: () => context.pushReplacement(
@@ -150,7 +162,7 @@ class _OrderSuccessScreenState extends State<OrderSuccessScreen> {
                   color: AppColors.btnSecondary,
                   textColor: AppColors.txtPrimary,
                 ),
-                const Spacer(flex: 3),
+                const SizedBox(height: AppSizes.xl),
               ],
             ),
           ),
@@ -169,6 +181,115 @@ class _SuccessIcon extends StatelessWidget {
       width: 210,
       height: 210,
       child: Image.asset(AppImages.orderSuccessIcon, fit: BoxFit.contain),
+    );
+  }
+}
+
+class _PaymentDetailsCard extends StatelessWidget {
+  const _PaymentDetailsCard({required this.paymentResult});
+
+  final OrderPaymentQueryResult paymentResult;
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <_PaymentDetailRow>[
+      const _PaymentDetailRow(label: 'Status', value: 'Successful'),
+      if (paymentResult.method != null)
+        _PaymentDetailRow(label: 'Method', value: paymentResult.method!),
+      if (paymentResult.amount != null)
+        _PaymentDetailRow(
+          label: 'Amount',
+          value:
+              '${paymentResult.amount!.toStringAsFixed(2)} ${AppConstants.currency}',
+        ),
+      if (paymentResult.transId != null)
+        _PaymentDetailRow(label: 'Transaction ID', value: paymentResult.transId!),
+      if (paymentResult.transTime != null)
+        _PaymentDetailRow(
+          label: 'Transaction time',
+          value: _displayTransTime(paymentResult.transTime!),
+        ),
+    ];
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSizes.lg),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(AppSizes.radiusLg),
+        border: Border.all(color: AppColors.grey.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            'Payment details',
+            style: AppTextStyles.h6.copyWith(
+              color: AppColors.txtPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: AppSizes.md),
+          for (var i = 0; i < rows.length; i++) ...[
+            if (i > 0) const SizedBox(height: AppSizes.sm),
+            rows[i],
+          ],
+        ],
+      ),
+    );
+  }
+
+  /// Shows API-style `yyyy-MM-dd HH:mm:ss` even when backend sends ISO-8601.
+  static String _displayTransTime(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return trimmed;
+
+    try {
+      final dt = DateTime.parse(trimmed).toLocal();
+      String two(int n) => n.toString().padLeft(2, '0');
+      return '${dt.year}-${two(dt.month)}-${two(dt.day)} '
+          '${two(dt.hour)}:${two(dt.minute)}:${two(dt.second)}';
+    } catch (_) {
+      return trimmed
+          .replaceFirst('T', ' ')
+          .replaceAll(RegExp(r'[Zz]\s*$'), '')
+          .trim();
+    }
+  }
+}
+
+class _PaymentDetailRow extends StatelessWidget {
+  const _PaymentDetailRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            label,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.txtSecondary,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.txtPrimary,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.end,
+          ),
+        ),
+      ],
     );
   }
 }

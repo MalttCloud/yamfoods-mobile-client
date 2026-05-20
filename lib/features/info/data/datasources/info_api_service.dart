@@ -29,6 +29,9 @@ abstract class InfoApiService {
   @POST(ApiRoutes.submitFeedback)
   Future<void> submitFeedback(@Body() Map<String, dynamic> body);
 
+  @POST(ApiRoutes.submitCollaborationRequest)
+  Future<void> submitCollaborationRequest(@Body() Map<String, dynamic> body);
+
   @POST(ApiRoutes.deleteMyAccount)
   Future<void> deleteMyAccount(@Body() Map<String, dynamic> body);
 }

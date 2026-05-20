@@ -26,6 +26,8 @@ import '../../../branch/presentation/providers/branch_providers.dart';
 import '../../../cart/domain/entities/cart.dart';
 import '../../../cart/presentation/providers/cart_notifier.dart';
 import '../../../order/domain/entities/order_request_data.dart';
+import '../../models/order_success_args.dart';
+import '../../../order/domain/entities/order_payment_query_result.dart';
 import '../../../order/domain/entities/query_order_request.dart';
 import '../../../order/presentation/providers/order_events.dart';
 import '../../../order/presentation/providers/order_notifier.dart';
@@ -245,12 +247,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen>
     );
   }
 
-  void _clearCartAndNavigate(int orderId) {
+  void _clearCartAndNavigate(
+    int orderId,
+    OrderPaymentQueryResult paymentResult,
+  ) {
     ref
         .read(cartProvider(widget.branchId).notifier)
         .deleteAllCartItems(shouldShowSnackBar: false);
     if (mounted) {
-      context.pushReplacement(RouteName.orderSuccess, extra: orderId);
+      context.pushReplacement(
+        RouteName.orderSuccess,
+        extra: OrderSuccessArgs(orderId: orderId, paymentResult: paymentResult),
+      );
     }
   }
 

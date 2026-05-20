@@ -16,6 +16,7 @@ import '../../domain/usecases/get_faqs_usecase.dart';
 import '../../domain/usecases/get_help_support_usecase.dart';
 import '../../domain/usecases/get_privacy_policy_usecase.dart';
 import '../../domain/usecases/get_terms_and_conditions_usecase.dart';
+import '../../domain/usecases/submit_collaboration_request_usecase.dart';
 import '../../domain/usecases/submit_feedback_usecase.dart';
 
 part 'info_providers.g.dart';
@@ -87,6 +88,15 @@ Future<SubmitFeedbackUsecase> submitFeedbackUsecase(Ref ref) async {
   return SubmitFeedbackUsecase(repository);
 }
 
+/// Submit collaboration request usecase provider
+@riverpod
+Future<SubmitCollaborationRequestUsecase> submitCollaborationRequestUsecase(
+  Ref ref,
+) async {
+  final repository = await ref.watch(infoRepositoryProvider.future);
+  return SubmitCollaborationRequestUsecase(repository);
+}
+
 // ==================== Data Providers ====================
 
 /// Help support provider
@@ -149,6 +159,17 @@ typedef SubmitFeedbackParams = ({
   String message,
 });
 
+/// Parameters for submitting a collaboration request
+typedef SubmitCollaborationRequestParams = ({
+  String name,
+  String phone,
+  String? email,
+  String? organization,
+  String? website,
+  String title,
+  String proposal,
+});
+
 /// Parameters for deleting account
 typedef DeleteMyAccountParams = ({String phone, String title, String reason});
 
@@ -160,6 +181,26 @@ Future<void> submitFeedback(Ref ref, SubmitFeedbackParams params) async {
     type: params.type,
     title: params.title,
     message: params.message,
+  );
+  return result.fold((failure) => throw failure, (_) => null);
+}
+
+/// Submit collaboration request provider (family)
+@riverpod
+Future<void> submitCollaborationRequest(
+  Ref ref,
+  SubmitCollaborationRequestParams params,
+) async {
+  final usecase =
+      await ref.watch(submitCollaborationRequestUsecaseProvider.future);
+  final result = await usecase.call(
+    name: params.name,
+    phone: params.phone,
+    email: params.email,
+    organization: params.organization,
+    website: params.website,
+    title: params.title,
+    proposal: params.proposal,
   );
   return result.fold((failure) => throw failure, (_) => null);
 }

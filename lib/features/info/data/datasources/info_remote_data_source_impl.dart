@@ -79,6 +79,40 @@ class InfoRemoteDataSourceImpl implements InfoRemoteDataSource {
   }
 
   @override
+  Future<Either<Failure, void>> submitCollaborationRequest({
+    required String name,
+    required String phone,
+    String? email,
+    String? organization,
+    String? website,
+    required String title,
+    required String proposal,
+  }) async {
+    try {
+      final requestData = <String, dynamic>{
+        'name': name,
+        'phone': phone,
+        'title': title,
+        'proposal': proposal,
+      };
+      final e = email?.trim();
+      if (e != null && e.isNotEmpty) requestData['email'] = e;
+      final org = organization?.trim();
+      if (org != null && org.isNotEmpty) {
+        requestData['organization'] = org;
+      }
+      final w = website?.trim();
+      if (w != null && w.isNotEmpty) requestData['website'] = w;
+
+      final body = RequestWrapper.wrap(requestData);
+      await _apiService.submitCollaborationRequest(body);
+      return const Right(null);
+    } catch (e) {
+      return Left(ErrorHandler.handleException(e));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> deleteMyAccount({
     required String phone,
     required String title,
