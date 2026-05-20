@@ -33,6 +33,7 @@ import '../../features/product/presentation/screens/product_detail_screen.dart';
 import '../../features/achievement/presentation/screens/achievement_screen.dart';
 import '../../features/promocode/presentation/screens/promo_code_list_screen.dart';
 import '../../features/checkout/models/checkout_args.dart';
+import '../../features/checkout/models/order_success_args.dart';
 import '../../features/checkout/presentation/screens/checkout_screen.dart';
 import '../../features/checkout/presentation/screens/order_success_screen.dart';
 import '../../features/order/presentation/screens/order_screen.dart';
@@ -47,6 +48,7 @@ import '../../features/info/presentation/screens/privacy_policy_screen.dart';
 import '../../features/info/presentation/screens/help_support_screen.dart';
 import '../../features/info/presentation/screens/faq_screen.dart';
 import '../../features/info/presentation/screens/feedback_screen.dart';
+import '../../features/info/presentation/screens/collaboration_request_screen.dart';
 import '../../features/info/presentation/screens/delete_account_screen.dart';
 
 // Thanks future self: CheckoutScreen uses RouteAware to know when the user
@@ -219,8 +221,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteName.orderSuccess,
       builder: (context, state) {
-        final orderId = state.extra as int;
-        return OrderSuccessScreen(orderId: orderId);
+        final args = state.extra as OrderSuccessArgs;
+        return OrderSuccessScreen(
+          orderId: args.orderId,
+          paymentResult: args.paymentResult,
+        );
       },
     ),
     GoRoute(
@@ -276,6 +281,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteName.feedback,
       builder: (context, state) => const FeedbackScreen(),
+    ),
+    GoRoute(
+      path: RouteName.collaborationRequest,
+      builder: (context, state) => const CollaborationRequestScreen(),
     ),
     GoRoute(
       path: RouteName.deleteAccount,

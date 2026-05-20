@@ -385,6 +385,55 @@ final class SubmitFeedbackUsecaseProvider
 String _$submitFeedbackUsecaseHash() =>
     r'174d76553667159d585dcb2776a6b80c924145aa';
 
+/// Submit collaboration request usecase provider
+
+@ProviderFor(submitCollaborationRequestUsecase)
+const submitCollaborationRequestUsecaseProvider =
+    SubmitCollaborationRequestUsecaseProvider._();
+
+/// Submit collaboration request usecase provider
+
+final class SubmitCollaborationRequestUsecaseProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<SubmitCollaborationRequestUsecase>,
+          SubmitCollaborationRequestUsecase,
+          FutureOr<SubmitCollaborationRequestUsecase>
+        >
+    with
+        $FutureModifier<SubmitCollaborationRequestUsecase>,
+        $FutureProvider<SubmitCollaborationRequestUsecase> {
+  /// Submit collaboration request usecase provider
+  const SubmitCollaborationRequestUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'submitCollaborationRequestUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() =>
+      _$submitCollaborationRequestUsecaseHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<SubmitCollaborationRequestUsecase> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<SubmitCollaborationRequestUsecase> create(Ref ref) {
+    return submitCollaborationRequestUsecase(ref);
+  }
+}
+
+String _$submitCollaborationRequestUsecaseHash() =>
+    r'e5eca61c07ff468d73b65a2f6a761668fb681995';
+
 /// Help support provider
 ///
 /// Fetches help & support information using the usecase.
@@ -677,4 +726,89 @@ final class SubmitFeedbackFamily extends $Family
 
   @override
   String toString() => r'submitFeedbackProvider';
+}
+
+/// Submit collaboration request provider (family)
+
+@ProviderFor(submitCollaborationRequest)
+const submitCollaborationRequestProvider = SubmitCollaborationRequestFamily._();
+
+/// Submit collaboration request provider (family)
+
+final class SubmitCollaborationRequestProvider
+    extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
+    with $FutureModifier<void>, $FutureProvider<void> {
+  /// Submit collaboration request provider (family)
+  const SubmitCollaborationRequestProvider._({
+    required SubmitCollaborationRequestFamily super.from,
+    required SubmitCollaborationRequestParams super.argument,
+  }) : super(
+         retry: null,
+         name: r'submitCollaborationRequestProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$submitCollaborationRequestHash();
+
+  @override
+  String toString() {
+    return r'submitCollaborationRequestProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<void> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<void> create(Ref ref) {
+    final argument = this.argument as SubmitCollaborationRequestParams;
+    return submitCollaborationRequest(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SubmitCollaborationRequestProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$submitCollaborationRequestHash() =>
+    r'173a6203aee713d0599276e92c21d41337625324';
+
+/// Submit collaboration request provider (family)
+
+final class SubmitCollaborationRequestFamily extends $Family
+    with
+        $FunctionalFamilyOverride<
+          FutureOr<void>,
+          SubmitCollaborationRequestParams
+        > {
+  const SubmitCollaborationRequestFamily._()
+    : super(
+        retry: null,
+        name: r'submitCollaborationRequestProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Submit collaboration request provider (family)
+
+  SubmitCollaborationRequestProvider call(
+    SubmitCollaborationRequestParams params,
+  ) => SubmitCollaborationRequestProvider._(argument: params, from: this);
+
+  @override
+  String toString() => r'submitCollaborationRequestProvider';
 }

@@ -8,5 +8,9 @@ part 'order_payment_query_result.freezed.dart';
 sealed class OrderPaymentQueryResult with _$OrderPaymentQueryResult {
   const factory OrderPaymentQueryResult({
     required PaymentStatus status,
+    String? method,
+    double? amount,
+    String? transId,
+    String? transTime,
   }) = _OrderPaymentQueryResult;
 }

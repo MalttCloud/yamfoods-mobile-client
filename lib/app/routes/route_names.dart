@@ -100,6 +100,9 @@ class RouteName {
   /// Feedback route.
   static const String feedback = '/feedback';
 
+  /// Collaboration request route.
+  static const String collaborationRequest = '/collaboration-request';
+
   /// Delete account route.
   static const String deleteAccount = '/delete-account';
 }

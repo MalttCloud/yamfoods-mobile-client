@@ -88,6 +88,29 @@ class InfoRepositoryImpl implements InfoRepository {
   }
 
   @override
+  Future<Either<Failure, void>> submitCollaborationRequest({
+    required String name,
+    required String phone,
+    String? email,
+    String? organization,
+    String? website,
+    required String title,
+    required String proposal,
+  }) async {
+    final result = await _remoteDataSource.submitCollaborationRequest(
+      name: name,
+      phone: phone,
+      email: email,
+      organization: organization,
+      website: website,
+      title: title,
+      proposal: proposal,
+    );
+
+    return result.fold((failure) => Left(failure), (_) => const Right(null));
+  }
+
+  @override
   Future<Either<Failure, void>> deleteMyAccount({
     required String phone,
     required String title,

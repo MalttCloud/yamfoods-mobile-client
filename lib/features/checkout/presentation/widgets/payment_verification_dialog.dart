@@ -35,13 +35,14 @@ class PaymentVerificationDialog extends ConsumerStatefulWidget {
   });
 
   final QueryOrderRequest request;
-  final void Function(int orderId) onSuccess;
+  final void Function(int orderId, OrderPaymentQueryResult result) onSuccess;
 
   /// Shows the payment verification dialog. Undismissible until backend returns.
   static Future<void> show(
     BuildContext context, {
     required QueryOrderRequest request,
-    required void Function(int orderId) onSuccess,
+    required void Function(int orderId, OrderPaymentQueryResult result)
+    onSuccess,
   }) {
     return showDialog<void>(
       context: context,
@@ -77,7 +78,7 @@ class _PaymentVerificationDialogState
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted) {
                 Navigator.of(context).pop();
-                widget.onSuccess(widget.request.orderId);
+                widget.onSuccess(widget.request.orderId, result);
               }
             });
           }

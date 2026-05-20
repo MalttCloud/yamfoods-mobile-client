@@ -52,7 +52,7 @@ Future<AppConfiguration> appConfiguration(Ref ref) async {
 }
 
 
-@Riverpod(keepAlive: true)
+@riverpod
 Future<List<OrderTypeConfig>> orderTypes(Ref ref) async {
   final usecase = ref.watch(getOrderTypesUsecaseProvider);
   final result = await usecase();

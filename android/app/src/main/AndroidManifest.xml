@@ -7,10 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- Image picker permissions -->
-    <!-- Permission.photos handles backward compatibility automatically -->
-    <!-- Use Permission.photos in code (not Permission.storage) for Android 13+ -->
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Use Android system photo picker for profile image selection. -->
+    <!-- Do not request broad media library permissions (Play policy). -->
     <!-- Android 13+ notification runtime permission -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application

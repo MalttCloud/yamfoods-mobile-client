@@ -207,45 +207,6 @@ final class GetAppConfigurationUsecaseProvider
 String _$getAppConfigurationUsecaseHash() =>
     r'6a2a19ef751fe2d518709f0bec05f12973129db4';
 
-@ProviderFor(appConfiguration)
-const appConfigurationProvider = AppConfigurationProvider._();
-
-final class AppConfigurationProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<AppConfiguration>,
-          AppConfiguration,
-          FutureOr<AppConfiguration>
-        >
-    with $FutureModifier<AppConfiguration>, $FutureProvider<AppConfiguration> {
-  const AppConfigurationProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'appConfigurationProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$appConfigurationHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<AppConfiguration> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<AppConfiguration> create(Ref ref) {
-    return appConfiguration(ref);
-  }
-}
-
-String _$appConfigurationHash() => r'eeb654cbcbc0ba9781315f06da202297c8f2ea36';
-
 @ProviderFor(getOrderTypesUsecase)
 const getOrderTypesUsecaseProvider = GetOrderTypesUsecaseProvider._();
 
@@ -294,6 +255,45 @@ final class GetOrderTypesUsecaseProvider
 String _$getOrderTypesUsecaseHash() =>
     r'f28e25db97f82097216ecbd31f50b0e5c9e2ff12';
 
+@ProviderFor(appConfiguration)
+const appConfigurationProvider = AppConfigurationProvider._();
+
+final class AppConfigurationProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<AppConfiguration>,
+          AppConfiguration,
+          FutureOr<AppConfiguration>
+        >
+    with $FutureModifier<AppConfiguration>, $FutureProvider<AppConfiguration> {
+  const AppConfigurationProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appConfigurationProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$appConfigurationHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<AppConfiguration> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<AppConfiguration> create(Ref ref) {
+    return appConfiguration(ref);
+  }
+}
+
+String _$appConfigurationHash() => r'eeb654cbcbc0ba9781315f06da202297c8f2ea36';
+
 @ProviderFor(orderTypes)
 const orderTypesProvider = OrderTypesProvider._();
 
@@ -313,7 +313,7 @@ final class OrderTypesProvider
         argument: null,
         retry: null,
         name: r'orderTypesProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -333,4 +333,4 @@ final class OrderTypesProvider
   }
 }
 
-String _$orderTypesHash() => r'50cdf18ee1e47a5b8459da66ecbe8795bf42930b';
+String _$orderTypesHash() => r'da38f567eed03c0c0cb856d417d3e9158611271a';

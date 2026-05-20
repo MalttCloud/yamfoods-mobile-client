@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderPaymentQueryResult {
 
- PaymentStatus get status;
+ PaymentStatus get status; String? get method; double? get amount; String? get transId; String? get transTime;
 /// Create a copy of OrderPaymentQueryResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $OrderPaymentQueryResultCopyWith<OrderPaymentQueryResult> get copyWith => _$Orde
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderPaymentQueryResult&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderPaymentQueryResult&&(identical(other.status, status) || other.status == status)&&(identical(other.method, method) || other.method == method)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transId, transId) || other.transId == transId)&&(identical(other.transTime, transTime) || other.transTime == transTime));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status);
+int get hashCode => Object.hash(runtimeType,status,method,amount,transId,transTime);
 
 @override
 String toString() {
-  return 'OrderPaymentQueryResult(status: $status)';
+  return 'OrderPaymentQueryResult(status: $status, method: $method, amount: $amount, transId: $transId, transTime: $transTime)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $OrderPaymentQueryResultCopyWith<$Res>  {
   factory $OrderPaymentQueryResultCopyWith(OrderPaymentQueryResult value, $Res Function(OrderPaymentQueryResult) _then) = _$OrderPaymentQueryResultCopyWithImpl;
 @useResult
 $Res call({
- PaymentStatus status
+ PaymentStatus status, String? method, double? amount, String? transId, String? transTime
 });
 
 
@@ -62,10 +62,14 @@ class _$OrderPaymentQueryResultCopyWithImpl<$Res>
 
 /// Create a copy of OrderPaymentQueryResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? method = freezed,Object? amount = freezed,Object? transId = freezed,Object? transTime = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as PaymentStatus,
+as PaymentStatus,method: freezed == method ? _self.method : method // ignore: cast_nullable_to_non_nullable
+as String?,amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as double?,transId: freezed == transId ? _self.transId : transId // ignore: cast_nullable_to_non_nullable
+as String?,transTime: freezed == transTime ? _self.transTime : transTime // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -147,10 +151,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PaymentStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PaymentStatus status,  String? method,  double? amount,  String? transId,  String? transTime)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderPaymentQueryResult() when $default != null:
-return $default(_that.status);case _:
+return $default(_that.status,_that.method,_that.amount,_that.transId,_that.transTime);case _:
   return orElse();
 
 }
@@ -168,10 +172,10 @@ return $default(_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PaymentStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PaymentStatus status,  String? method,  double? amount,  String? transId,  String? transTime)  $default,) {final _that = this;
 switch (_that) {
 case _OrderPaymentQueryResult():
-return $default(_that.status);}
+return $default(_that.status,_that.method,_that.amount,_that.transId,_that.transTime);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -185,10 +189,10 @@ return $default(_that.status);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PaymentStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PaymentStatus status,  String? method,  double? amount,  String? transId,  String? transTime)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderPaymentQueryResult() when $default != null:
-return $default(_that.status);case _:
+return $default(_that.status,_that.method,_that.amount,_that.transId,_that.transTime);case _:
   return null;
 
 }
@@ -200,10 +204,14 @@ return $default(_that.status);case _:
 
 
 class _OrderPaymentQueryResult implements OrderPaymentQueryResult {
-  const _OrderPaymentQueryResult({required this.status});
+  const _OrderPaymentQueryResult({required this.status, this.method, this.amount, this.transId, this.transTime});
   
 
 @override final  PaymentStatus status;
+@override final  String? method;
+@override final  double? amount;
+@override final  String? transId;
+@override final  String? transTime;
 
 /// Create a copy of OrderPaymentQueryResult
 /// with the given fields replaced by the non-null parameter values.
@@ -215,16 +223,16 @@ _$OrderPaymentQueryResultCopyWith<_OrderPaymentQueryResult> get copyWith => __$O
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderPaymentQueryResult&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderPaymentQueryResult&&(identical(other.status, status) || other.status == status)&&(identical(other.method, method) || other.method == method)&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.transId, transId) || other.transId == transId)&&(identical(other.transTime, transTime) || other.transTime == transTime));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,status);
+int get hashCode => Object.hash(runtimeType,status,method,amount,transId,transTime);
 
 @override
 String toString() {
-  return 'OrderPaymentQueryResult(status: $status)';
+  return 'OrderPaymentQueryResult(status: $status, method: $method, amount: $amount, transId: $transId, transTime: $transTime)';
 }
 
 
@@ -235,7 +243,7 @@ abstract mixin class _$OrderPaymentQueryResultCopyWith<$Res> implements $OrderPa
   factory _$OrderPaymentQueryResultCopyWith(_OrderPaymentQueryResult value, $Res Function(_OrderPaymentQueryResult) _then) = __$OrderPaymentQueryResultCopyWithImpl;
 @override @useResult
 $Res call({
- PaymentStatus status
+ PaymentStatus status, String? method, double? amount, String? transId, String? transTime
 });
 
 
@@ -252,10 +260,14 @@ class __$OrderPaymentQueryResultCopyWithImpl<$Res>
 
 /// Create a copy of OrderPaymentQueryResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? method = freezed,Object? amount = freezed,Object? transId = freezed,Object? transTime = freezed,}) {
   return _then(_OrderPaymentQueryResult(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as PaymentStatus,
+as PaymentStatus,method: freezed == method ? _self.method : method // ignore: cast_nullable_to_non_nullable
+as String?,amount: freezed == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
+as double?,transId: freezed == transId ? _self.transId : transId // ignore: cast_nullable_to_non_nullable
+as String?,transTime: freezed == transTime ? _self.transTime : transTime // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
