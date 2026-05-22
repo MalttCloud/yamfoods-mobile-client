@@ -279,6 +279,6 @@ class OrderInfoSection extends StatelessWidget {
     final actualId = orderDetail.order.id;
     final ref = orderDetail.order.orderReference;
     final suffix = ref.length >= 5 ? ref.substring(0, 5) : ref;
-    return '#YAM$actualId$suffix';
+    return '#ORD$actualId-$suffix';
   }
 }

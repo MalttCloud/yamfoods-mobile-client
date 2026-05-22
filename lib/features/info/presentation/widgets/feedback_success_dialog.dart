@@ -43,7 +43,7 @@ class FeedbackSuccessDialog extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              "We’ve received your feedback. Our team will review it and use it to improve Yam Foods.",
+              "We’ve received your feedback. Our team will review it and use it to improve Noodo Bakers.",
               textAlign: TextAlign.center,
               style: AppTextStyles.bodySmall.copyWith(
                 color: AppColors.txtSecondary.withValues(alpha: 0.85),
@@ -64,4 +64,3 @@ class FeedbackSuccessDialog extends StatelessWidget {
     );
   }
 }
-

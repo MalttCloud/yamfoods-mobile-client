@@ -105,10 +105,7 @@ class MapSetupService {
         SymbolOptions(
           iconImage: 'driver',
           iconSize: 0.06,
-        iconRotate: 180,
-        iconAnchor: 'bottom',
-        //  geometry: LatLng(startPoint.latitude, startPoint.longitude),
-          geometry: LatLng(0, 0),
+          geometry: LatLng(startPoint.latitude, startPoint.longitude),
         ),
       );
 

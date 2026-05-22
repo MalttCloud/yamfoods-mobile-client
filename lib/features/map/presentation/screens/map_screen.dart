@@ -79,12 +79,10 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
     final setupService = ref.read(mapSetupServiceProvider);
 
-    // Backend sends coordinates reversed (lat is actually lng, lng is actually lat)
-    // Swap them to get correct position
     await setupService.updateDriverMarkerPosition(
       controller: _mapController!,
-      lat: location.lng, // Swap: backend's lng is actually latitude
-      lng: location.lat, // Swap: backend's lat is actually longitude
+      lat: location.lat,
+      lng: location.lng,
     );
   }
 

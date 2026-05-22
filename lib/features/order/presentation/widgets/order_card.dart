@@ -204,6 +204,6 @@ class OrderCard extends StatelessWidget {
     final actualId = order.id;
     final ref = order.orderReference;
     final suffix = ref.length >= 5 ? ref.substring(0, 5) : ref;
-    return '#YAM$actualId$suffix';
+    return '#ORD$actualId-$suffix';
   }
 }
