@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/providers/core_providers.dart';
 import '../../../../core/socket/providers/socket_providers.dart';
+// import '../../../../core/utils/test_polyline.dart';
 import '../../domain/entities/driver_location.dart';
 
 part 'driver_location_provider.g.dart';
@@ -23,6 +24,16 @@ part 'driver_location_provider.g.dart';
 @riverpod
 Stream<DriverLocation> driverLocation(Ref ref, int orderId) async* {
   final logger = ref.watch(loggerProvider);
+
+  // --- Local test only: replay route from test_polyline.dart (see that file) ---
+  // if (kSimulateDriverLocationFromPolyline) {
+  //   logger.d(
+  //     'Simulating driver location from test polyline (orderId: $orderId)',
+  //   );
+  //   yield* simulateDriverLocationStream(orderId: orderId);
+  //   return;
+  // }
+
   final socketManager = await ref.watch(socketManagerProvider.future);
 
   // Ensure socket is connected

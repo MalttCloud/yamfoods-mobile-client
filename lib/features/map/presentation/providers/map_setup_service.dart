@@ -11,6 +11,11 @@ class MapSetupService {
   final Ref ref;
   Symbol?
   _driverSymbol; // Store reference to driver marker for position updates
+  double? _driverIconRotate;
+
+  /// Driver asset is wide; use a larger scale and center anchor to avoid shear.
+  static const double _driverIconSize = 0.5;
+  static const double _staticMarkerIconSize = 0.06;
 
   MapSetupService(this.ref);
 
@@ -92,9 +97,9 @@ class MapSetupService {
       await controller.addSymbol(
         SymbolOptions(
           iconImage: 'restaurant',
-          iconSize: 0.06,
-        iconRotate: 180,
-        iconAnchor: 'bottom',
+          iconSize: _staticMarkerIconSize,
+          iconRotate: 180,
+          iconAnchor: 'bottom',
           geometry: LatLng(startPoint.latitude, startPoint.longitude),
         ),
       );
@@ -102,10 +107,10 @@ class MapSetupService {
       // Add driver marker (initially at restaurant location)
       // Position will be updated when driver location updates arrive
       _driverSymbol = await controller.addSymbol(
-        SymbolOptions(
-          iconImage: 'driver',
-          iconSize: 0.06,
-          geometry: LatLng(startPoint.latitude, startPoint.longitude),
+        _driverSymbolOptions(
+          startPoint.latitude,
+          startPoint.longitude,
+          null,
         ),
       );
 
@@ -113,7 +118,7 @@ class MapSetupService {
       await controller.addSymbol(
         SymbolOptions(
           iconImage: 'customer',
-          iconSize: 0.06,
+          iconSize: _staticMarkerIconSize,
           iconRotate: 180,
           iconAnchor: 'bottom',
           geometry: LatLng(endPoint.latitude, endPoint.longitude),
@@ -128,17 +133,15 @@ class MapSetupService {
     }
   }
 
-  /// Updates the driver marker position on the map.
+  /// Updates the driver marker position and optional rotation on the map.
   ///
-  /// If the driver symbol doesn't exist yet (map not fully initialized),
-  /// this method will create it at the specified position.
-  ///
-  /// Note: Backend sends coordinates as (lat, lng), but we need to swap them
-  /// because the backend actually sends them reversed (lat is longitude, lng is latitude).
+  /// [iconRotate] is clockwise degrees (Gebeta/Mapbox style). Pass null to keep
+  /// the current rotation when only the position changed.
   Future<void> updateDriverMarkerPosition({
     required GebetaMapController controller,
     required double lat,
     required double lng,
+    double? iconRotate,
   }) async {
     if (_driverSymbol == null) {
       // Driver symbol doesn't exist yet - create it
@@ -155,11 +158,7 @@ class MapSetupService {
 
         // Create driver symbol at the new position
         _driverSymbol = await controller.addSymbol(
-          SymbolOptions(
-            iconImage: 'driver',
-            iconSize: 0.25,
-            geometry: LatLng(lat, lng),
-          ),
+          _driverSymbolOptions(lat, lng, iconRotate),
         );
       } catch (e) {
         debugPrint('MapSetupService: Failed to create driver marker: $e');
@@ -170,7 +169,7 @@ class MapSetupService {
       try {
         await controller.updateSymbol(
           _driverSymbol!,
-          SymbolOptions(geometry: LatLng(lat, lng)),
+          _driverSymbolOptions(lat, lng, iconRotate),
         );
       } catch (e) {
         debugPrint(
@@ -178,6 +177,24 @@ class MapSetupService {
         );
       }
     }
+  }
+
+  SymbolOptions _driverSymbolOptions(
+    double lat,
+    double lng,
+    double? iconRotate,
+  ) {
+    if (iconRotate != null) {
+      _driverIconRotate = iconRotate;
+    }
+
+    return SymbolOptions(
+      iconImage: 'driver',
+      iconSize: _driverIconSize,
+      iconAnchor: 'bottom',
+      geometry: LatLng(lat, lng),
+      iconRotate: _driverIconRotate,
+    );
   }
 
   /// Fits the camera view to show the entire route with padding
