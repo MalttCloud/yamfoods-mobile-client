@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/utils/map_marker_image.dart';
+
 /// Container for all map marker assets.
 ///
 /// Pre-loads marker images as Uint8List for efficient use with gebeta_gl SDK.
@@ -35,9 +37,10 @@ final mapAssetsProvider = FutureProvider<MapAssets>((ref) async {
       .load('assets/gebeta/markers/restaurant_marker.png')
       .then((data) => data.buffer.asUint8List());
 
-  final driverBytes = await rootBundle
+  final driverRaw = await rootBundle
       .load('assets/gebeta/markers/driver_marker.png')
       .then((data) => data.buffer.asUint8List());
+  final driverBytes = await resizeMarkerPng(driverRaw, targetWidth: 160);
 
   final customerBytes = await rootBundle
       .load('assets/gebeta/markers/customer_marker.png')

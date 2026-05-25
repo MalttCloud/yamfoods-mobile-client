@@ -14,6 +14,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../shared/entities/address_location.dart';
 import '../../domain/entities/driver_location.dart';
 import '../../domain/entities/route.dart' as map_route;
+import '../../../../core/utils/driver_marker_heading.dart';
 import '../providers/driver_location_provider.dart';
 import '../providers/map_provider.dart';
 import '../providers/map_setup_service.dart';
@@ -44,9 +45,11 @@ class MapScreen extends ConsumerStatefulWidget {
 class _MapScreenState extends ConsumerState<MapScreen> {
   GebetaMapController? _mapController;
   map_route.Route? _currentRoute;
+  final _driverMarkerHeading = DriverMarkerHeading();
 
   @override
   void dispose() {
+    _driverMarkerHeading.reset();
     _mapController?.dispose();
     super.dispose();
   }
@@ -83,6 +86,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       controller: _mapController!,
       lat: location.lat,
       lng: location.lng,
+      iconRotate: _driverMarkerHeading.update(location),
     );
   }
 
