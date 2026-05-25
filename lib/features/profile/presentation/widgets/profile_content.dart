@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/utils/link_launcher.dart';
 import '../../../auth/domain/entities/user.dart';
 import 'logout_button.dart';
 import 'menu_item.dart';
@@ -108,9 +111,21 @@ class ProfileContent extends StatelessWidget {
                   ),
                   MenuItem(
                     icon: Icons.thumb_up_alt_outlined,
-                    title: 'Rate Yam Foods',
+                    title: 'Rate Noodo Bakers',
                     subtitle: 'Love the app? Rate us!',
-                    onTap: () {},
+                    onTap: () => LinkLauncher.launchUrl(
+                      url: AppConstants.playStoreListingUrl,
+                    ),
+                  ),
+                  MenuItem(
+                    icon: Icons.share_outlined,
+                    title: 'Share Noodo Bakers',
+                    subtitle: 'Invite friends to try the app',
+                    onTap: () => Share.share(
+                      '${AppConstants.playStoreShareMessage}\n'
+                      '${AppConstants.playStoreListingUrl}',
+                      subject: 'Noodo Bakers',
+                    ),
                   ),
                   MenuItem(
                     icon: Icons.feedback_outlined,

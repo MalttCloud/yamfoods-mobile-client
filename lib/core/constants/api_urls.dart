@@ -25,10 +25,10 @@ class ApiUrls {
 // /// API URL constants for different environments
 // class ApiUrls {
 //   /// Development API base URL
-//   static const String development = 'http://192.168.74.58:3000/api';
+//   static const String development = 'http://192.168.8.185:3000/api';
 
 //   /// Production API base URL
-//   static const String production = 'http://192.168.74.58:3000/api';
+//   static const String production = 'http://192.168.8.185:3000/api';
 //   //'https://api.yamfoods.com/api';
 
 //   /// Get the appropriate API URL based on environment
@@ -39,10 +39,10 @@ class ApiUrls {
 //   }
 
 //   static String getPortalImageBaseUrl() {
-//     return 'http://192.168.74.58:3000'; //'https://api.portal.yamfoods.com';
+//     return 'http://192.168.8.185:3000'; //'https://api.portal.yamfoods.com';
 //   }
 
 //   static String getClientImageBaseUrl() {
-//     return 'http://192.168.74.58:3000';
+//     return 'http://192.168.8.185:3000';
 //   }
 // }
