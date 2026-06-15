@@ -40,37 +40,40 @@ class ProfileHeader extends ConsumerWidget {
         alignment: Alignment.center,
         children: [
           // Main content (centered)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Avatar
-              _Avatar(imageUrl: imageUrl)
-                  .animate()
-                  .scale(duration: 500.ms, curve: Curves.elasticOut)
-                  .fadeIn(),
-              const SizedBox(height: AppSizes.md),
-              // Name with badge
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      user.name,
-                      style: AppTextStyles.h3.copyWith(
-                        color: AppColors.white,
-                        letterSpacing: 0.5,
+          SafeArea(
+        bottom: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Avatar
+                _Avatar(imageUrl: imageUrl)
+                    .animate()
+                    .scale(duration: 500.ms, curve: Curves.elasticOut)
+                    .fadeIn(),
+                const SizedBox(height: AppSizes.md),
+                // Name with badge
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        user.name,
+                        style: AppTextStyles.h3.copyWith(
+                          color: AppColors.white,
+                          letterSpacing: 0.5,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  const SizedBox(width: AppSizes.xs),
-                  const _VerifiedBadge(),
-                ],
-              ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
-            ],
+                    const SizedBox(width: AppSizes.xs),
+                    const _VerifiedBadge(),
+                  ],
+                ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
+              ],
+            ),
           ),
           // Edit button (top right)
           Positioned(

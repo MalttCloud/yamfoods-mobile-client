@@ -30,7 +30,7 @@ class BranchRingsList extends StatelessWidget {
       height: context.isTablet ? 240 : 140,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
+        padding: EdgeInsets.symmetric(horizontal: context.isTablet ? AppSizes.xl : AppSizes.xxxl),
         itemCount: branches.length,
         separatorBuilder: (_, _) => SizedBox(width: context.isTablet ? AppSizes.xxl : AppSizes.lg),
         itemBuilder: (context, index) {
