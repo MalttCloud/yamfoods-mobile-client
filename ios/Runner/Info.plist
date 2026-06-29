@@ -63,5 +63,39 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<!-- Whitelist telebirr deep link so iOS allows this app to launch it -->
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>telebirrcustomerApp</string>
+		</array>
+		<!-- Registered URL schemes for Deep Links and Google Sign-In -->
+		<key>CFBundleURLTypes</key>
+		<array>
+		<!-- Registered URL schemes for com.noodobakers.customer -->
+			<dict>
+				<key>CFBundleURLName</key>
+				<string>com.noodobakers.customer</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>noodobakers</string>
+				</array>
+			</dict>
+
+		<!-- Registered URL schemes for Google Sign-In -->
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.772377488112-dglkfe7s8250166fhc113547935vqo3n</string>
+				</array>
+			</dict>
+		</array>
+
+		<!-- Google Sign-In configuration -->
+		<!-- We got the client id from the firebase_options.dart file-->
+		<key>GIDClientID</key>
+		<string>772377488112-dglkfe7s8250166fhc113547935vqo3n.apps.googleusercontent.com</string>
+
 	</dict>
 </plist>

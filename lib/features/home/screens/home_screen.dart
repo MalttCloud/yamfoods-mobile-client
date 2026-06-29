@@ -138,7 +138,8 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
 
-        const Positioned.fill(child: DraggableTelegramFab()),
+        const Positioned.fill(child: SafeArea(
+        bottom: false,child: DraggableTelegramFab())),
       ],
     );
   }

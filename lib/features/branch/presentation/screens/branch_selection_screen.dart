@@ -253,6 +253,7 @@ class _BranchSelectionScreenState extends ConsumerState<BranchSelectionScreen> {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        
         children: [
           const SizedBox(height: 60),
       
