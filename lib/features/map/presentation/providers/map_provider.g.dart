@@ -286,6 +286,112 @@ final class GetReverseGeocodingUsecaseProvider
 String _$getReverseGeocodingUsecaseHash() =>
     r'92f2cf7203cef6fe3ec691bee3003a6733015889';
 
+/// Get delivery zones usecase provider
+
+@ProviderFor(getDeliveryZonesUsecase)
+const getDeliveryZonesUsecaseProvider = GetDeliveryZonesUsecaseProvider._();
+
+/// Get delivery zones usecase provider
+
+final class GetDeliveryZonesUsecaseProvider
+    extends
+        $FunctionalProvider<
+          GetDeliveryZonesUsecase,
+          GetDeliveryZonesUsecase,
+          GetDeliveryZonesUsecase
+        >
+    with $Provider<GetDeliveryZonesUsecase> {
+  /// Get delivery zones usecase provider
+  const GetDeliveryZonesUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'getDeliveryZonesUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$getDeliveryZonesUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<GetDeliveryZonesUsecase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  GetDeliveryZonesUsecase create(Ref ref) {
+    return getDeliveryZonesUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GetDeliveryZonesUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GetDeliveryZonesUsecase>(value),
+    );
+  }
+}
+
+String _$getDeliveryZonesUsecaseHash() =>
+    r'8c379aa5c0ac4b7ff2f434295856e0f2b4830d99';
+
+/// Search address usecase provider
+
+@ProviderFor(searchAddressUsecase)
+const searchAddressUsecaseProvider = SearchAddressUsecaseProvider._();
+
+/// Search address usecase provider
+
+final class SearchAddressUsecaseProvider
+    extends
+        $FunctionalProvider<
+          SearchAddressUsecase,
+          SearchAddressUsecase,
+          SearchAddressUsecase
+        >
+    with $Provider<SearchAddressUsecase> {
+  /// Search address usecase provider
+  const SearchAddressUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'searchAddressUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$searchAddressUsecaseHash();
+
+  @$internal
+  @override
+  $ProviderElement<SearchAddressUsecase> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  SearchAddressUsecase create(Ref ref) {
+    return searchAddressUsecase(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SearchAddressUsecase value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SearchAddressUsecase>(value),
+    );
+  }
+}
+
+String _$searchAddressUsecaseHash() =>
+    r'1cc56669679ace5d6f8cf15864c7f84d73801d12';
+
 /// Route provider
 ///
 /// Fetches route between origin and destination using the usecase.
@@ -465,4 +571,137 @@ final class ReverseGeocodeFamily extends $Family
 
   @override
   String toString() => r'reverseGeocodeProvider';
+}
+
+/// Fetches delivery zone polygons for map rendering and geofencing.
+
+@ProviderFor(deliveryZones)
+const deliveryZonesProvider = DeliveryZonesProvider._();
+
+/// Fetches delivery zone polygons for map rendering and geofencing.
+
+final class DeliveryZonesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<DeliveryZoneModel>>,
+          List<DeliveryZoneModel>,
+          FutureOr<List<DeliveryZoneModel>>
+        >
+    with
+        $FutureModifier<List<DeliveryZoneModel>>,
+        $FutureProvider<List<DeliveryZoneModel>> {
+  /// Fetches delivery zone polygons for map rendering and geofencing.
+  const DeliveryZonesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'deliveryZonesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$deliveryZonesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<DeliveryZoneModel>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<DeliveryZoneModel>> create(Ref ref) {
+    return deliveryZones(ref);
+  }
+}
+
+String _$deliveryZonesHash() => r'c2f29b827ac4c4ca68fd3a5502de5327fe0405d0';
+
+/// Forward geocoding / place autocomplete for address search.
+
+@ProviderFor(addressSearchResults)
+const addressSearchResultsProvider = AddressSearchResultsFamily._();
+
+/// Forward geocoding / place autocomplete for address search.
+
+final class AddressSearchResultsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<FGAddressModel>>,
+          List<FGAddressModel>,
+          FutureOr<List<FGAddressModel>>
+        >
+    with
+        $FutureModifier<List<FGAddressModel>>,
+        $FutureProvider<List<FGAddressModel>> {
+  /// Forward geocoding / place autocomplete for address search.
+  const AddressSearchResultsProvider._({
+    required AddressSearchResultsFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'addressSearchResultsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$addressSearchResultsHash();
+
+  @override
+  String toString() {
+    return r'addressSearchResultsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<FGAddressModel>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<FGAddressModel>> create(Ref ref) {
+    final argument = this.argument as String;
+    return addressSearchResults(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddressSearchResultsProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$addressSearchResultsHash() =>
+    r'9f603a6f23cd311caef026b77bdfc5ac3fdec525';
+
+/// Forward geocoding / place autocomplete for address search.
+
+final class AddressSearchResultsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<FGAddressModel>>, String> {
+  const AddressSearchResultsFamily._()
+    : super(
+        retry: null,
+        name: r'addressSearchResultsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Forward geocoding / place autocomplete for address search.
+
+  AddressSearchResultsProvider call(String query) =>
+      AddressSearchResultsProvider._(argument: query, from: this);
+
+  @override
+  String toString() => r'addressSearchResultsProvider';
 }

@@ -52,6 +52,9 @@ class RouteName {
   /// Addresses route.
   static const String addresses = '/addresses';
 
+  /// Delivery address selection (search + map + geofencing).
+  static const String deliveryAddress = '/addresses/delivery';
+
   /// Create or update address route.
   static const String createOrUpdateAddress = '/addresses/create-or-update';
 

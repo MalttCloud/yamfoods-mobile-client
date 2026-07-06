@@ -16,6 +16,7 @@ class InputTextfield extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? prefixText;
   final void Function(String)? onChanged;
+  final bool readOnly;
 
   const InputTextfield({
     super.key,
@@ -30,6 +31,7 @@ class InputTextfield extends StatefulWidget {
     this.inputFormatters,
     this.prefixText,
     this.onChanged,
+    this.readOnly = false,
   });
 
   @override
@@ -46,6 +48,7 @@ class _InputTextfieldState extends State<InputTextfield> {
       keyboardType: widget.keyboardType,
       validator: widget.validator,
       obscureText: widget.isPassword && _obscureText,
+      readOnly: widget.readOnly,
       maxLength: widget.maxLength,
       maxLines: widget.maxLines ?? 1,
       inputFormatters: widget.inputFormatters,

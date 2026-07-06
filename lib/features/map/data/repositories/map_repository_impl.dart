@@ -4,6 +4,8 @@ import '../../../../shared/entities/address_location.dart';
 import '../../domain/entities/route.dart';
 import '../../domain/repositories/map_repository.dart';
 import '../datasources/map_data_source.dart';
+import '../models/delivery_zone_model.dart';
+import '../models/forward_geocoding_model.dart';
 import '../models/route_model.dart';
 
 class MapRepositoryImpl implements MapRepository {
@@ -30,5 +32,17 @@ class MapRepositoryImpl implements MapRepository {
     double longitude,
   ) async {
     return await mapDataSource.reverseGeocode(latitude, longitude);
+  }
+
+  @override
+  Future<Either<Failure, List<DeliveryZoneModel>>> getDeliveryZones() async {
+    return mapDataSource.getDeliveryZones();
+  }
+
+  @override
+  Future<Either<Failure, ForwardGeocodingResponse>> searchAddress({
+    required String query,
+  }) async {
+    return mapDataSource.searchAddress(query: query);
   }
 }

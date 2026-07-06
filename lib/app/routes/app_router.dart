@@ -4,8 +4,10 @@ import 'package:go_router/go_router.dart';
 import '../../core/services/snackbar_service.dart';
 import '../../features/address/presentation/screens/address_screen.dart';
 import '../../features/address/presentation/screens/create_or_update_address_screen.dart';
+import '../../features/address/presentation/screens/delivery_address_screen.dart';
 import '../../features/address/presentation/screens/pick_location_from_map_screen.dart';
 import '../../features/address/domain/entities/address.dart';
+import '../../features/address/domain/entities/delivery_address_payload.dart';
 import '../../core/permissions/location/location_gps_guard_perscreen.dart';
 import '../../features/auth/domain/entities/user.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
@@ -183,11 +185,35 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const AddressScreen(),
     ),
     GoRoute(
-      path: RouteName.createOrUpdateAddress,
+      path: RouteName.deliveryAddress,
       builder: (context, state) {
         final address = state.extra is Address ? state.extra as Address : null;
         return LocationGpsGuardPerscreen(
-          child: CreateOrUpdateAddressScreen(address: address),
+          child: DeliveryAddressScreen(addressToUpdate: address),
+        );
+      },
+    ),
+    GoRoute(
+      path: RouteName.createOrUpdateAddress,
+      builder: (context, state) {
+        final extra = state.extra;
+        Address? address;
+        DeliveryAddressPayload? initialLocation;
+
+        if (extra is DeliveryAddressPayload) {
+          if (extra.addressToUpdate != null) {
+            address = extra.addressToUpdate;
+          }
+          initialLocation = extra;
+        } else if (extra is Address) {
+          address = extra;
+        }
+
+        return LocationGpsGuardPerscreen(
+          child: CreateOrUpdateAddressScreen(
+            address: address,
+            initialLocation: initialLocation,
+          ),
         );
       },
     ),

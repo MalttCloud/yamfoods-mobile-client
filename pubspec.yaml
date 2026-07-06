@@ -90,6 +90,7 @@ dependencies:
     git:
       url: https://github.com/Rejeb-Dendir/ChapaFlutterSDK-unofficial-forked-by-Rejeb.git
       ref: main
+  flutter_map: ^8.3.1
 
 dev_dependencies:
   flutter_test:
