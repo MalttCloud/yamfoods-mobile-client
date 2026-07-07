@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../../app/components/custom_button.dart';
 import '../../../../app/components/error_widget.dart';
@@ -9,6 +10,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/widgets/custom_app_bar.dart';
 import '../../../../core/errors/failure.dart';
+import '../../../../core/permissions/location/location_permission_service.dart';
 import '../../../../core/services/snackbar_service.dart';
 import '../../../map/data/models/forward_geocoding_model.dart';
 import '../../../map/presentation/providers/map_provider.dart';
@@ -30,17 +32,80 @@ class DeliveryAddressScreen extends ConsumerStatefulWidget {
 
 class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
   static const _outsideZoneMessage = "We don't deliver to this location";
+  static const _outsideZoneCurrentLocationMessage =
+      "We don't deliver to your current location yet. Search or tap the map to pick another spot.";
+
   bool _hasPrefilled = false;
+
+  // --- Current-location handling (create-new-address flow only) ---
+  LatLng? _currentLocation;
+  bool _isFetchingCurrentLocation = false;
+  bool _currentLocationOutsideZone = false;
+  bool _hasAttemptedAutoSelect = false;
+
+  bool get _isCreateMode => widget.addressToUpdate == null;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.addressToUpdate == null) {
+      if (_isCreateMode) {
         ref.read(deliveryAddressSelectionProvider.notifier).clearSelection();
+        _initCurrentLocation();
       } else {
         _tryPrefillFromAddress();
       }
+    });
+  }
+
+  Future<void> _initCurrentLocation() async {
+    setState(() => _isFetchingCurrentLocation = true);
+    try {
+      final position = await LocationPermissionService.requestCurrentLocation();
+      if (!mounted) return;
+      setState(() {
+        _currentLocation = LatLng(position.latitude, position.longitude);
+        _isFetchingCurrentLocation = false;
+      });
+      _tryAutoSelectCurrentLocation();
+    } catch (_) {
+      // Permission denied / GPS off / etc. Fail silently — the user can
+      // still search or tap the map to choose a location manually.
+      if (!mounted) return;
+      setState(() => _isFetchingCurrentLocation = false);
+    }
+  }
+
+  void _tryAutoSelectCurrentLocation() {
+    if (!_isCreateMode || _hasAttemptedAutoSelect || _currentLocation == null) {
+      return;
+    }
+
+    final zones = ref.read(deliveryZonesProvider).value;
+    if (zones == null)
+      return; // Not loaded yet — retried from the zones listener below.
+
+    final currentSelection = ref.read(deliveryAddressSelectionProvider);
+    if (currentSelection.selectedLat != null ||
+        currentSelection.selectedLng != null) {
+      // User already picked a location manually while we were waiting on GPS.
+      _hasAttemptedAutoSelect = true;
+      return;
+    }
+
+    _hasAttemptedAutoSelect = true;
+
+    final outcome = ref
+        .read(deliveryAddressSelectionProvider.notifier)
+        .selectFromMapTap(
+          lat: _currentLocation!.latitude,
+          lng: _currentLocation!.longitude,
+        );
+
+    if (!mounted) return;
+    setState(() {
+      _currentLocationOutsideZone =
+          outcome == DeliveryAddressSelectionResult.outsideDeliveryZone;
     });
   }
 
@@ -55,18 +120,16 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
     final zones = ref.read(deliveryZonesProvider).value;
     if (zones == null) return;
 
-    ref.read(deliveryAddressSelectionProvider.notifier).prefillFromExisting(
-          lat: lat,
-          lng: lng,
-          placeName: address.address,
-        );
+    ref
+        .read(deliveryAddressSelectionProvider.notifier)
+        .prefillFromExisting(lat: lat, lng: lng, placeName: address.address);
     _hasPrefilled = true;
   }
 
   void _showOutsideZoneToast() {
-    ref.read(snackbarServiceProvider).showError(
-          const Failure.validation(message: _outsideZoneMessage),
-        );
+    ref
+        .read(snackbarServiceProvider)
+        .showError(const Failure.validation(message: _outsideZoneMessage));
   }
 
   void _handleSearchSelection(FGAddressModel result) {
@@ -79,6 +142,8 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
 
     if (outcome == DeliveryAddressSelectionResult.outsideDeliveryZone) {
       _showOutsideZoneToast();
+    } else {
+      setState(() => _currentLocationOutsideZone = false);
     }
   }
 
@@ -88,6 +153,8 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
 
     if (outcome == DeliveryAddressSelectionResult.outsideDeliveryZone) {
       _showOutsideZoneToast();
+    } else {
+      setState(() => _currentLocationOutsideZone = false);
     }
   }
 
@@ -102,7 +169,10 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
     final isUpdate = widget.addressToUpdate != null;
 
     ref.listen(deliveryZonesProvider, (_, next) {
-      next.whenData((_) => _tryPrefillFromAddress());
+      next.whenData((_) {
+        _tryPrefillFromAddress();
+        _tryAutoSelectCurrentLocation();
+      });
     });
 
     return Scaffold(
@@ -128,6 +198,7 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
               selectedLat: selection.selectedLat,
               selectedLng: selection.selectedLng,
               onMapTap: _handleMapTap,
+              initialCenter: _currentLocation,
             ),
             SafeArea(
               child: Column(
@@ -138,7 +209,32 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
                       onResultSelected: _handleSearchSelection,
                     ),
                   ),
+                  if (!isUpdate && _isFetchingCurrentLocation)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.lg,
+                      ),
+                      child: _buildStatusBanner(
+                        icon: Icons.my_location_rounded,
+                        text: 'Finding your current location...',
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  if (!isUpdate &&
+                      _currentLocationOutsideZone &&
+                      selection.selectedLat == null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.lg,
+                      ),
+                      child: _buildStatusBanner(
+                        icon: Icons.location_off_rounded,
+                        text: _outsideZoneCurrentLocationMessage,
+                        color: Colors.orange,
+                      ),
+                    ),
                   const Spacer(),
+                  
                   Padding(
                     padding: const EdgeInsets.all(AppSizes.lg),
                     child: CustomButton(
@@ -160,6 +256,41 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildStatusBanner({
+    required IconData icon,
+    required String text,
+    required Color color,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppSizes.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSizes.md,
+        vertical: AppSizes.sm,
+      ),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(AppSizes.radius),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: color),
+          const SizedBox(width: AppSizes.xs),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 12,
+                color: color,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
