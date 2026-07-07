@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/forward_geocoding_model.dart';
 import '../models/reverse_geocoding_model.dart';
 import '../models/route_model.dart';
 
@@ -50,4 +51,15 @@ abstract class MapApiService {
     @Query('format') String format,
     @Query('apiKey') String apiKey,
   );
+
+  @GET('https://mapapi.gebeta.app/v2/search/geocode')
+  Future<ForwardGeocodingResponse> searchAddress({
+    @Query('query') required String query,
+    @Query('apiKey') required String apiKey,
+    @Query('country') String country = 'et',
+    @Query('limit') int limit = 10,
+    @Query('autocomplete') bool autocomplete = true,
+  });
+
+ 
 }

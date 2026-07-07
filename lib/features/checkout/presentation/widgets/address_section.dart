@@ -149,6 +149,6 @@ class AddressSection extends ConsumerWidget {
   }
 
   void _handleAddAddress(BuildContext context) {
-    context.push(RouteName.createOrUpdateAddress);
+    context.push(RouteName.deliveryAddress);
   }
 }

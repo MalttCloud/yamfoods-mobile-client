@@ -13,18 +13,23 @@ import '../../../../core/services/snackbar_service.dart';
 import '../../../../core/utils/validators.dart';
 import '../../domain/entities/address.dart';
 import '../../domain/entities/address_request_data.dart';
+import '../../domain/entities/delivery_address_payload.dart';
 import '../../../auth/presentation/providers/auth_user_state.dart';
 import '../../../map/presentation/providers/map_provider.dart';
 import '../providers/address_events.dart';
 import '../providers/address_loading_providers.dart';
 import '../providers/address_notifier.dart';
 import '../providers/location_selection_provider.dart';
-import '../widgets/location_selection_section.dart';
 
 class CreateOrUpdateAddressScreen extends ConsumerStatefulWidget {
   final Address? address;
+  final DeliveryAddressPayload? initialLocation;
 
-  const CreateOrUpdateAddressScreen({super.key, this.address});
+  const CreateOrUpdateAddressScreen({
+    super.key,
+    this.address,
+    this.initialLocation,
+  });
 
   @override
   ConsumerState<CreateOrUpdateAddressScreen> createState() =>
@@ -77,14 +82,39 @@ class _CreateOrUpdateAddressScreenState
     // Initialize location and autofill from user when creating
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (isUpdate) {
-        // Update mode: use existing address coordinates
         final lat = double.tryParse(widget.address!.lat);
         final lng = double.tryParse(widget.address!.lng);
-        if (lat != null && lng != null) {
+
+        if (widget.initialLocation != null) {
+          ref
+              .read(locationSelectionProvider.notifier)
+              .initializeWithExistingAddress(
+                widget.initialLocation!.lat,
+                widget.initialLocation!.lng,
+              );
+          final placeName = widget.initialLocation!.placeName;
+          if (placeName != null && placeName.isNotEmpty) {
+            _addressController.text = placeName;
+          }
+        } else if (lat != null && lng != null) {
           ref
               .read(locationSelectionProvider.notifier)
               .initializeWithExistingAddress(lat, lng);
         }
+      } else if (widget.initialLocation != null) {
+        final location = widget.initialLocation!;
+        ref
+            .read(locationSelectionProvider.notifier)
+            .initializeWithExistingAddress(location.lat, location.lng);
+        if (location.placeName != null && location.placeName!.isNotEmpty) {
+          _addressController.text = location.placeName!;
+        }
+        final user = ref.read(currentUserProvider);
+        if (user != null && mounted) {
+          _receiverNameController.text = user.name;
+          _receiverPhoneController.text = user.phone ?? '';
+        }
+        if (mounted) setState(() {});
       } else {
         // Create mode: autofill receiver name and phone from current user
         final user = ref.read(currentUserProvider);
@@ -188,11 +218,13 @@ class _CreateOrUpdateAddressScreenState
     final locationState = ref.watch(locationSelectionProvider);
     final lat = locationState.selectedLat;
     final lng = locationState.selectedLng;
-    final reverseGeocodeAsync = (lat != null && lng != null)
+    final hasPrefilledPlaceName = widget.initialLocation?.placeName != null &&
+        widget.initialLocation!.placeName!.isNotEmpty;
+    final reverseGeocodeAsync = (lat != null && lng != null && !hasPrefilledPlaceName)
         ? ref.watch(reverseGeocodeProvider(lat, lng))
         : null;
 
-    if (lat != null && lng != null) {
+    if (lat != null && lng != null && !hasPrefilledPlaceName) {
       ref.listen(reverseGeocodeProvider(lat, lng), (prev, next) {
         next.whenOrNull(
           data: (address) {
@@ -255,11 +287,6 @@ class _CreateOrUpdateAddressScreenState
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Location Selection Section
-                              const LocationSelectionSection(),
-                              const SizedBox(height: AppSizes.xl),
-                        
-                              // Address Field (Required)
                               Row(
                                 children: [
                                   _buildLabel('Address *'),
@@ -285,58 +312,18 @@ class _CreateOrUpdateAddressScreenState
                                       ),
                                     ),
                                   ],
-                                  const Spacer(),
-                                  if (lat != null &&
-                                      lng != null &&
-                                      locationState.mode ==
-                                          LocationSelectionMode.currentLocation)
-                                    Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onTap: () => ref
-                                            .read(locationSelectionProvider.notifier)
-                                            .refreshCurrentLocation(),
-                                        borderRadius: BorderRadius.circular(
-                                          AppSizes.radius,
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: AppSizes.xs,
-                                            horizontal: AppSizes.sm,
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(
-                                                Icons.refresh_rounded,
-                                                size: 18,
-                                                color: AppColors.primary,
-                                              ),
-                                              SizedBox(width: AppSizes.xs),
-                                              Text(
-                                                'Refresh',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: AppColors.primary,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                 ],
                               ),
                               const SizedBox(height: AppSizes.sm),
                               InputTextfield(
                                 controller: _addressController,
-                                hintText: 'Enter full address',
+                                hintText: 'Delivery address',
                                 icon: Icons.location_on_rounded,
                                 validator: Validators.validateAddress,
                                 keyboardType: TextInputType.multiline,
                                 maxLength: 100,
                                 maxLines: 3,
+                                readOnly: true,
                               ),
                               const SizedBox(height: AppSizes.lg),
                         

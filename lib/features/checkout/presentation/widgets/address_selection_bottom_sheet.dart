@@ -108,7 +108,7 @@ class AddressSelectionBottomSheet extends ConsumerWidget {
               width: 200,
               onPressed: () {
                 context.pop();
-                context.push(RouteName.createOrUpdateAddress);
+                context.push(RouteName.deliveryAddress);
               },
               height: 44,
             ),

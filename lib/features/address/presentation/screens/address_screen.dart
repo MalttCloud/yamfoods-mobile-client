@@ -40,7 +40,7 @@ class AddressScreen extends ConsumerWidget {
       backgroundColor: AppColors.background,
       appBar: CustomAppBar(title: 'Your Addresses'),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push(RouteName.createOrUpdateAddress),
+        onPressed: () => context.push(RouteName.deliveryAddress),
         icon: const Icon(Icons.add_rounded),
         label: const Text('Add Address'),
         backgroundColor: AppColors.primary,
@@ -59,7 +59,7 @@ class AddressScreen extends ConsumerWidget {
                 title: 'No addresses found',
                 subtitle: 'Add your first address to get started',
                 actionText: 'Add Address',
-                onAction: () => context.push(RouteName.createOrUpdateAddress),
+                onAction: () => context.push(RouteName.deliveryAddress),
               );
             }
             return Center(

@@ -247,7 +247,7 @@ class AddressCard extends ConsumerWidget {
   }
 
   void _handleEdit(BuildContext context, WidgetRef ref) {
-    context.push(RouteName.createOrUpdateAddress, extra: address);
+    context.push(RouteName.deliveryAddress, extra: address);
   }
 
   void _handleDelete(BuildContext context, WidgetRef ref) {
