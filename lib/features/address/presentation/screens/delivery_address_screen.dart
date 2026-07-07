@@ -15,7 +15,6 @@ import '../../../../core/services/snackbar_service.dart';
 import '../../../map/data/models/forward_geocoding_model.dart';
 import '../../../map/presentation/providers/map_provider.dart';
 import '../../domain/entities/address.dart';
-import '../../domain/entities/delivery_address_payload.dart';
 import '../providers/delivery_address_selection_provider.dart';
 import '../widgets/address_search_field.dart';
 import '../widgets/delivery_zone_map.dart';
@@ -158,7 +157,12 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
     }
   }
 
-  void _handleContinue(DeliveryAddressPayload payload) {
+  void _handleContinue() {
+    final payload = ref
+        .read(deliveryAddressSelectionProvider)
+        .payload(addressToUpdate: widget.addressToUpdate);
+    if (payload == null) return;
+
     context.push(RouteName.createOrUpdateAddress, extra: payload);
   }
 
@@ -233,22 +237,27 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
                         color: Colors.orange,
                       ),
                     ),
+                  if (selection.placeNameResolutionFailed)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSizes.lg,
+                      ),
+                      child: _buildStatusBanner(
+                        icon: Icons.wifi_off_rounded,
+                        text:
+                            'Could not fetch address for this location. Check your connection, then tap the map again or search.',
+                        color: AppColors.error,
+                      ),
+                    ),
                   const Spacer(),
-                  
+
                   Padding(
                     padding: const EdgeInsets.all(AppSizes.lg),
                     child: CustomButton(
                       text: 'Continue',
-                      onPressed: selection.canContinue
-                          ? () {
-                              final payload = selection.payload(
-                                addressToUpdate: widget.addressToUpdate,
-                              );
-                              if (payload != null) {
-                                _handleContinue(payload);
-                              }
-                            }
-                          : null,
+                      onPressed: selection.canContinue ? _handleContinue : null,
+                      isLoading: selection.isResolvingPlaceName,
+                      loadingText: 'Getting address...',
                     ),
                   ),
                 ],

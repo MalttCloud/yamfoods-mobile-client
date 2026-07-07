@@ -96,7 +96,7 @@ final class DeliveryAddressSelectionProvider
 }
 
 String _$deliveryAddressSelectionHash() =>
-    r'ee6e778e45ad0eee52360c503d6ab78f0cd87b59';
+    r'ec8c26afc636ed977f1e966121a7ff65ae2999bc';
 
 abstract class _$DeliveryAddressSelection
     extends $Notifier<DeliveryAddressSelectionState> {

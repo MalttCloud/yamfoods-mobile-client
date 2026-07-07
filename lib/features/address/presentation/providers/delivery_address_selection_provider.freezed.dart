@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DeliveryAddressSelectionState {
 
- double? get selectedLat; double? get selectedLng; String? get selectedPlaceName;
+ double? get selectedLat; double? get selectedLng; String? get selectedPlaceName; PlaceNameStatus get placeNameStatus;
 /// Create a copy of DeliveryAddressSelectionState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $DeliveryAddressSelectionStateCopyWith<DeliveryAddressSelectionState> get copyWi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeliveryAddressSelectionState&&(identical(other.selectedLat, selectedLat) || other.selectedLat == selectedLat)&&(identical(other.selectedLng, selectedLng) || other.selectedLng == selectedLng)&&(identical(other.selectedPlaceName, selectedPlaceName) || other.selectedPlaceName == selectedPlaceName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DeliveryAddressSelectionState&&(identical(other.selectedLat, selectedLat) || other.selectedLat == selectedLat)&&(identical(other.selectedLng, selectedLng) || other.selectedLng == selectedLng)&&(identical(other.selectedPlaceName, selectedPlaceName) || other.selectedPlaceName == selectedPlaceName)&&(identical(other.placeNameStatus, placeNameStatus) || other.placeNameStatus == placeNameStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedLat,selectedLng,selectedPlaceName);
+int get hashCode => Object.hash(runtimeType,selectedLat,selectedLng,selectedPlaceName,placeNameStatus);
 
 @override
 String toString() {
-  return 'DeliveryAddressSelectionState(selectedLat: $selectedLat, selectedLng: $selectedLng, selectedPlaceName: $selectedPlaceName)';
+  return 'DeliveryAddressSelectionState(selectedLat: $selectedLat, selectedLng: $selectedLng, selectedPlaceName: $selectedPlaceName, placeNameStatus: $placeNameStatus)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $DeliveryAddressSelectionStateCopyWith<$Res>  {
   factory $DeliveryAddressSelectionStateCopyWith(DeliveryAddressSelectionState value, $Res Function(DeliveryAddressSelectionState) _then) = _$DeliveryAddressSelectionStateCopyWithImpl;
 @useResult
 $Res call({
- double? selectedLat, double? selectedLng, String? selectedPlaceName
+ double? selectedLat, double? selectedLng, String? selectedPlaceName, PlaceNameStatus placeNameStatus
 });
 
 
@@ -62,12 +62,13 @@ class _$DeliveryAddressSelectionStateCopyWithImpl<$Res>
 
 /// Create a copy of DeliveryAddressSelectionState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? selectedLat = freezed,Object? selectedLng = freezed,Object? selectedPlaceName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? selectedLat = freezed,Object? selectedLng = freezed,Object? selectedPlaceName = freezed,Object? placeNameStatus = null,}) {
   return _then(_self.copyWith(
 selectedLat: freezed == selectedLat ? _self.selectedLat : selectedLat // ignore: cast_nullable_to_non_nullable
 as double?,selectedLng: freezed == selectedLng ? _self.selectedLng : selectedLng // ignore: cast_nullable_to_non_nullable
 as double?,selectedPlaceName: freezed == selectedPlaceName ? _self.selectedPlaceName : selectedPlaceName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,placeNameStatus: null == placeNameStatus ? _self.placeNameStatus : placeNameStatus // ignore: cast_nullable_to_non_nullable
+as PlaceNameStatus,
   ));
 }
 
@@ -149,10 +150,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double? selectedLat,  double? selectedLng,  String? selectedPlaceName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double? selectedLat,  double? selectedLng,  String? selectedPlaceName,  PlaceNameStatus placeNameStatus)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DeliveryAddressSelectionState() when $default != null:
-return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName);case _:
+return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName,_that.placeNameStatus);case _:
   return orElse();
 
 }
@@ -170,10 +171,10 @@ return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double? selectedLat,  double? selectedLng,  String? selectedPlaceName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double? selectedLat,  double? selectedLng,  String? selectedPlaceName,  PlaceNameStatus placeNameStatus)  $default,) {final _that = this;
 switch (_that) {
 case _DeliveryAddressSelectionState():
-return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName);}
+return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName,_that.placeNameStatus);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -187,10 +188,10 @@ return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double? selectedLat,  double? selectedLng,  String? selectedPlaceName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double? selectedLat,  double? selectedLng,  String? selectedPlaceName,  PlaceNameStatus placeNameStatus)?  $default,) {final _that = this;
 switch (_that) {
 case _DeliveryAddressSelectionState() when $default != null:
-return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName);case _:
+return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName,_that.placeNameStatus);case _:
   return null;
 
 }
@@ -202,12 +203,13 @@ return $default(_that.selectedLat,_that.selectedLng,_that.selectedPlaceName);cas
 
 
 class _DeliveryAddressSelectionState implements DeliveryAddressSelectionState {
-  const _DeliveryAddressSelectionState({this.selectedLat, this.selectedLng, this.selectedPlaceName});
+  const _DeliveryAddressSelectionState({this.selectedLat, this.selectedLng, this.selectedPlaceName, this.placeNameStatus = PlaceNameStatus.idle});
   
 
 @override final  double? selectedLat;
 @override final  double? selectedLng;
 @override final  String? selectedPlaceName;
+@override@JsonKey() final  PlaceNameStatus placeNameStatus;
 
 /// Create a copy of DeliveryAddressSelectionState
 /// with the given fields replaced by the non-null parameter values.
@@ -219,16 +221,16 @@ _$DeliveryAddressSelectionStateCopyWith<_DeliveryAddressSelectionState> get copy
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeliveryAddressSelectionState&&(identical(other.selectedLat, selectedLat) || other.selectedLat == selectedLat)&&(identical(other.selectedLng, selectedLng) || other.selectedLng == selectedLng)&&(identical(other.selectedPlaceName, selectedPlaceName) || other.selectedPlaceName == selectedPlaceName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeliveryAddressSelectionState&&(identical(other.selectedLat, selectedLat) || other.selectedLat == selectedLat)&&(identical(other.selectedLng, selectedLng) || other.selectedLng == selectedLng)&&(identical(other.selectedPlaceName, selectedPlaceName) || other.selectedPlaceName == selectedPlaceName)&&(identical(other.placeNameStatus, placeNameStatus) || other.placeNameStatus == placeNameStatus));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,selectedLat,selectedLng,selectedPlaceName);
+int get hashCode => Object.hash(runtimeType,selectedLat,selectedLng,selectedPlaceName,placeNameStatus);
 
 @override
 String toString() {
-  return 'DeliveryAddressSelectionState(selectedLat: $selectedLat, selectedLng: $selectedLng, selectedPlaceName: $selectedPlaceName)';
+  return 'DeliveryAddressSelectionState(selectedLat: $selectedLat, selectedLng: $selectedLng, selectedPlaceName: $selectedPlaceName, placeNameStatus: $placeNameStatus)';
 }
 
 
@@ -239,7 +241,7 @@ abstract mixin class _$DeliveryAddressSelectionStateCopyWith<$Res> implements $D
   factory _$DeliveryAddressSelectionStateCopyWith(_DeliveryAddressSelectionState value, $Res Function(_DeliveryAddressSelectionState) _then) = __$DeliveryAddressSelectionStateCopyWithImpl;
 @override @useResult
 $Res call({
- double? selectedLat, double? selectedLng, String? selectedPlaceName
+ double? selectedLat, double? selectedLng, String? selectedPlaceName, PlaceNameStatus placeNameStatus
 });
 
 
@@ -256,12 +258,13 @@ class __$DeliveryAddressSelectionStateCopyWithImpl<$Res>
 
 /// Create a copy of DeliveryAddressSelectionState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? selectedLat = freezed,Object? selectedLng = freezed,Object? selectedPlaceName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? selectedLat = freezed,Object? selectedLng = freezed,Object? selectedPlaceName = freezed,Object? placeNameStatus = null,}) {
   return _then(_DeliveryAddressSelectionState(
 selectedLat: freezed == selectedLat ? _self.selectedLat : selectedLat // ignore: cast_nullable_to_non_nullable
 as double?,selectedLng: freezed == selectedLng ? _self.selectedLng : selectedLng // ignore: cast_nullable_to_non_nullable
 as double?,selectedPlaceName: freezed == selectedPlaceName ? _self.selectedPlaceName : selectedPlaceName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,placeNameStatus: null == placeNameStatus ? _self.placeNameStatus : placeNameStatus // ignore: cast_nullable_to_non_nullable
+as PlaceNameStatus,
   ));
 }
 
