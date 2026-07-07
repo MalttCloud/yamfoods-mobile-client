@@ -6,10 +6,10 @@ import '../../../../responsive.dart';
 import '../../domain/entities/branch.dart';
 import 'branch_ring_selector.dart';
 
-/// Horizontal scrollable list of branch ring selectors.
+/// Horizontal list of branch ring selectors.
 ///
-/// Displays all branches as circular rings that can be selected.
-/// Distance is shown only when [userPosition] is non-null.
+/// - Centers the rings when they all fit on screen.
+/// - Falls back to horizontal scrolling when they don't.
 class BranchRingsList extends StatelessWidget {
   final List<Branch> branches;
   final int selectedIndex;
@@ -26,27 +26,62 @@ class BranchRingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final horizontalPadding = context.isTablet ? AppSizes.xl : AppSizes.xxxl;
+
+    final spacing = context.isTablet ? AppSizes.xxl : AppSizes.lg;
+
+    final children = List.generate(branches.length, (index) {
+      final branch = branches[index];
+
+      final formattedDistance = userPosition != null
+          ? DistanceCalculator.calculateDistanceInMeters(
+              userPosition!,
+              branch.location,
+            )
+          : null;
+
+      return BranchRingSelector(
+        name: branch.name,
+        distance: formattedDistance,
+        isSelected: index == selectedIndex,
+        onTap: () => onBranchSelected(index),
+      );
+    });
+
     return SizedBox(
       height: context.isTablet ? 240 : 140,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: context.isTablet ? AppSizes.xl : AppSizes.xxxl),
-        itemCount: branches.length,
-        separatorBuilder: (_, _) => SizedBox(width: context.isTablet ? AppSizes.xxl : AppSizes.lg),
-        itemBuilder: (context, index) {
-          final branch = branches[index];
-          final formattedDistance = userPosition != null
-              ? DistanceCalculator.calculateDistanceInMeters(
-                  userPosition!,
-                  branch.location,
-                )
-              : null;
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Approximate width occupied by each ring.
+          final ringWidth = context.isTablet ? 200.0 : 100.0;
 
-          return BranchRingSelector(
-            name: branch.name,
-            distance: formattedDistance,
-            isSelected: index == selectedIndex,
-            onTap: () => onBranchSelected(index),
+          final totalWidth =
+              branches.length * ringWidth +
+              (branches.length - 1) * spacing +
+              horizontalPadding * 2;
+
+          // Everything fits -> center it.
+          if (totalWidth <= constraints.maxWidth) {
+            return Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (int i = 0; i < children.length; i++) ...[
+                    children[i],
+                    if (i != children.length - 1) SizedBox(width: spacing),
+                  ],
+                ],
+              ),
+            );
+          }
+
+          // Doesn't fit -> make it scrollable.
+          return ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+            itemCount: branches.length,
+            separatorBuilder: (_, _) => SizedBox(width: spacing),
+            itemBuilder: (_, index) => children[index],
           );
         },
       ),

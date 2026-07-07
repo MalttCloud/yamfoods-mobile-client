@@ -81,86 +81,88 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
   }
 
   Widget _buildNavigationBar() {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 500),
-      child: CurvedNavigationBar(
-        height: 60,
-        key: ValueKey('${widget.navigationShell.currentIndex}-$_navBarVersion'),
-        index: widget.navigationShell.currentIndex,
-        onTap: (index) async {
-          final didNavigate = await _onItemTapped(index);
-          if (!didNavigate && mounted) {
-            // Force nav bar state reset when guarded navigation is denied.
-            setState(() => _navBarVersion++);
-          }
-        },
-        backgroundColor: Colors.transparent,
-        color: AppColors.primary,
-        buttonBackgroundColor: AppColors.primary,
-        animationDuration: const Duration(milliseconds: 250),
-        items: [
-          CurvedNavigationBarItem(
-            child: Icon(
-              widget.navigationShell.currentIndex == 0
-                  ? CupertinoIcons.house_fill
-                  : CupertinoIcons.house_alt,
-              color: AppColors.accentOrange,
+    return SafeArea(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: CurvedNavigationBar(
+          height: 60,
+          key: ValueKey('${widget.navigationShell.currentIndex}-$_navBarVersion'),
+          index: widget.navigationShell.currentIndex,
+          onTap: (index) async {
+            final didNavigate = await _onItemTapped(index);
+            if (!didNavigate && mounted) {
+              // Force nav bar state reset when guarded navigation is denied.
+              setState(() => _navBarVersion++);
+            }
+          },
+          backgroundColor: Colors.transparent,
+          color: AppColors.primary,
+          buttonBackgroundColor: AppColors.primary,
+          animationDuration: const Duration(milliseconds: 250),
+          items: [
+            CurvedNavigationBarItem(
+              child: Icon(
+                widget.navigationShell.currentIndex == 0
+                    ? CupertinoIcons.house_fill
+                    : CupertinoIcons.house_alt,
+                color: AppColors.accentOrange,
+              ),
+              label: 'Home',
+              labelStyle: TextStyle(
+                fontSize: AppSizes.sm,
+                fontWeight: widget.navigationShell.currentIndex == 0
+                    ? FontWeight.w600
+                    : FontWeight.w400,
+                color: AppColors.accentOrange,
+              ),
             ),
-            label: 'Home',
-            labelStyle: TextStyle(
-              fontSize: AppSizes.sm,
-              fontWeight: widget.navigationShell.currentIndex == 0
-                  ? FontWeight.w600
-                  : FontWeight.w400,
-              color: AppColors.accentOrange,
+            CurvedNavigationBarItem(
+              child: _CartBadgeIcon(
+                isActive: widget.navigationShell.currentIndex == 1,
+              ),
+              label: 'Cart',
+              labelStyle: TextStyle(
+                fontSize: AppSizes.sm,
+                fontWeight: widget.navigationShell.currentIndex == 1
+                    ? FontWeight.w600
+                    : FontWeight.w400,
+                color: AppColors.accentOrange,
+              ),
             ),
-          ),
-          CurvedNavigationBarItem(
-            child: _CartBadgeIcon(
-              isActive: widget.navigationShell.currentIndex == 1,
+            CurvedNavigationBarItem(
+              child: Icon(
+                widget.navigationShell.currentIndex == 2
+                    ? CupertinoIcons.square_favorites_alt_fill
+                    : CupertinoIcons.square_favorites_alt,
+                color: AppColors.accentOrange,
+              ),
+              label: 'Order',
+              labelStyle: TextStyle(
+                fontSize: AppSizes.sm,
+                fontWeight: widget.navigationShell.currentIndex == 2
+                    ? FontWeight.w600
+                    : FontWeight.w400,
+                color: AppColors.accentOrange,
+              ),
             ),
-            label: 'Cart',
-            labelStyle: TextStyle(
-              fontSize: AppSizes.sm,
-              fontWeight: widget.navigationShell.currentIndex == 1
-                  ? FontWeight.w600
-                  : FontWeight.w400,
-              color: AppColors.accentOrange,
+            CurvedNavigationBarItem(
+              child: Icon(
+                widget.navigationShell.currentIndex == 3
+                    ? CupertinoIcons.person_fill
+                    : CupertinoIcons.person,
+                color: AppColors.accentOrange,
+              ),
+              label: 'Profile',
+              labelStyle: TextStyle(
+                fontSize: AppSizes.sm,
+                fontWeight: widget.navigationShell.currentIndex == 3
+                    ? FontWeight.w600
+                    : FontWeight.w400,
+                color: AppColors.accentOrange,
+              ),
             ),
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              widget.navigationShell.currentIndex == 2
-                  ? CupertinoIcons.square_favorites_alt_fill
-                  : CupertinoIcons.square_favorites_alt,
-              color: AppColors.accentOrange,
-            ),
-            label: 'Order',
-            labelStyle: TextStyle(
-              fontSize: AppSizes.sm,
-              fontWeight: widget.navigationShell.currentIndex == 2
-                  ? FontWeight.w600
-                  : FontWeight.w400,
-              color: AppColors.accentOrange,
-            ),
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              widget.navigationShell.currentIndex == 3
-                  ? CupertinoIcons.person_fill
-                  : CupertinoIcons.person,
-              color: AppColors.accentOrange,
-            ),
-            label: 'Profile',
-            labelStyle: TextStyle(
-              fontSize: AppSizes.sm,
-              fontWeight: widget.navigationShell.currentIndex == 3
-                  ? FontWeight.w600
-                  : FontWeight.w400,
-              color: AppColors.accentOrange,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
