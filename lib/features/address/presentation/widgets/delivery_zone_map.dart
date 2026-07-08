@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../map/data/models/delivery_zone_model.dart';
+import '../../../map/presentation/providers/map_provider.dart';
 
-class DeliveryZoneMap extends StatefulWidget {
+class DeliveryZoneMap extends ConsumerStatefulWidget {
   final List<DeliveryZoneModel> zones;
   final double? selectedLat;
   final double? selectedLng;
@@ -26,10 +28,10 @@ class DeliveryZoneMap extends StatefulWidget {
   });
 
   @override
-  State<DeliveryZoneMap> createState() => _DeliveryZoneMapState();
+  ConsumerState<DeliveryZoneMap> createState() => _DeliveryZoneMapState();
 }
 
-class _DeliveryZoneMapState extends State<DeliveryZoneMap>
+class _DeliveryZoneMapState extends ConsumerState<DeliveryZoneMap>
     with TickerProviderStateMixin {
   static const _fallbackCenter = LatLng(9.010491794724187, 38.744469130997395);
   static const _initialZoom = 13.0;
@@ -137,11 +139,14 @@ class _DeliveryZoneMapState extends State<DeliveryZoneMap>
         )
         .toList();
 
+    final lat = widget.selectedLat;
+    final lng = widget.selectedLng;
+
     final markers = <Marker>[];
-    if (widget.selectedLat != null && widget.selectedLng != null) {
+    if (lat != null && lng != null) {
       markers.add(
         Marker(
-          point: LatLng(widget.selectedLat!, widget.selectedLng!),
+          point: LatLng(lat, lng),
           width: 40,
           height: 40,
           child: const Icon(
@@ -152,6 +157,10 @@ class _DeliveryZoneMapState extends State<DeliveryZoneMap>
         ),
       );
     }
+
+    final reverseGeocode = (lat != null && lng != null)
+        ? ref.watch(reverseGeocodeProvider(lat, lng))
+        : null;
 
     return Stack(
       fit: StackFit.expand,
@@ -185,6 +194,61 @@ class _DeliveryZoneMapState extends State<DeliveryZoneMap>
                 fontWeight: FontWeight.w500,
               ),
               textAlign: TextAlign.center,
+            ),
+          ),
+        if (lat != null && lng != null)
+          Positioned(
+            bottom: 90,
+            left: AppSizes.lg,
+            right: AppSizes.lg,
+            child: Material(
+              elevation: 4,
+              borderRadius: BorderRadius.circular(AppSizes.radius),
+              child: Container(
+                padding: const EdgeInsets.all(AppSizes.md),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(AppSizes.radius),
+                ),
+                child: reverseGeocode!.when(
+                  loading: () => const Row(
+                    children: [
+                      SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(child: Text('Getting address...')),
+                    ],
+                  ),
+                  error: (_, __) => const Row(
+                    children: [
+                      Icon(Icons.location_off_outlined),
+                      SizedBox(width: 8),
+                      Expanded(child: Text('Unable to determine address')),
+                    ],
+                  ),
+                  data: (address) => Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.location_on_rounded,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(width: AppSizes.sm),
+                      Expanded(
+                        child: Text(
+                          address,
+                          style: AppTextStyles.bodyMedium,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
       ],

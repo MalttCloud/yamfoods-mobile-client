@@ -51,7 +51,7 @@ class _CreateOrUpdateAddressScreenState
   void initState() {
     super.initState();
     _addressController = TextEditingController(
-      text: widget.address?.address ?? '',
+      text: _initialAddressText(),
     );
     final isUpdate = widget.address != null;
     _receiverNameController = TextEditingController(
@@ -126,6 +126,20 @@ class _CreateOrUpdateAddressScreenState
         // Provider already fetches current location on build()
       }
     });
+  }
+
+  String _initialAddressText() {
+    final placeName = widget.initialLocation?.placeName;
+    if (placeName != null && placeName.isNotEmpty) {
+      return placeName;
+    }
+    return widget.address?.address ?? '';
+  }
+
+  String _fallbackAddressText() {
+    final current = _addressController.text.trim();
+    if (current.isNotEmpty) return current;
+    return _initialAddressText();
   }
 
   @override
@@ -209,6 +223,9 @@ class _CreateOrUpdateAddressScreenState
     ref.listen<AddressUiEvent?>(addressUiEventsProvider, (prev, next) {
       if (next == null) return;
       if (next is AddressCreated || next is AddressUpdated) {
+        //pop from this screen
+        context.pop();
+        //pop from delivery address screen
         context.pop();
       }
       ref.read(addressUiEventsProvider.notifier).clear();
@@ -216,8 +233,8 @@ class _CreateOrUpdateAddressScreenState
 
     // Watch location and reverse-geocode: auto-fill address from coordinates
     final locationState = ref.watch(locationSelectionProvider);
-    final lat = locationState.selectedLat;
-    final lng = locationState.selectedLng;
+    final lat = locationState.selectedLat ?? widget.initialLocation?.lat;
+    final lng = locationState.selectedLng ?? widget.initialLocation?.lng;
     final hasPrefilledPlaceName = widget.initialLocation?.placeName != null &&
         widget.initialLocation!.placeName!.isNotEmpty;
     final reverseGeocodeAsync = (lat != null && lng != null && !hasPrefilledPlaceName)
@@ -233,14 +250,17 @@ class _CreateOrUpdateAddressScreenState
             }
           },
           error: (_, __) {
-            if (mounted) {
-              ref
-                  .read(snackbarServiceProvider)
-                  .showError(
-                    const Failure.mapError(
-                      'Could not get address for this location.',
-                    ),
-                  );
+            if (mounted && _addressController.text.trim().isEmpty) {
+              final fallback = _fallbackAddressText();
+              if (fallback.isNotEmpty) {
+                _addressController.text = fallback;
+              } else {
+                ref.read(snackbarServiceProvider).showError(
+                      const Failure.mapError(
+                        'Could not get address for this location.',
+                      ),
+                    );
+              }
             }
           },
         );
