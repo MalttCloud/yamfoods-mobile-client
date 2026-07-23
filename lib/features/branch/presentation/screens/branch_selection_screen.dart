@@ -6,16 +6,16 @@ import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 
 import '../../../../app/components/custom_button.dart';
-import '../../../../app/routes/route_names.dart';
 import '../../../../app/components/empty_state.dart';
-import '../../../../core/utils/distance_calculator.dart';
 import '../../../../app/components/skeleton/branch_selection_skeleton.dart';
+import '../../../../app/routes/route_names.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_sizes.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../app/theme/app_texts.dart';
 import '../../../../core/permissions/location/location_gps_guard_perscreen.dart';
 import '../../../../core/services/app_info_service.dart';
+import '../../../../core/utils/distance_calculator.dart';
 import '../../../../responsive.dart';
 import '../../../app_configuration/domain/entities/app_version.dart';
 import '../../../app_configuration/presentation/providers/app_configuration_providers.dart';
@@ -97,7 +97,7 @@ class _BranchSelectionScreenState extends ConsumerState<BranchSelectionScreen> {
                 Center(
                   child: ConstrainedBox(
                     // Limit the Column to 600 width
-                   constraints: const BoxConstraints(maxWidth: 700),
+                    constraints: const BoxConstraints(maxWidth: 700),
                     child: appConfigAsync.when(
                       data: (config) => appInfoAsync.when(
                         data: (appInfo) => branchesAsync.when(
@@ -107,7 +107,7 @@ class _BranchSelectionScreenState extends ConsumerState<BranchSelectionScreen> {
                               backend: config.appVersion,
                               current: appInfo,
                             );
-                    
+
                             if (branches.isEmpty) {
                               return EmptyState(
                                 icon: Icons.store_outlined,
@@ -116,13 +116,13 @@ class _BranchSelectionScreenState extends ConsumerState<BranchSelectionScreen> {
                                     'There are no branches available at the moment.',
                               );
                             }
-                    
+
                             final selectedBranch = branches[_selectedIndex];
                             return _buildContent(
                               branches,
                               selectedBranch,
                               userPosition,
-                              context
+                              context,
                             );
                           },
                           loading: () => const BranchSelectionSkeleton(),
@@ -249,14 +249,14 @@ class _BranchSelectionScreenState extends ConsumerState<BranchSelectionScreen> {
     Branch selectedBranch,
     ({double lat, double lng})? userPosition,
     BuildContext context,
-  ) { 
+  ) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        
+
         children: [
           const SizedBox(height: 60),
-      
+
           // Description text - centered
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
@@ -269,20 +269,20 @@ class _BranchSelectionScreenState extends ConsumerState<BranchSelectionScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-      
-           SizedBox(height: context.isTablet ? AppSizes.xxxl:  AppSizes.xl),
+
+          SizedBox(height: context.isTablet ? AppSizes.xxxl : AppSizes.xl),
           BranchStatusBadge(isOpen: selectedBranch.isCurrentlyOpen),
           const SizedBox(height: AppSizes.lg),
-      
+
           // Phone and Working Hours
           BranchInfoRow(
             phone: selectedBranch.contactPhone,
             openingHour: selectedBranch.openingHour,
             closingHour: selectedBranch.closingHour,
           ),
-      
+
           const SizedBox(height: AppSizes.xxl),
-      
+
           // Branch rings - horizontal scroll
           BranchRingsList(
             branches: branches,
@@ -294,20 +294,20 @@ class _BranchSelectionScreenState extends ConsumerState<BranchSelectionScreen> {
               });
             },
           ),
-      
+
           const SizedBox(height: AppSizes.xxl),
-      
+
           // Selected branch details - natural height
           BranchDetailsSection(
             branch: selectedBranch,
             userPosition: userPosition,
           ),
-      
-          SizedBox(height: context.isTablet ? AppSizes.xxxl:  AppSizes.xl),
-      
+
+          SizedBox(height: context.isTablet ? AppSizes.xxxl : AppSizes.xl),
+
           // Open button
           _buildOpenButton(selectedBranch, userPosition),
-      
+
           const SizedBox(height: AppSizes.xl),
         ],
       ),

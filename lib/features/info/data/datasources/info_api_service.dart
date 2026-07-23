@@ -34,4 +34,7 @@ abstract class InfoApiService {
 
   @POST(ApiRoutes.deleteMyAccount)
   Future<void> deleteMyAccount(@Body() Map<String, dynamic> body);
+
+  @POST(ApiRoutes.recordDau)
+  Future<void> recordDau(@Body() Map<String, dynamic> body);
 }

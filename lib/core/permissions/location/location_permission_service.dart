@@ -31,20 +31,32 @@ class LocationPermissionService {
 
   /// Requests current location (triggers GPS accuracy dialog if GPS is disabled).
   ///
-  /// This method will automatically trigger Android's "Location Accuracy" system dialog
-  /// if GPS/High Accuracy is disabled.
+  /// When GPS is on, returns the last known cached position when available for a
+  /// fast response, otherwise requests a fresh fix. When GPS is off, requests a
+  /// high-accuracy fix which triggers Android's "Location Accuracy" system dialog.
   ///
   /// Returns the current position if successful.
   /// Throws an exception if permission is denied or location cannot be determined.
   static Future<Position> requestCurrentLocation() async {
-    // Check permission first
     final permission = await checkPermissionStatus();
     if (!permission.isGranted) {
       throw Exception('Location permission is not granted');
     }
 
-    // Request location - this will trigger GPS accuracy dialog if GPS is off
-    return await Geolocator.getCurrentPosition(
+    final gpsEnabled = await isGpsEnabled();
+    if (gpsEnabled) {
+      final lastKnown = await Geolocator.getLastKnownPosition();
+      if (lastKnown != null) return lastKnown;
+
+      return Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.medium,
+          timeLimit: Duration(seconds: 10),
+        ),
+      );
+    }
+
+    return Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
     );
   }

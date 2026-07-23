@@ -15,7 +15,6 @@ class DeliveryZoneMap extends ConsumerStatefulWidget {
   final double? selectedLng;
   final void Function(double lat, double lng) onMapTap;
   final LatLng? initialCenter;
-  final bool showInstructionOverlay;
 
   const DeliveryZoneMap({
     super.key,
@@ -24,7 +23,6 @@ class DeliveryZoneMap extends ConsumerStatefulWidget {
     this.selectedLat,
     this.selectedLng,
     this.initialCenter,
-    this.showInstructionOverlay = true,
   });
 
   @override
@@ -182,20 +180,6 @@ class _DeliveryZoneMapState extends ConsumerState<DeliveryZoneMap>
             if (markers.isNotEmpty) MarkerLayer(markers: markers),
           ],
         ),
-        if (widget.showInstructionOverlay)
-          Positioned(
-            top: 100,
-            left: AppSizes.lg,
-            right: AppSizes.lg,
-            child: Text(
-              'Search or tap on the map to select your delivery location',
-              style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.w500,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
         if (lat != null && lng != null)
           Positioned(
             bottom: 90,

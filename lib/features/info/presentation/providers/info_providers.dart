@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/network/di/dio_client.dart';
 import '../../../../core/enums/feedback_type.dart';
+import '../../../../core/network/di/dio_client.dart';
+import '../../../auth/presentation/providers/auth_user_state.dart';
 import '../../data/datasources/info_api_service.dart';
 import '../../data/datasources/info_remote_data_source.dart';
 import '../../data/datasources/info_remote_data_source_impl.dart';
@@ -16,6 +19,7 @@ import '../../domain/usecases/get_faqs_usecase.dart';
 import '../../domain/usecases/get_help_support_usecase.dart';
 import '../../domain/usecases/get_privacy_policy_usecase.dart';
 import '../../domain/usecases/get_terms_and_conditions_usecase.dart';
+import '../../domain/usecases/record_dau_usecase.dart';
 import '../../domain/usecases/submit_collaboration_request_usecase.dart';
 import '../../domain/usecases/submit_feedback_usecase.dart';
 
@@ -95,6 +99,13 @@ Future<SubmitCollaborationRequestUsecase> submitCollaborationRequestUsecase(
 ) async {
   final repository = await ref.watch(infoRepositoryProvider.future);
   return SubmitCollaborationRequestUsecase(repository);
+}
+
+/// Record DAU usecase provider
+@riverpod
+Future<RecordDauUsecase> recordDauUsecase(Ref ref) async {
+  final repository = await ref.watch(infoRepositoryProvider.future);
+  return RecordDauUsecase(repository);
 }
 
 // ==================== Data Providers ====================
@@ -203,6 +214,32 @@ Future<void> submitCollaborationRequest(
     proposal: params.proposal,
   );
   return result.fold((failure) => throw failure, (_) => null);
+}
+
+/// Records daily active user (fire-and-forget, errors are swallowed).
+@riverpod
+Future<void> recordDau(Ref ref) async {
+  final usecase = await ref.watch(recordDauUsecaseProvider.future);
+  await usecase.call();
+}
+
+/// Fires POST /info/dau when the user is authenticated.
+///
+/// Initialized once in [App]. 
+/// Backend deduplicates repeated calls.
+/// Wait until auth is resolved; 
+/// if there's no logged-in user, do nothing; 
+/// otherwise fire the DAU request in the background 
+/// without blocking the app.
+@Riverpod(keepAlive: true)
+void dauRecorder(Ref ref) {
+  ref.listen(authUserStateProvider, (previous, next) {
+    if (!next.hasValue || next.value == null) return;
+
+    unawaited(
+      ref.read(recordDauProvider.future).catchError((_) {}),
+    );
+  }, fireImmediately: true);
 }
 
 Future<void> deleteMyAccountMutation(

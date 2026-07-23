@@ -27,7 +27,9 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
-    print('The size of this device is: $size, width: ${size.width}, height: ${size.height}');
+    print(
+      'The size of this device is: $size, width: ${size.width}, height: ${size.height}',
+    );
     // Get current branch ID - guaranteed to exist since branch selection is enforced
     final branchId = ref.watch(currentBranchProvider)!;
 
@@ -92,19 +94,19 @@ class HomeScreen extends ConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                         SizedBox(height:  context.isTablet ? 30 : 2),
+                        SizedBox(height: context.isTablet ? 30 : 2),
                         // Promo banner slider
                         const PromoBannerSlider(),
-          
+
                         SizedBox(height: AppSizes.lg),
-          
+
                         // Category chips list
                         CategoryChipsList(branchId: branchId),
                       ],
                     ),
                   ),
                 ),
-          
+
                 // Special offer + Popular with gradient (primary → white) like top section
                 SliverToBoxAdapter(
                   child: Container(
@@ -118,18 +120,17 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-          
+
                 // Product grid - scrolls with content
                 ProductSliverGrid(branchId: branchId),
-          
+
                 // Bottom padding for safe area (background so content area ends on white)
                 SliverToBoxAdapter(
                   child: Container(
                     color: AppColors.background,
                     child: SizedBox(
                       height:
-                          MediaQuery.of(context).padding.bottom +
-                          AppSizes.lg,
+                          MediaQuery.of(context).padding.bottom + AppSizes.lg,
                     ),
                   ),
                 ),
@@ -138,8 +139,9 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
 
-        const Positioned.fill(child: SafeArea(
-        bottom: false,child: DraggableTelegramFab())),
+        const Positioned.fill(
+          child: SafeArea(bottom: false, child: DraggableTelegramFab()),
+        ),
       ],
     );
   }

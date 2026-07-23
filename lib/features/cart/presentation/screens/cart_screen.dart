@@ -101,7 +101,9 @@ class CartScreen extends ConsumerWidget {
         ),
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: AppSizes.defaultMaxScreenWidth),
+            constraints: const BoxConstraints(
+              maxWidth: AppSizes.defaultMaxScreenWidth,
+            ),
             child: CartList(
               cartAsync: cartAsync,
               branchId: branchId,

@@ -124,4 +124,9 @@ class InfoRepositoryImpl implements InfoRepository {
 
     return result.fold((failure) => Left(failure), (_) => const Right(null));
   }
+
+  @override
+  Future<Either<Failure, void>> recordDau() async {
+    return _remoteDataSource.recordDau();
+  }
 }

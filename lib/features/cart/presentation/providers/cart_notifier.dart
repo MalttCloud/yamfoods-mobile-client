@@ -1,11 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../auth/presentation/providers/auth_user_state.dart';
 import '../../../product/domain/entities/product.dart';
 import '../../domain/entities/cart.dart';
 import '../../domain/entities/cart_request_data.dart';
-import 'cart_providers.dart';
 import 'cart_events.dart';
 import 'cart_loading_providers.dart';
+import 'cart_providers.dart';
 
 part 'cart_notifier.g.dart';
 
@@ -19,10 +20,23 @@ part 'cart_notifier.g.dart';
 class CartNotifier extends _$CartNotifier {
   @override
   Future<List<Cart>> build(int branchId) async {
+    // Cart APIs require auth, but home product cards watch this provider for
+    // guests too. Skip the network call here so AuthInterceptor doesn't cancel
+    // the request and flood the console with "Not authenticated" errors.
+    // Watching auth also reloads the cart after login and clears it on logout.
+    final isAuthenticated = ref.watch(isAuthenticatedProvider);
+    if (!isAuthenticated) {
+      return const [];
+    }
     return await _load(branchId);
   }
 
   Future<void> load(int branchId) async {
+    // Same guard as [build] for explicit reloads (e.g. cart screen retry).
+    if (!ref.read(isAuthenticatedProvider)) {
+      state = const AsyncValue.data([]);
+      return;
+    }
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => _load(branchId));
   }
@@ -33,12 +47,10 @@ class CartNotifier extends _$CartNotifier {
     CartRequestData data, {
     Product? productForOptimistic,
   }) async {
-
     final addLoading = ref.read(cartAddLoadingProvider.notifier);
     final operationLoading = ref.read(cartOperationLoadingProvider.notifier);
     operationLoading.setLoading(true);
     addLoading.setLoading(true);
-    
 
     try {
       // Save current state as reserve before optimistic update
@@ -83,12 +95,10 @@ class CartNotifier extends _$CartNotifier {
     } finally {
       operationLoading.setLoading(false);
       addLoading.setLoading(false);
-      
     }
   }
 
   Future<void> increaseQuantity(int cartId) async {
-
     final updating = ref.read(cartQuantityUpdateLoadingProvider.notifier);
     final operationLoading = ref.read(cartOperationLoadingProvider.notifier);
     updating.start(cartId);
@@ -134,7 +144,6 @@ class CartNotifier extends _$CartNotifier {
   }
 
   Future<void> decreaseQuantity(int cartId) async {
-
     final updating = ref.read(cartQuantityUpdateLoadingProvider.notifier);
     final operationLoading = ref.read(cartOperationLoadingProvider.notifier);
     updating.start(cartId);
@@ -261,6 +270,4 @@ class CartNotifier extends _$CartNotifier {
       throw failure;
     }, (carts) => carts);
   }
- 
-
 }

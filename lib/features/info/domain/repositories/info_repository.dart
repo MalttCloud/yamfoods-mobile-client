@@ -37,4 +37,6 @@ abstract class InfoRepository {
     required String title,
     required String reason,
   });
+
+  Future<Either<Failure, void>> recordDau();
 }

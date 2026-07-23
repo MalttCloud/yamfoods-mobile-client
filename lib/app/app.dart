@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/info/presentation/providers/info_providers.dart';
 import '../features/notification/presentation/providers/notification_providers.dart';
 import 'routes/app_router.dart';
 import 'theme/app_theme.dart';
@@ -15,6 +16,7 @@ class YamFoodsApp extends ConsumerWidget {
     // This sets up automatic token updates when FCM token changes
     // Uses keepAlive: true so listener stays active throughout app lifecycle
     ref.read(fcmTokenRefreshListenerProvider);
+    ref.read(dauRecorderProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
