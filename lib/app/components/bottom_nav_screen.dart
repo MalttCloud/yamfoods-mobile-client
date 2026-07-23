@@ -1,17 +1,17 @@
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 
+import '../../features/branch/presentation/providers/branch_providers.dart';
+import '../../features/cart/presentation/providers/cart_providers.dart';
 import '../../responsive.dart';
 import '../routes/auth_guard_helper.dart';
 import '../routes/route_names.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_sizes.dart';
-import '../../features/branch/presentation/providers/branch_providers.dart';
-import '../../features/cart/presentation/providers/cart_providers.dart';
 
 class BottomNavScreen extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -85,7 +85,7 @@ class _BottomNavScreenState extends ConsumerState<BottomNavScreen> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500),
         child: CurvedNavigationBar(
-          height: 60,
+          height: 55,
           key: ValueKey('${widget.navigationShell.currentIndex}-$_navBarVersion'),
           index: widget.navigationShell.currentIndex,
           onTap: (index) async {

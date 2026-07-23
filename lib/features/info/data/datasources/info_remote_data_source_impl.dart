@@ -3,12 +3,12 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/errors/error_handler.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/network/api/request_wrapper.dart';
-import 'info_api_service.dart';
-import 'info_remote_data_source.dart';
 import '../models/faq_model.dart';
 import '../models/help_support_model.dart';
 import '../models/privacy_policy_model.dart';
 import '../models/terms_and_conditions_model.dart';
+import 'info_api_service.dart';
+import 'info_remote_data_source.dart';
 
 /// Handles API calls and error transformation.
 ///
@@ -123,6 +123,19 @@ class InfoRemoteDataSourceImpl implements InfoRemoteDataSource {
       final body = RequestWrapper.wrap(requestData);
 
       await _apiService.deleteMyAccount(body);
+      return const Right(null);
+    } catch (e) {
+      return Left(ErrorHandler.handleException(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> recordDau() async {
+    
+    try {
+      final body = RequestWrapper.wrap({'platform': 'MOBILE'});
+      print('DAC request body: $body');
+      await _apiService.recordDau(body);
       return const Right(null);
     } catch (e) {
       return Left(ErrorHandler.handleException(e));

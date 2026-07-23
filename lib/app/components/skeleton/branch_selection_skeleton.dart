@@ -40,7 +40,9 @@ class BranchSelectionSkeleton extends StatelessWidget {
                   const SizedBox(height: 60),
                   // Description text (same as real UI)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.xl,
+                    ),
                     child: Text(
                       AppTexts.selectBranchDescription,
                       style: AppTextStyles.h5.copyWith(
@@ -62,7 +64,9 @@ class BranchSelectionSkeleton extends StatelessWidget {
 
                   // BranchInfoRow (phone / hours)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.lg,
+                    ),
                     child: Bone(width: maxW - AppSizes.lg * 2, height: 72),
                   ),
 
@@ -70,7 +74,9 @@ class BranchSelectionSkeleton extends StatelessWidget {
 
                   // BranchRingsList
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.xl),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.xl,
+                    ),
                     child: SizedBox(
                       height: ringsListHeight,
                       child: Row(
@@ -94,7 +100,9 @@ class BranchSelectionSkeleton extends StatelessWidget {
 
                   // BranchDetailsSection
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.lg,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -125,7 +133,9 @@ class BranchSelectionSkeleton extends StatelessWidget {
 
                   // Continue button
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppSizes.lg),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.lg,
+                    ),
                     child: Align(
                       alignment: Alignment.center,
                       child: Bone(

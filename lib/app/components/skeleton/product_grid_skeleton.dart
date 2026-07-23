@@ -17,7 +17,9 @@ SliverPadding productGridSkeletonSliver({required BuildContext context, int item
         crossAxisCount:  context.isTabletInPortraitMOde ? 4 : context.isTablet ? 3 : 2 ,
         crossAxisSpacing: AppSizes.sm,
         mainAxisSpacing: AppSizes.sm,
-        childAspectRatio: 0.88,
+        mainAxisExtent: context.isTablet
+            ? AppSizes.productCardHeightTablet
+            : AppSizes.productCardHeightMobile,
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) => const ProductCardSkeleton(),

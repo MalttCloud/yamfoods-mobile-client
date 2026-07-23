@@ -107,6 +107,7 @@ class ErrorHandler {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
+      case DioExceptionType.transformTimeout:
         _logError('Network timeout', error);
         return const Failure.network(
           message:

@@ -132,4 +132,5 @@ class ApiRoutes {
   static const String submitCollaborationRequest =
       '$_infoBase/collaboration-request';
   static const String deleteMyAccount = '$_infoBase/delete-my-account';
+  static const String recordDau = '$_infoBase/dau';
 }

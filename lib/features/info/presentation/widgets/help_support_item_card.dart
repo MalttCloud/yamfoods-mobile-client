@@ -13,7 +13,7 @@ import '../../../../core/utils/link_launcher.dart';
 /// - title
 /// - value
 class HelpSupportItemCard extends StatelessWidget {
-  final IconData icon;
+  final FaIconData icon;
   final String title;
   final String value;
   final List<String> launchUrls;

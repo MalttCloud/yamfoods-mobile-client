@@ -166,6 +166,48 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
     context.push(RouteName.createOrUpdateAddress, extra: payload);
   }
 
+  String? _topOverlayMessage({
+    required bool isUpdate,
+    required DeliveryAddressSelectionState selection,
+  }) {
+    if (isUpdate) return null;
+
+    if (_isFetchingCurrentLocation) {
+      return 'Finding your current location...';
+    }
+    if (_currentLocationOutsideZone && selection.selectedLat == null) {
+      return _outsideZoneCurrentLocationMessage;
+    }
+    if (selection.placeNameResolutionFailed) {
+      return 'Could not fetch address for this location. Check your connection, then tap the map again or search.';
+    }
+    if (selection.selectedLat == null) {
+      return 'Search or tap on the map to select your delivery location';
+    }
+    return null;
+  }
+
+  (IconData?, Color?) _topOverlayStyle({
+    required bool isUpdate,
+    required DeliveryAddressSelectionState selection,
+  }) {
+    if (isUpdate) return (null, null);
+
+    if (_isFetchingCurrentLocation) {
+      return (Icons.my_location_rounded, AppColors.primary);
+    }
+    if (_currentLocationOutsideZone && selection.selectedLat == null) {
+      return (Icons.location_off_rounded, Colors.orange);
+    }
+    if (selection.placeNameResolutionFailed) {
+      return (Icons.wifi_off_rounded, AppColors.error);
+    }
+    if (selection.selectedLat == null) {
+      return (Icons.touch_app_outlined, AppColors.primary);
+    }
+    return (null, null);
+  }
+
   @override
   Widget build(BuildContext context) {
     final zonesAsync = ref.watch(deliveryZonesProvider);
@@ -194,7 +236,17 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
               : Failure.unexpected(message: error.toString()),
           onRetry: () async => ref.invalidate(deliveryZonesProvider),
         ),
-        data: (zones) => Stack(
+        data: (zones) {
+          final overlayMessage = _topOverlayMessage(
+            isUpdate: isUpdate,
+            selection: selection,
+          );
+          final (overlayIcon, overlayColor) = _topOverlayStyle(
+            isUpdate: isUpdate,
+            selection: selection,
+          );
+
+          return Stack(
           fit: StackFit.expand,
           children: [
             DeliveryZoneMap(
@@ -213,40 +265,18 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
                       onResultSelected: _handleSearchSelection,
                     ),
                   ),
-                  if (!isUpdate && _isFetchingCurrentLocation)
+                  if (overlayMessage != null)
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.lg,
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSizes.lg,
+                        0,
+                        AppSizes.lg,
+                        AppSizes.sm,
                       ),
-                      child: _buildStatusBanner(
-                        icon: Icons.my_location_rounded,
-                        text: 'Finding your current location...',
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  if (!isUpdate &&
-                      _currentLocationOutsideZone &&
-                      selection.selectedLat == null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.lg,
-                      ),
-                      child: _buildStatusBanner(
-                        icon: Icons.location_off_rounded,
-                        text: _outsideZoneCurrentLocationMessage,
-                        color: Colors.orange,
-                      ),
-                    ),
-                  if (selection.placeNameResolutionFailed)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSizes.lg,
-                      ),
-                      child: _buildStatusBanner(
-                        icon: Icons.wifi_off_rounded,
-                        text:
-                            'Could not fetch address for this location. Check your connection, then tap the map again or search.',
-                        color: AppColors.error,
+                      child: _StatusBanner(
+                        icon: overlayIcon,
+                        text: overlayMessage,
+                        color: overlayColor ?? AppColors.primary,
                       ),
                     ),
                   const Spacer(),
@@ -264,42 +294,58 @@ class _DeliveryAddressScreenState extends ConsumerState<DeliveryAddressScreen> {
               ),
             ),
           ],
-        ),
+        );
+        },
       ),
     );
   }
+}
 
-  Widget _buildStatusBanner({
-    required IconData icon,
-    required String text,
-    required Color color,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: AppSizes.sm),
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSizes.md,
-        vertical: AppSizes.sm,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(AppSizes.radius),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: color),
-          const SizedBox(width: AppSizes.xs),
-          Expanded(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 12,
-                color: color,
-                fontWeight: FontWeight.w500,
+class _StatusBanner extends StatelessWidget {
+  final IconData? icon;
+  final String text;
+  final Color color;
+
+  const _StatusBanner({
+    this.icon,
+    required this.text,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 2,
+      borderRadius: BorderRadius.circular(AppSizes.radius),
+      color: Colors.white,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSizes.md,
+          vertical: AppSizes.sm,
+        ),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(AppSizes.radius),
+          border: Border.all(color: color.withValues(alpha: 0.25)),
+        ),
+        child: Row(
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 18, color: color),
+              const SizedBox(width: AppSizes.xs),
+            ],
+            Expanded(
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: color,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

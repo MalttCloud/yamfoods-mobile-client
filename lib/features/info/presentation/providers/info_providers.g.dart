@@ -434,6 +434,50 @@ final class SubmitCollaborationRequestUsecaseProvider
 String _$submitCollaborationRequestUsecaseHash() =>
     r'e5eca61c07ff468d73b65a2f6a761668fb681995';
 
+/// Record DAU usecase provider
+
+@ProviderFor(recordDauUsecase)
+const recordDauUsecaseProvider = RecordDauUsecaseProvider._();
+
+/// Record DAU usecase provider
+
+final class RecordDauUsecaseProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<RecordDauUsecase>,
+          RecordDauUsecase,
+          FutureOr<RecordDauUsecase>
+        >
+    with $FutureModifier<RecordDauUsecase>, $FutureProvider<RecordDauUsecase> {
+  /// Record DAU usecase provider
+  const RecordDauUsecaseProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recordDauUsecaseProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$recordDauUsecaseHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<RecordDauUsecase> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<RecordDauUsecase> create(Ref ref) {
+    return recordDauUsecase(ref);
+  }
+}
+
+String _$recordDauUsecaseHash() => r'dde84da4f001857f9f548300d9752c9bced762e8';
+
 /// Help support provider
 ///
 /// Fetches help & support information using the usecase.
@@ -812,3 +856,92 @@ final class SubmitCollaborationRequestFamily extends $Family
   @override
   String toString() => r'submitCollaborationRequestProvider';
 }
+
+/// Records daily active user (fire-and-forget, errors are swallowed).
+
+@ProviderFor(recordDau)
+const recordDauProvider = RecordDauProvider._();
+
+/// Records daily active user (fire-and-forget, errors are swallowed).
+
+final class RecordDauProvider
+    extends $FunctionalProvider<AsyncValue<void>, void, FutureOr<void>>
+    with $FutureModifier<void>, $FutureProvider<void> {
+  /// Records daily active user (fire-and-forget, errors are swallowed).
+  const RecordDauProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'recordDauProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$recordDauHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<void> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<void> create(Ref ref) {
+    return recordDau(ref);
+  }
+}
+
+String _$recordDauHash() => r'6dbf2f94761c6de3c4a3c28ffac932be9721b2ac';
+
+/// Fires POST /info/dau when the user is authenticated.
+///
+/// Initialized once in [YamFoodsApp]. Backend deduplicates repeated calls.
+
+@ProviderFor(dauRecorder)
+const dauRecorderProvider = DauRecorderProvider._();
+
+/// Fires POST /info/dau when the user is authenticated.
+///
+/// Initialized once in [YamFoodsApp]. Backend deduplicates repeated calls.
+
+final class DauRecorderProvider extends $FunctionalProvider<void, void, void>
+    with $Provider<void> {
+  /// Fires POST /info/dau when the user is authenticated.
+  ///
+  /// Initialized once in [YamFoodsApp]. Backend deduplicates repeated calls.
+  const DauRecorderProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'dauRecorderProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$dauRecorderHash();
+
+  @$internal
+  @override
+  $ProviderElement<void> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  void create(Ref ref) {
+    return dauRecorder(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
+}
+
+String _$dauRecorderHash() => r'ccb99c1d50066fdd6da072f32aa359412d63b338';
